@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local databases and runtime uploads
+*.db
+backend/uploads/
+backend/temp/
+backend/temp_import/
+
+# Large training/import datasets
+backend/datasets/
+backend/custom_dataset/
+
+# Training outputs. Keep the current lightweight classifier weights needed by the Pi bridge.
+backend/runs/*
+!backend/runs/classify/
+backend/runs/classify/*
+!backend/runs/classify/grocery-classifier-public4/
+backend/runs/classify/grocery-classifier-public4/*
+!backend/runs/classify/grocery-classifier-public4/weights/
+backend/runs/classify/grocery-classifier-public4/weights/*
+!backend/runs/classify/grocery-classifier-public4/weights/best.pt
+
+# Flutter / IDE build products
+fridge_app/.dart_tool/
+fridge_app/build/
+fridge_app/.idea/
+fridge_app/*.iml
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
