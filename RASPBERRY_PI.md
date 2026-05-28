@@ -31,7 +31,7 @@ On Raspberry Pi OS 64-bit:
 
 ```bash
 sudo apt update
-sudo apt install -y python3-venv python3-opencv python3-picamera2
+sudo apt install -y python3-venv python3-opencv python3-picamera2 python3-gpiozero
 python3 -m venv --system-site-packages .venv
 source .venv/bin/activate
 pip install -r backend/requirements-pi.txt
@@ -76,7 +76,49 @@ Default behavior:
 - uploads recognized items only
 - prevents repeat uploads with a 20 second cooldown
 
-## 5. Optional systemd service
+## 5. Reed switch trigger
+
+Recommended wiring for a plain two-wire reed switch:
+
+- one wire to Raspberry Pi `GND`
+- one wire to `GPIO17` physical pin 11
+
+With this wiring and the magnet near the switch when the fridge door is closed:
+
+- door closed: GPIO is pulled low
+- door open: GPIO goes high
+
+Run a one-event test:
+
+```bash
+BACKEND_URL=http://192.168.0.25:5000 \
+python backend/pi_fridge_camera.py \
+  --trigger reed \
+  --reed-pin 17 \
+  --reed-open-level high \
+  --once
+```
+
+Continuous reed-triggered mode:
+
+```bash
+BACKEND_URL=http://192.168.0.25:5000 \
+FRIDGE_ID=1 \
+python backend/pi_fridge_camera.py \
+  --trigger reed \
+  --reed-pin 17 \
+  --reed-open-level high
+```
+
+If opening the door does nothing but closing it triggers the scan, flip the level:
+
+```bash
+python backend/pi_fridge_camera.py --trigger reed --reed-open-level low
+```
+
+In reed mode the script waits for the door-open signal, starts the camera, uploads the first stable recognized item, stops the camera, then waits for the door to close before arming the next scan.
+
+## 6. Optional systemd service
 
 Create `/etc/systemd/system/fridge-camera.service`:
 
@@ -90,6 +132,9 @@ Wants=network-online.target
 WorkingDirectory=/home/pi/fridge
 Environment=BACKEND_URL=http://192.168.0.25:5000
 Environment=FRIDGE_ID=1
+Environment=TRIGGER_MODE=reed
+Environment=REED_PIN=17
+Environment=REED_OPEN_LEVEL=high
 ExecStart=/home/pi/fridge/.venv/bin/python /home/pi/fridge/backend/pi_fridge_camera.py
 Restart=always
 RestartSec=5
@@ -106,4 +151,3 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now fridge-camera
 sudo journalctl -u fridge-camera -f
 ```
-

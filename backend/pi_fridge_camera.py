@@ -61,6 +61,27 @@ class Picamera2Camera:
         self.camera.stop()
 
 
+class ReedDoorSensor:
+    def __init__(self, pin: int, open_level: str, bounce_time: float) -> None:
+        from gpiozero import Button
+
+        self.open_level = open_level
+        self.switch = Button(pin, pull_up=True, bounce_time=bounce_time)
+
+    def is_open(self) -> bool:
+        if self.open_level == "high":
+            return not self.switch.is_pressed
+        return self.switch.is_pressed
+
+    def wait_for_open(self, interval: float = 0.05) -> None:
+        while not self.is_open():
+            time.sleep(interval)
+
+    def wait_for_close(self, interval: float = 0.05) -> None:
+        while self.is_open():
+            time.sleep(interval)
+
+
 def make_camera(camera_backend: str, camera_index: int, width: int, height: int):
     global cv2
     if cv2 is None:
@@ -181,24 +202,63 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--interval", type=float, default=float(os.environ.get("SCAN_INTERVAL_SECONDS", "1.0")))
     parser.add_argument("--cooldown", type=float, default=float(os.environ.get("UPLOAD_COOLDOWN_SECONDS", "20.0")))
     parser.add_argument("--stable-frames", type=int, default=int(os.environ.get("STABLE_FRAMES", "3")))
+    parser.add_argument("--scan-timeout", type=float, default=float(os.environ.get("SCAN_TIMEOUT_SECONDS", "20.0")))
+    parser.add_argument("--trigger", choices=["continuous", "reed"], default=os.environ.get("TRIGGER_MODE", "continuous"))
+    parser.add_argument("--reed-pin", type=int, default=int(os.environ.get("REED_PIN", "17")))
+    parser.add_argument("--reed-open-level", choices=["high", "low"], default=os.environ.get("REED_OPEN_LEVEL", "high"))
+    parser.add_argument("--reed-bounce-time", type=float, default=float(os.environ.get("REED_BOUNCE_TIME", "0.1")))
+    parser.add_argument("--post-open-delay", type=float, default=float(os.environ.get("POST_OPEN_DELAY_SECONDS", "0.0")))
     parser.add_argument("--once", action="store_true", help="Upload the first stable prediction and exit.")
     parser.add_argument("--dry-run", action="store_true", help="Classify frames without uploading.")
     return parser.parse_args()
 
 
-def main() -> None:
-    args = parse_args()
-    model_path = Path(args.model).expanduser().resolve()
-    upload_url = args.backend_url.rstrip("/") + "/upload"
+def scan_until_upload(camera, model, args: argparse.Namespace, upload_url: str) -> bool:
+    last_label: str | None = None
+    stable_count = 0
+    started_at = time.time()
 
-    if not model_path.exists():
-        raise SystemExit(f"Model was not found: {model_path}")
-    if not args.dry_run:
-        check_backend(upload_url)
+    while True:
+        if args.scan_timeout > 0 and time.time() - started_at > args.scan_timeout:
+            print("Scan timed out without an upload.")
+            return False
 
-    from ultralytics import YOLO
+        frame = camera.read()
+        crop = center_crop(frame, args.crop_ratio)
+        results = model(crop, verbose=False)
+        prediction = choose_prediction(
+            results,
+            args.min_confidence,
+            args.background_strong_confidence,
+        )
 
-    model = YOLO(str(model_path))
+        confidence_text = "n/a" if prediction.confidence is None else f"{prediction.confidence:.2f}"
+        print(f"Read: {prediction.label} ({confidence_text})")
+
+        if prediction.label == last_label:
+            stable_count += 1
+        else:
+            last_label = prediction.label
+            stable_count = 1
+
+        is_uploadable = prediction.label.lower() not in SKIP_LABELS
+        is_stable = stable_count >= args.stable_frames
+
+        if is_uploadable and is_stable:
+            if args.dry_run:
+                print(f"Dry run upload skipped: {prediction.label}")
+            else:
+                item = upload_prediction(upload_url, args.fridge_id, frame, crop, prediction)
+                print(
+                    f"Uploaded: {item['display_name']} "
+                    f"confidence={item.get('confidence')} fridge={item['fridge_id']}"
+                )
+            return True
+
+        time.sleep(args.interval)
+
+
+def run_continuous(model, args: argparse.Namespace, upload_url: str) -> None:
     camera = make_camera(args.camera_backend, args.camera_index, args.width, args.height)
     print(f"Camera started. Upload target: {upload_url}")
 
@@ -250,6 +310,53 @@ def main() -> None:
             time.sleep(args.interval)
     finally:
         camera.close()
+
+
+def run_reed_triggered(model, args: argparse.Namespace, upload_url: str) -> None:
+    sensor = ReedDoorSensor(args.reed_pin, args.reed_open_level, args.reed_bounce_time)
+    print(
+        f"Waiting for door open on GPIO {args.reed_pin} "
+        f"(open level: {args.reed_open_level})."
+    )
+
+    while True:
+        sensor.wait_for_open()
+        print("Door opened. Starting camera scan.")
+        if args.post_open_delay > 0:
+            time.sleep(args.post_open_delay)
+
+        camera = make_camera(args.camera_backend, args.camera_index, args.width, args.height)
+        try:
+            scan_until_upload(camera, model, args, upload_url)
+        finally:
+            camera.close()
+            print("Camera stopped. Waiting for door close.")
+
+        if args.once:
+            return
+
+        sensor.wait_for_close()
+        print("Door closed. Ready for next open event.")
+        time.sleep(args.cooldown)
+
+
+def main() -> None:
+    args = parse_args()
+    model_path = Path(args.model).expanduser().resolve()
+    upload_url = args.backend_url.rstrip("/") + "/upload"
+
+    if not model_path.exists():
+        raise SystemExit(f"Model was not found: {model_path}")
+    if not args.dry_run:
+        check_backend(upload_url)
+
+    from ultralytics import YOLO
+
+    model = YOLO(str(model_path))
+    if args.trigger == "reed":
+        run_reed_triggered(model, args, upload_url)
+    else:
+        run_continuous(model, args, upload_url)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,8 @@
 
 Use Raspberry Pi 5 as the camera bridge for the fridge app:
 
-1. Turn on the camera.
+1. Detect fridge door open through a reed switch.
+2. Turn on the camera.
 2. Read/classify the ingredient in front of the camera.
 3. Send the image, crop, label, and confidence to the backend database through the backend `/upload` endpoint.
 
@@ -31,7 +32,8 @@ main
 
 - `backend/pi_fridge_camera.py`
   - Raspberry Pi camera bridge.
-  - Captures a frame.
+  - Supports continuous camera mode and reed-switch-triggered mode.
+  - In reed mode, waits for door open, starts the camera, captures a frame, uploads the first stable prediction, then stops the camera.
   - Center-crops the image.
   - Runs the YOLO grocery classifier.
   - Uploads the full frame and crop to the backend.
@@ -53,7 +55,7 @@ On the Raspberry Pi:
 git clone https://github.com/Young265/fridge.git
 cd fridge
 sudo apt update
-sudo apt install -y python3-venv python3-opencv python3-picamera2
+sudo apt install -y python3-venv python3-opencv python3-picamera2 python3-gpiozero
 python3 -m venv --system-site-packages .venv
 source .venv/bin/activate
 pip install -r backend/requirements-pi.txt
@@ -95,10 +97,50 @@ FRIDGE_ID=1 \
 python backend/pi_fridge_camera.py
 ```
 
+## Reed Switch Mode
+
+Recommended wiring:
+
+- Reed switch wire 1 -> Raspberry Pi `GND`
+- Reed switch wire 2 -> `GPIO17`, physical pin 11
+- Magnet close to reed switch when fridge door is closed
+
+Default expected signal:
+
+- door closed: GPIO low
+- door open: GPIO high
+
+One door-open event test:
+
+```bash
+BACKEND_URL=http://BACKEND_IP:5000 \
+python backend/pi_fridge_camera.py \
+  --trigger reed \
+  --reed-pin 17 \
+  --reed-open-level high \
+  --once
+```
+
+Continuous reed mode:
+
+```bash
+BACKEND_URL=http://BACKEND_IP:5000 \
+FRIDGE_ID=1 \
+python backend/pi_fridge_camera.py \
+  --trigger reed \
+  --reed-pin 17 \
+  --reed-open-level high
+```
+
+If the trigger is backwards, use:
+
+```bash
+--reed-open-level low
+```
+
 ## Notes
 
 - The local PC currently has IP `172.29.139.148` on the school network.
 - The Raspberry Pi has a `192.168.x.x` address, so direct SSH from the PC may not work unless both devices are on the same network.
 - If the networks stay separate, use GitHub as the transfer path or install Tailscale on both devices.
 - Codex on the Raspberry Pi does not automatically know this chat history. Start Codex in the cloned repo and tell it to read `HANDOFF.md` and `RASPBERRY_PI.md`.
-
