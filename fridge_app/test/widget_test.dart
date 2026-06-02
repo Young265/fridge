@@ -13,8 +13,8 @@ void main() {
   testWidgets('Fridge app smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(const FridgeApp());
 
-    expect(find.text('스마트 냉장고'), findsOneWidget);
-    expect(find.text('우유'), findsOneWidget);
-    expect(find.text('계란'), findsOneWidget);
+    expect(find.text('스마트 냉장고 로그인'), findsOneWidget);
+    expect(find.text('로그인'), findsOneWidget);
+    expect(find.text('회원가입'), findsOneWidget);
   });
 }

@@ -652,36 +652,6 @@ class _SampleFruitThumbnail extends StatelessWidget {
   }
 }
 
-class _ThumbnailFallback extends StatelessWidget {
-  const _ThumbnailFallback({required this.icon, required this.label});
-
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFE8EFE4),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 38, color: const Color(0xFF6F8474)),
-            const SizedBox(height: 6),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: const Color(0xFF6F8474),
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _LoadingState extends StatelessWidget {
   const _LoadingState();
 

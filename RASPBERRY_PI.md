@@ -6,7 +6,13 @@ This project already has a Flask backend endpoint at `/upload`. The Raspberry Pi
 python backend/pi_fridge_camera.py --backend-url http://<PC_OR_SERVER_IP>:5000 --fridge-id <FRIDGE_ID>
 ```
 
-It captures the camera image, classifies the center crop with the grocery classifier model, and uploads the full image plus crop to the backend. The backend writes the result to `fridge_items`.
+It captures the camera image, finds ingredient candidates dynamically, classifies the candidates, and uploads the full image plus recognized crops to the backend. The backend writes the results to `fridge_items`. Common food labels already known by the detector, such as apples and bananas, are used directly. Other candidates are passed to the grocery classifier.
+
+Candidate crop priority:
+
+1. YOLO detection boxes from `backend/yolov8n.pt`
+2. Contour proposals for ingredients the general detector does not know
+3. The old center crop only when the previous steps do not produce a usable prediction
 
 ## 1. Backend on the main machine
 
@@ -40,6 +46,7 @@ pip install -r backend/requirements-pi.txt
 Copy this project folder to the Pi, including:
 
 - `backend/pi_fridge_camera.py`
+- `backend/yolov8n.pt`
 - `backend/runs/classify/grocery-classifier-public4/weights/best.pt`
 
 ## 3. Test once
@@ -58,8 +65,21 @@ Useful test options:
 ```bash
 python backend/pi_fridge_camera.py --dry-run
 python backend/pi_fridge_camera.py --camera-backend opencv --camera-index 0
+python backend/pi_fridge_camera.py --fps 30 --interval 0.25
 python backend/pi_fridge_camera.py --min-confidence 0.75
+python backend/pi_fridge_camera.py --detection-confidence 0.25 --crop-padding-ratio 0.20
+python backend/pi_fridge_camera.py --detection-imgsz 416
 ```
+
+The PC preview and Raspberry Pi bridge both default to a `640x480` camera frame at `30 FPS`. The `--interval` option is separate: it controls how often the heavier detection and classification pipeline runs. Lower it from the default `1.0` seconds only if the Pi has enough processing headroom.
+
+For a local PC preview with visible dynamic boxes:
+
+```bash
+python backend/classify_camera.py
+```
+
+Press `s` to upload the recognized boxes and `q` to quit.
 
 ## 4. Run continuously
 
@@ -71,9 +91,12 @@ python backend/pi_fridge_camera.py
 
 Default behavior:
 
+- configures the camera at `640x480`, `30 FPS`
 - reads a frame every 1 second
-- waits for the same label 3 times in a row
-- uploads recognized items only
+- finds up to 4 dynamic crop candidates
+- adds padding around detected crops before classification
+- waits for the same recognized label group 3 times in a row
+- uploads each recognized item in the stable group
 - prevents repeat uploads with a 20 second cooldown
 
 ## 5. Reed switch trigger
@@ -116,9 +139,23 @@ If opening the door does nothing but closing it triggers the scan, flip the leve
 python backend/pi_fridge_camera.py --trigger reed --reed-open-level low
 ```
 
-In reed mode the script waits for the door-open signal, starts the camera, uploads the first stable recognized item, stops the camera, then waits for the door to close before arming the next scan.
+In reed mode the script waits for the door-open signal, starts the camera, uploads the first stable recognized ingredient group, stops the camera, then waits for the door to close before arming the next scan.
 
-## 6. Optional systemd service
+## 6. Performance tuning
+
+Dynamic detection is more accurate than a fixed center box but uses more CPU. If the Raspberry Pi scan is too slow, reduce detector input size:
+
+```bash
+python backend/pi_fridge_camera.py --detection-imgsz 416
+```
+
+If needed, disable the YOLO detector and keep contour proposals plus the center fallback:
+
+```bash
+python backend/pi_fridge_camera.py --disable-detector
+```
+
+## 7. Optional systemd service
 
 Create `/etc/systemd/system/fridge-camera.service`:
 
@@ -135,6 +172,7 @@ Environment=FRIDGE_ID=1
 Environment=TRIGGER_MODE=reed
 Environment=REED_PIN=17
 Environment=REED_OPEN_LEVEL=high
+Environment=CAMERA_FPS=30
 ExecStart=/home/pi/fridge/.venv/bin/python /home/pi/fridge/backend/pi_fridge_camera.py
 Restart=always
 RestartSec=5

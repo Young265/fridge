@@ -6,8 +6,9 @@ Use Raspberry Pi 5 as the camera bridge for the fridge app:
 
 1. Detect fridge door open through a reed switch.
 2. Turn on the camera.
-2. Read/classify the ingredient in front of the camera.
-3. Send the image, crop, label, and confidence to the backend database through the backend `/upload` endpoint.
+3. Find ingredient candidates dynamically instead of requiring a fixed center box.
+4. Classify the detected crops.
+5. Send the image, crops, labels, and confidences to the backend database through the backend `/upload` endpoint.
 
 ## Repository
 
@@ -33,10 +34,13 @@ main
 - `backend/pi_fridge_camera.py`
   - Raspberry Pi camera bridge.
   - Supports continuous camera mode and reed-switch-triggered mode.
-  - In reed mode, waits for door open, starts the camera, captures a frame, uploads the first stable prediction, then stops the camera.
-  - Center-crops the image.
-  - Runs the YOLO grocery classifier.
-  - Uploads the full frame and crop to the backend.
+  - In reed mode, waits for door open, starts the camera, uploads the first stable group of predictions, then stops the camera.
+  - Uses YOLO detection boxes plus contour proposals so the ingredient does not need to fit inside a fixed center box.
+  - Uses trusted detector labels directly for common foods such as apples and bananas.
+  - Adds padding around the remaining candidate crops before running the grocery classifier.
+  - Uses the old center crop only as a final fallback.
+  - Configures the Pi and PC camera paths at the same `640x480`, `30 FPS` defaults.
+  - Uploads the full frame and each recognized crop to the backend.
 
 - `backend/requirements-pi.txt`
   - Minimal pip requirements for Raspberry Pi.
@@ -46,6 +50,9 @@ main
 
 - `backend/runs/classify/grocery-classifier-public4/weights/best.pt`
   - Grocery classifier model used by the Pi bridge.
+
+- `backend/yolov8n.pt`
+  - Dynamic object detector used to propose crop boxes.
 
 ## Raspberry Pi Setup
 
@@ -87,6 +94,25 @@ Dry-run without uploading:
 
 ```bash
 python backend/pi_fridge_camera.py --dry-run
+```
+
+Local preview with dynamic boxes:
+
+```bash
+python backend/classify_camera.py
+```
+
+In the preview, press `s` to upload recognized boxes and `q` to quit.
+
+Useful tuning options:
+
+```bash
+python backend/pi_fridge_camera.py \
+  --dry-run \
+  --fps 30 \
+  --detection-confidence 0.25 \
+  --crop-padding-ratio 0.20 \
+  --max-candidates 4
 ```
 
 Continuous run:
