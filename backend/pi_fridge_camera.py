@@ -600,6 +600,61 @@ class PreviewStreamer:
             self.server.server_close()
 
 
+class LivePreviewCamera:
+    def __init__(self, camera, preview_stream: PreviewStreamer, preview_fps: float) -> None:
+        self.camera = camera
+        self.preview_stream = preview_stream
+        self.interval = 1.0 / max(1.0, preview_fps)
+        self.condition = threading.Condition()
+        self.overlay_lock = threading.Lock()
+        self.stop_event = threading.Event()
+        self.latest_frame = None
+        self.latest_candidates: list[ClassifiedCandidate] | None = None
+        self.latest_status: str | None = "camera preview"
+        self.thread: threading.Thread | None = None
+
+    def start(self) -> None:
+        self.thread = threading.Thread(target=self._run, daemon=True)
+        self.thread.start()
+
+    def _run(self) -> None:
+        while not self.stop_event.is_set():
+            started_at = time.time()
+            frame = self.camera.read()
+            with self.condition:
+                self.latest_frame = frame
+                self.condition.notify_all()
+            with self.overlay_lock:
+                candidates = self.latest_candidates
+                status = self.latest_status
+            self.preview_stream.update(frame, candidates, status)
+            elapsed = time.time() - started_at
+            time.sleep(max(0.0, self.interval - elapsed))
+
+    def read(self):
+        with self.condition:
+            if self.latest_frame is None:
+                self.condition.wait_for(lambda: self.latest_frame is not None, timeout=2.0)
+            if self.latest_frame is None:
+                raise RuntimeError("Preview camera did not provide a frame.")
+            return self.latest_frame.copy()
+
+    def set_overlay(
+        self,
+        candidates: list[ClassifiedCandidate] | None = None,
+        status: str | None = None,
+    ) -> None:
+        with self.overlay_lock:
+            self.latest_candidates = candidates
+            self.latest_status = status
+
+    def close(self) -> None:
+        self.stop_event.set()
+        if self.thread is not None:
+            self.thread.join(timeout=1.0)
+        self.camera.close()
+
+
 def local_ip_hint() -> str:
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
@@ -607,6 +662,27 @@ def local_ip_hint() -> str:
             return sock.getsockname()[0]
     except OSError:
         return "<raspberry-pi-ip>"
+
+
+def update_preview(
+    camera,
+    preview_stream: PreviewStreamer | None,
+    frame,
+    candidates: list[ClassifiedCandidate] | None,
+    status: str,
+) -> None:
+    if isinstance(camera, LivePreviewCamera):
+        camera.set_overlay(candidates, status)
+    elif preview_stream is not None:
+        preview_stream.update(frame, candidates, status)
+
+
+def maybe_live_preview_camera(camera, preview_stream: PreviewStreamer | None, args: argparse.Namespace):
+    if preview_stream is None:
+        return camera
+    live_camera = LivePreviewCamera(camera, preview_stream, args.preview_fps)
+    live_camera.start()
+    return live_camera
 
 
 def check_backend(upload_url: str) -> None:
@@ -738,6 +814,9 @@ def apply_candidates(
 
 
 def discard_camera_frames(camera, count: int) -> None:
+    if isinstance(camera, LivePreviewCamera):
+        time.sleep(camera.interval * max(0, count))
+        return
     for _ in range(max(0, count)):
         camera.read()
 
@@ -820,6 +899,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--preview-stream-host", default=os.environ.get("PREVIEW_STREAM_HOST", "0.0.0.0"))
     parser.add_argument("--preview-stream-port", type=int, default=int(os.environ.get("PREVIEW_STREAM_PORT", "8080")))
     parser.add_argument("--preview-stream-quality", type=int, default=int(os.environ.get("PREVIEW_STREAM_QUALITY", "80")))
+    parser.add_argument("--preview-fps", type=float, default=float(os.environ.get("PREVIEW_FPS", os.environ.get("CAMERA_FPS", "30"))))
     parser.add_argument("--preview-idle-interval", type=float, default=float(os.environ.get("PREVIEW_IDLE_INTERVAL_SECONDS", "0.2")))
     parser.add_argument("--once", action="store_true", help="Upload the first stable prediction and exit.")
     parser.add_argument("--dry-run", action="store_true", help="Classify frames without uploading.")
@@ -852,8 +932,7 @@ def scan_until_action(
         candidates = classify_frame(frame, detector, classifier, settings)
         signature = prediction_signature(candidates)
         print(f"Read: {format_candidates(candidates)}")
-        if preview_stream is not None:
-            preview_stream.update(frame, candidates, f"{action} scan")
+        update_preview(camera, preview_stream, frame, candidates, f"{action} scan")
 
         if signature and signature == last_signature:
             stable_count += 1
@@ -894,8 +973,7 @@ def scan_while_reed_state(
         candidates = classify_frame(frame, detector, classifier, settings)
         signature = prediction_signature(candidates)
         print(f"Read: {format_candidates(candidates)}")
-        if preview_stream is not None:
-            preview_stream.update(frame, candidates, f"{action} scan until reed {end_state}")
+        update_preview(camera, preview_stream, frame, candidates, f"{action} scan until reed {end_state}")
 
         if signature and signature == last_signature:
             stable_count += 1
@@ -924,7 +1002,11 @@ def run_continuous(
     upload_url: str,
     preview_stream: PreviewStreamer | None = None,
 ) -> None:
-    camera = make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps)
+    camera = maybe_live_preview_camera(
+        make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps),
+        preview_stream,
+        args,
+    )
     print(f"Camera started. Upload target: {upload_url}")
 
     settings = scan_settings(args)
@@ -939,8 +1021,7 @@ def run_continuous(
             candidates = classify_frame(frame, detector, classifier, settings)
             signature = prediction_signature(candidates)
             print(f"Read: {format_candidates(candidates)}")
-            if preview_stream is not None:
-                preview_stream.update(frame, candidates, "continuous scan")
+            update_preview(camera, preview_stream, frame, candidates, "continuous scan")
 
             if signature and signature == last_signature:
                 stable_count += 1
@@ -973,7 +1054,10 @@ def wait_for_reed_state(
     status: str | None = None,
 ) -> None:
     while sensor.is_open() != target_open:
-        if camera is not None and preview_stream is not None:
+        if isinstance(camera, LivePreviewCamera):
+            camera.set_overlay(None, status)
+            time.sleep(args.preview_idle_interval)
+        elif camera is not None and preview_stream is not None:
             frame = camera.read()
             preview_stream.update(frame, None, status)
             time.sleep(args.preview_idle_interval)
@@ -997,7 +1081,11 @@ def scan_reed_event(
     if camera is not None:
         discard_camera_frames(camera, args.warm_camera_discard_frames)
     else:
-        camera = make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps)
+        camera = maybe_live_preview_camera(
+            make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps),
+            preview_stream,
+            args,
+        )
 
     try:
         if scan_until_state_change and sensor is not None:
@@ -1039,7 +1127,11 @@ def run_reed_triggered(
     )
 
     if args.reed_camera_mode == "warm":
-        warm_camera = make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps)
+        warm_camera = maybe_live_preview_camera(
+            make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps),
+            preview_stream,
+            args,
+        )
         print("Camera is warmed and ready; detection will run only on reed events.")
 
     try:

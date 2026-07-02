@@ -166,7 +166,8 @@ python backend/pi_fridge_camera.py \
   --stable-frames 2 \
   --interval 0.2 \
   --detection-imgsz 416 \
-  --preview-stream
+  --preview-stream \
+  --preview-fps 30
 ```
 
 For this workflow, mount the camera so the ingredient is visible both while the
@@ -180,9 +181,10 @@ device on the same network:
 http://<RASPBERRY_PI_IP>:8080
 ```
 
-The preview shows the latest camera frame and draws detection boxes while a scan
-is running. With `--reed-camera-mode warm`, it also updates while waiting for
-the reed switch to open or close.
+The preview uses a separate camera frame loop, so the browser can keep showing
+camera frames while detection is running. It draws the latest detection boxes
+when they are available. With `--reed-camera-mode warm`, it also updates while
+waiting for the reed switch to open or close.
 
 In this workflow, the open-side add scan keeps running until the reed switch
 closes. The first stable recognized ingredient group is added once, then the
