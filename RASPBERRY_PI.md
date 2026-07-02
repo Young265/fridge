@@ -165,12 +165,24 @@ python backend/pi_fridge_camera.py \
   --reed-camera-mode warm \
   --stable-frames 2 \
   --interval 0.2 \
-  --detection-imgsz 416
+  --detection-imgsz 416 \
+  --preview-stream
 ```
 
 For this workflow, mount the camera so the ingredient is visible both while the
 hand enters and while it leaves. If the scan is too early or too late, tune
 `--post-open-delay` or `--post-close-delay`.
+
+With `--preview-stream`, open the Raspberry Pi camera preview from another
+device on the same network:
+
+```text
+http://<RASPBERRY_PI_IP>:8080
+```
+
+The preview shows the latest camera frame and draws detection boxes while a scan
+is running. With `--reed-camera-mode warm`, it also updates while waiting for
+the reed switch to open or close.
 
 If opening the door does nothing but closing it triggers the scan, flip the level:
 
@@ -221,6 +233,8 @@ Environment=REED_PIN=17
 Environment=REED_OPEN_LEVEL=high
 Environment=REED_CAMERA_MODE=warm
 Environment=REED_WORKFLOW=add-on-open-consume-on-close
+Environment=PREVIEW_STREAM=1
+Environment=PREVIEW_STREAM_PORT=8080
 Environment=CAMERA_FPS=30
 Environment=STABLE_FRAMES=2
 Environment=SCAN_INTERVAL_SECONDS=0.2

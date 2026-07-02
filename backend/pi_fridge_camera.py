@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import argparse
 import os
+import socket
+import threading
 import time
 from dataclasses import dataclass
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -446,6 +449,166 @@ def format_candidates(candidates: list[ClassifiedCandidate]) -> str:
     )
 
 
+def draw_preview_frame(
+    frame,
+    candidates: list[ClassifiedCandidate] | None = None,
+    status: str | None = None,
+):
+    preview = frame.copy()
+    if candidates:
+        for candidate in candidates:
+            x1, y1, x2, y2 = candidate.coords
+            prediction = candidate.prediction
+            is_candidate_uploadable = is_uploadable(prediction)
+            color = (0, 200, 0) if is_candidate_uploadable else (0, 165, 255)
+            confidence = "n/a" if prediction.confidence is None else f"{prediction.confidence:.2f}"
+            label_text = f"{prediction.label} {confidence} [{candidate.source}]"
+            cv2.rectangle(preview, (x1, y1), (x2, y2), color, 2)
+            cv2.putText(
+                preview,
+                label_text,
+                (x1, max(24, y1 - 10)),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.55,
+                color,
+                2,
+                cv2.LINE_AA,
+            )
+
+    if status:
+        cv2.rectangle(preview, (0, 0), (preview.shape[1], 34), (0, 0, 0), -1)
+        cv2.putText(
+            preview,
+            status,
+            (10, 23),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.65,
+            (255, 255, 255),
+            2,
+            cv2.LINE_AA,
+        )
+    return preview
+
+
+class PreviewStreamer:
+    def __init__(self, host: str, port: int, jpeg_quality: int) -> None:
+        self.host = host
+        self.port = port
+        self.jpeg_quality = jpeg_quality
+        self.condition = threading.Condition()
+        self.latest_jpeg: bytes | None = None
+        self.frame_id = 0
+        self.server: ThreadingHTTPServer | None = None
+        self.thread: threading.Thread | None = None
+
+    def start(self) -> None:
+        streamer = self
+
+        class PreviewHandler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                if self.path in {"/", "/index.html"}:
+                    self.send_response(200)
+                    self.send_header("Content-Type", "text/html; charset=utf-8")
+                    self.end_headers()
+                    self.wfile.write(
+                        b"<!doctype html><html><head><title>Fridge Camera</title>"
+                        b"<style>body{margin:0;background:#111;color:#eee;font-family:sans-serif;}"
+                        b"img{display:block;max-width:100vw;max-height:100vh;margin:auto;}</style>"
+                        b"</head><body><img src='/stream.mjpg'></body></html>"
+                    )
+                    return
+
+                if self.path.startswith("/snapshot.jpg"):
+                    with streamer.condition:
+                        jpeg = streamer.latest_jpeg
+                    if jpeg is None:
+                        self.send_response(503)
+                        self.end_headers()
+                        return
+                    self.send_response(200)
+                    self.send_header("Content-Type", "image/jpeg")
+                    self.send_header("Content-Length", str(len(jpeg)))
+                    self.end_headers()
+                    self.wfile.write(jpeg)
+                    return
+
+                if not self.path.startswith("/stream.mjpg"):
+                    self.send_response(404)
+                    self.end_headers()
+                    return
+
+                self.send_response(200)
+                self.send_header("Age", "0")
+                self.send_header("Cache-Control", "no-cache, private")
+                self.send_header("Pragma", "no-cache")
+                self.send_header("Content-Type", "multipart/x-mixed-replace; boundary=frame")
+                self.end_headers()
+
+                last_seen_frame_id = -1
+                while True:
+                    with streamer.condition:
+                        streamer.condition.wait_for(
+                            lambda: streamer.frame_id != last_seen_frame_id,
+                            timeout=5.0,
+                        )
+                        jpeg = streamer.latest_jpeg
+                        last_seen_frame_id = streamer.frame_id
+                    if jpeg is None:
+                        continue
+                    try:
+                        self.wfile.write(b"--frame\r\n")
+                        self.wfile.write(b"Content-Type: image/jpeg\r\n")
+                        self.wfile.write(f"Content-Length: {len(jpeg)}\r\n\r\n".encode("ascii"))
+                        self.wfile.write(jpeg)
+                        self.wfile.write(b"\r\n")
+                    except (BrokenPipeError, ConnectionResetError):
+                        return
+
+            def log_message(self, _format, *_args):
+                return
+
+        self.server = ThreadingHTTPServer((self.host, self.port), PreviewHandler)
+        self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
+        self.thread.start()
+        display_host = self.host
+        if display_host in {"0.0.0.0", ""}:
+            display_host = local_ip_hint()
+        print(f"Preview stream: http://{display_host}:{self.port}/")
+
+    def update(
+        self,
+        frame,
+        candidates: list[ClassifiedCandidate] | None = None,
+        status: str | None = None,
+    ) -> None:
+        preview = draw_preview_frame(frame, candidates, status)
+        ok, buffer = cv2.imencode(
+            ".jpg",
+            preview,
+            [int(cv2.IMWRITE_JPEG_QUALITY), self.jpeg_quality],
+        )
+        if not ok:
+            return
+        with self.condition:
+            self.latest_jpeg = buffer.tobytes()
+            self.frame_id += 1
+            self.condition.notify_all()
+
+    def close(self) -> None:
+        if self.server is not None:
+            self.server.shutdown()
+            self.server.server_close()
+
+
+def local_ip_hint() -> str:
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+            sock.connect(("8.8.8.8", 80))
+            return sock.getsockname()[0]
+    except OSError:
+        return "<raspberry-pi-ip>"
+
+
 def check_backend(upload_url: str) -> None:
     import requests
 
@@ -653,6 +816,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--warm-camera-discard-frames", type=int, default=int(os.environ.get("WARM_CAMERA_DISCARD_FRAMES", "2")))
     parser.add_argument("--post-open-delay", type=float, default=float(os.environ.get("POST_OPEN_DELAY_SECONDS", "0.0")))
     parser.add_argument("--post-close-delay", type=float, default=float(os.environ.get("POST_CLOSE_DELAY_SECONDS", "0.0")))
+    parser.add_argument("--preview-stream", action="store_true", default=env_flag("PREVIEW_STREAM"), help="Serve a browser camera preview from this Pi.")
+    parser.add_argument("--preview-stream-host", default=os.environ.get("PREVIEW_STREAM_HOST", "0.0.0.0"))
+    parser.add_argument("--preview-stream-port", type=int, default=int(os.environ.get("PREVIEW_STREAM_PORT", "8080")))
+    parser.add_argument("--preview-stream-quality", type=int, default=int(os.environ.get("PREVIEW_STREAM_QUALITY", "80")))
+    parser.add_argument("--preview-idle-interval", type=float, default=float(os.environ.get("PREVIEW_IDLE_INTERVAL_SECONDS", "0.2")))
     parser.add_argument("--once", action="store_true", help="Upload the first stable prediction and exit.")
     parser.add_argument("--dry-run", action="store_true", help="Classify frames without uploading.")
     args = parser.parse_args()
@@ -668,6 +836,7 @@ def scan_until_action(
     args: argparse.Namespace,
     action_url: str,
     action: str,
+    preview_stream: PreviewStreamer | None = None,
 ) -> bool:
     settings = scan_settings(args)
     last_signature: tuple[str, ...] = ()
@@ -683,6 +852,8 @@ def scan_until_action(
         candidates = classify_frame(frame, detector, classifier, settings)
         signature = prediction_signature(candidates)
         print(f"Read: {format_candidates(candidates)}")
+        if preview_stream is not None:
+            preview_stream.update(frame, candidates, f"{action} scan")
 
         if signature and signature == last_signature:
             stable_count += 1
@@ -701,7 +872,13 @@ def scan_until_upload(camera, detector, classifier, args: argparse.Namespace, up
     return scan_until_action(camera, detector, classifier, args, upload_url, "upload")
 
 
-def run_continuous(detector, classifier, args: argparse.Namespace, upload_url: str) -> None:
+def run_continuous(
+    detector,
+    classifier,
+    args: argparse.Namespace,
+    upload_url: str,
+    preview_stream: PreviewStreamer | None = None,
+) -> None:
     camera = make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps)
     print(f"Camera started. Upload target: {upload_url}")
 
@@ -717,6 +894,8 @@ def run_continuous(detector, classifier, args: argparse.Namespace, upload_url: s
             candidates = classify_frame(frame, detector, classifier, settings)
             signature = prediction_signature(candidates)
             print(f"Read: {format_candidates(candidates)}")
+            if preview_stream is not None:
+                preview_stream.update(frame, candidates, "continuous scan")
 
             if signature and signature == last_signature:
                 stable_count += 1
@@ -740,6 +919,23 @@ def run_continuous(detector, classifier, args: argparse.Namespace, upload_url: s
         camera.close()
 
 
+def wait_for_reed_state(
+    sensor: ReedDoorSensor,
+    target_open: bool,
+    args: argparse.Namespace,
+    camera=None,
+    preview_stream: PreviewStreamer | None = None,
+    status: str | None = None,
+) -> None:
+    while sensor.is_open() != target_open:
+        if camera is not None and preview_stream is not None:
+            frame = camera.read()
+            preview_stream.update(frame, None, status)
+            time.sleep(args.preview_idle_interval)
+        else:
+            time.sleep(0.05)
+
+
 def scan_reed_event(
     warm_camera,
     detector,
@@ -747,6 +943,7 @@ def scan_reed_event(
     args: argparse.Namespace,
     action_url: str,
     action: str,
+    preview_stream: PreviewStreamer | None = None,
 ) -> None:
     camera = warm_camera
     if camera is not None:
@@ -755,7 +952,7 @@ def scan_reed_event(
         camera = make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps)
 
     try:
-        scan_until_action(camera, detector, classifier, args, action_url, action)
+        scan_until_action(camera, detector, classifier, args, action_url, action, preview_stream)
     finally:
         if warm_camera is None:
             camera.close()
@@ -770,6 +967,7 @@ def run_reed_triggered(
     args: argparse.Namespace,
     upload_url: str,
     consume_url: str,
+    preview_stream: PreviewStreamer | None = None,
 ) -> None:
     sensor = ReedDoorSensor(args.reed_pin, args.reed_open_level, args.reed_bounce_time)
     warm_camera = None
@@ -785,21 +983,35 @@ def run_reed_triggered(
 
     try:
         while True:
-            sensor.wait_for_open()
+            wait_for_reed_state(
+                sensor,
+                True,
+                args,
+                warm_camera,
+                preview_stream,
+                "waiting for reed open",
+            )
             print("Reed opened. Starting add scan.")
             if args.post_open_delay > 0:
                 time.sleep(args.post_open_delay)
-            scan_reed_event(warm_camera, detector, classifier, args, upload_url, "upload")
+            scan_reed_event(warm_camera, detector, classifier, args, upload_url, "upload", preview_stream)
 
             if args.once and not consume_on_close:
                 return
 
-            sensor.wait_for_close()
+            wait_for_reed_state(
+                sensor,
+                False,
+                args,
+                warm_camera,
+                preview_stream,
+                "waiting for reed close",
+            )
             if consume_on_close:
                 print("Reed closed. Starting consume scan.")
                 if args.post_close_delay > 0:
                     time.sleep(args.post_close_delay)
-                scan_reed_event(warm_camera, detector, classifier, args, consume_url, "consume")
+                scan_reed_event(warm_camera, detector, classifier, args, consume_url, "consume", preview_stream)
                 if args.once:
                     return
                 print("Consume scan finished. Ready for next open event.")
@@ -827,10 +1039,23 @@ def main() -> None:
 
     classifier = YOLO(str(model_path))
     detector = load_detector(args.detector_model, args.disable_detector)
-    if args.trigger == "reed":
-        run_reed_triggered(detector, classifier, args, upload_url, consume_url)
-    else:
-        run_continuous(detector, classifier, args, upload_url)
+    preview_stream = None
+    if args.preview_stream:
+        preview_stream = PreviewStreamer(
+            args.preview_stream_host,
+            args.preview_stream_port,
+            max(1, min(100, args.preview_stream_quality)),
+        )
+        preview_stream.start()
+
+    try:
+        if args.trigger == "reed":
+            run_reed_triggered(detector, classifier, args, upload_url, consume_url, preview_stream)
+        else:
+            run_continuous(detector, classifier, args, upload_url, preview_stream)
+    finally:
+        if preview_stream is not None:
+            preview_stream.close()
 
 
 if __name__ == "__main__":
