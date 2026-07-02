@@ -133,6 +133,45 @@ python backend/pi_fridge_camera.py \
   --reed-open-level high
 ```
 
+Low-latency reed-triggered mode keeps the camera ready, but runs detection and
+classification only when the door opens:
+
+```bash
+BACKEND_URL=http://192.168.0.25:5000 \
+FRIDGE_ID=1 \
+python backend/pi_fridge_camera.py \
+  --trigger reed \
+  --reed-pin 17 \
+  --reed-open-level high \
+  --reed-camera-mode warm \
+  --stable-frames 2 \
+  --interval 0.2 \
+  --detection-imgsz 416
+```
+
+Arm in/out workflow:
+
+- reed open: scan and add recognized ingredients
+- reed close: scan and consume recognized ingredients if they already exist
+
+```bash
+BACKEND_URL=http://192.168.0.25:5000 \
+FRIDGE_ID=1 \
+python backend/pi_fridge_camera.py \
+  --trigger reed \
+  --reed-pin 17 \
+  --reed-open-level high \
+  --reed-workflow add-on-open-consume-on-close \
+  --reed-camera-mode warm \
+  --stable-frames 2 \
+  --interval 0.2 \
+  --detection-imgsz 416
+```
+
+For this workflow, mount the camera so the ingredient is visible both while the
+hand enters and while it leaves. If the scan is too early or too late, tune
+`--post-open-delay` or `--post-close-delay`.
+
 If opening the door does nothing but closing it triggers the scan, flip the level:
 
 ```bash
@@ -140,6 +179,14 @@ python backend/pi_fridge_camera.py --trigger reed --reed-open-level low
 ```
 
 In reed mode the script waits for the door-open signal, starts the camera, uploads the first stable recognized ingredient group, stops the camera, then waits for the door to close before arming the next scan.
+With `--reed-workflow add-on-open-consume-on-close`, the close event calls the
+backend `/consume` endpoint. The backend subtracts the most recently updated
+matching item by 1, deletes it when the remaining quantity is 0, and skips the
+event when no matching item exists.
+With `--reed-camera-mode warm`, the script starts the camera once at launch,
+keeps it ready between door events, discards a couple of buffered frames when the
+door opens, and then scans immediately. This uses more power than on-demand reed
+mode, but much less CPU than continuous scanning.
 
 ## 6. Performance tuning
 
@@ -172,7 +219,12 @@ Environment=FRIDGE_ID=1
 Environment=TRIGGER_MODE=reed
 Environment=REED_PIN=17
 Environment=REED_OPEN_LEVEL=high
+Environment=REED_CAMERA_MODE=warm
+Environment=REED_WORKFLOW=add-on-open-consume-on-close
 Environment=CAMERA_FPS=30
+Environment=STABLE_FRAMES=2
+Environment=SCAN_INTERVAL_SECONDS=0.2
+Environment=DETECTION_IMGSZ=416
 ExecStart=/home/pi/fridge/.venv/bin/python /home/pi/fridge/backend/pi_fridge_camera.py
 Restart=always
 RestartSec=5

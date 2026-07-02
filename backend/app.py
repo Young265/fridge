@@ -477,6 +477,91 @@ def resolve_ingredient(cursor, name: str | None):
     return cursor.fetchone()
 
 
+def parse_float_value(value, default: float | None = None) -> float | None:
+    if value is None or value == "":
+        return default
+    return float(value)
+
+
+def resolve_target_fridge_id(cursor, fridge_id: int | None) -> int | None:
+    if fridge_id:
+        return fridge_id
+    fridge_id = get_active_fridge_id(cursor)
+    if fridge_id:
+        return fridge_id
+    cursor.execute("SELECT fridge_id FROM fridges ORDER BY fridge_id LIMIT 1")
+    first_fridge = cursor.fetchone()
+    return first_fridge["fridge_id"] if first_fridge else None
+
+
+def save_detection_files(image, crop_image=None) -> tuple[Path | None, Path | None]:
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    image_path = None
+    if image and image.filename:
+        image_filename = f"{timestamp}_{secure_filename(image.filename)}"
+        image_path = UPLOAD_FOLDER / image_filename
+        image.save(image_path)
+
+    crop_path = None
+    if crop_image and crop_image.filename:
+        crop_filename = f"{timestamp}_crop_{secure_filename(crop_image.filename)}"
+        crop_path = CROP_FOLDER / crop_filename
+        crop_image.save(crop_path)
+
+    return image_path, crop_path
+
+
+def find_consumable_item(cursor, fridge_id: int, display_name: str, ingredient: dict | None):
+    if ingredient:
+        cursor.execute(
+            """
+            SELECT *
+            FROM fridge_items
+            WHERE fridge_id = %s
+              AND ingredient_id = %s
+              AND quantity > 0
+            ORDER BY updated_at DESC, fridge_item_id DESC
+            LIMIT 1
+            """,
+            (fridge_id, ingredient["ingredient_id"]),
+        )
+        row = cursor.fetchone()
+        if row:
+            return row
+
+    normalized_name = normalize_ingredient_name(display_name)
+    if not normalized_name:
+        return None
+
+    human_name = normalized_name.replace("_", " ")
+    cursor.execute(
+        """
+        SELECT *
+        FROM fridge_items
+        WHERE fridge_id = %s
+          AND quantity > 0
+          AND (
+              LOWER(display_name) IN (%s, %s)
+              OR LOWER(REPLACE(REPLACE(display_name, '-', ' '), ' ', '_')) = %s
+              OR LOWER(detected_name) IN (%s, %s)
+              OR LOWER(REPLACE(REPLACE(detected_name, '-', ' '), ' ', '_')) = %s
+          )
+        ORDER BY updated_at DESC, fridge_item_id DESC
+        LIMIT 1
+        """,
+        (
+            fridge_id,
+            normalized_name,
+            human_name,
+            normalized_name,
+            normalized_name,
+            human_name,
+            normalized_name,
+        ),
+    )
+    return cursor.fetchone()
+
+
 @app.route("/health", methods=["GET"])
 def health_check():
     return jsonify({"status": "ok"})
@@ -806,6 +891,129 @@ def delete_inventory_item(fridge_item_id: int):
     return jsonify({"message": "Inventory item deleted."})
 
 
+@app.route("/consume", methods=["POST"])
+def consume_detection():
+    payload = request.get_json(silent=True) or {}
+    fridge_id = request.form.get("fridge_id", type=int)
+    if fridge_id is None and payload.get("fridge_id") is not None:
+        try:
+            fridge_id = int(payload["fridge_id"])
+        except (TypeError, ValueError):
+            return jsonify({"error": "fridge_id must be a number."}), 400
+
+    display_name = (
+        request.form.get("label")
+        or request.form.get("display_name")
+        or payload.get("label")
+        or payload.get("display_name")
+        or ""
+    ).strip()
+    detected_name = (
+        request.form.get("detected_name")
+        or payload.get("detected_name")
+        or display_name
+    ).strip() or None
+
+    try:
+        quantity = parse_float_value(
+            request.form.get("quantity")
+            if request.form.get("quantity") is not None
+            else payload.get("quantity"),
+            1,
+        )
+        confidence = parse_float_value(
+            request.form.get("confidence")
+            if request.form.get("confidence") is not None
+            else payload.get("confidence"),
+        )
+    except (TypeError, ValueError):
+        return jsonify({"error": "quantity and confidence must be numbers."}), 400
+
+    if not display_name:
+        return jsonify({"error": "label or display_name is required."}), 400
+    if quantity is None or quantity <= 0:
+        return jsonify({"error": "quantity must be greater than 0."}), 400
+
+    image = request.files.get("image")
+    crop_image = request.files.get("crop_image")
+
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            fridge_id = resolve_target_fridge_id(cursor, fridge_id)
+            if not fridge_id:
+                return jsonify({"error": "No fridge is available for consume."}), 400
+
+            ingredient = resolve_ingredient(cursor, display_name)
+            current = find_consumable_item(cursor, fridge_id, display_name, ingredient)
+            if not current:
+                return jsonify(
+                    {
+                        "consumed": False,
+                        "reason": "not_found",
+                        "display_name": display_name,
+                        "detected_name": detected_name,
+                        "quantity": quantity,
+                        "fridge_id": fridge_id,
+                    }
+                )
+
+            remaining_quantity = float(current["quantity"]) - quantity
+            if remaining_quantity <= 0:
+                cursor.execute(
+                    "DELETE FROM fridge_items WHERE fridge_item_id = %s",
+                    (current["fridge_item_id"],),
+                )
+                conn.commit()
+                return jsonify(
+                    {
+                        "consumed": True,
+                        "deleted": True,
+                        "remaining_quantity": 0,
+                        "quantity": quantity,
+                        "item": serialize_item(current),
+                    }
+                )
+
+            image_path, crop_path = save_detection_files(image, crop_image)
+            cursor.execute(
+                """
+                UPDATE fridge_items
+                SET quantity = %s,
+                    image_path = %s,
+                    crop_image_path = %s,
+                    confidence = %s,
+                    detected_name = %s,
+                    updated_at = %s
+                WHERE fridge_item_id = %s
+                """,
+                (
+                    remaining_quantity,
+                    str(image_path) if image_path else current["image_path"],
+                    str(crop_path) if crop_path else current["crop_image_path"],
+                    confidence if confidence is not None else current["confidence"],
+                    detected_name or current["detected_name"],
+                    now_text(),
+                    current["fridge_item_id"],
+                ),
+            )
+            conn.commit()
+            cursor.execute(
+                "SELECT * FROM fridge_items WHERE fridge_item_id = %s",
+                (current["fridge_item_id"],),
+            )
+            row = cursor.fetchone()
+
+    return jsonify(
+        {
+            "consumed": True,
+            "deleted": False,
+            "remaining_quantity": row["quantity"],
+            "quantity": quantity,
+            "item": serialize_item(row),
+        }
+    )
+
+
 @app.route("/recipes", methods=["GET"])
 def list_recipes():
     fridge_id = request.args.get("fridge_id", type=int)
@@ -948,26 +1156,12 @@ def upload_detection():
 
     if image.filename == "":
         return jsonify({"error": "image filename is empty."}), 400
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    image_filename = f"{timestamp}_{secure_filename(image.filename)}"
-    image_path = UPLOAD_FOLDER / image_filename
-    image.save(image_path)
-
-    crop_path = None
-    if crop_image and crop_image.filename:
-        crop_filename = f"{timestamp}_crop_{secure_filename(crop_image.filename)}"
-        crop_path = CROP_FOLDER / crop_filename
-        crop_image.save(crop_path)
+    image_path, crop_path = save_detection_files(image, crop_image)
 
     created_at = now_text()
     with get_connection() as conn:
         with conn.cursor() as cursor:
-            if not fridge_id:
-                fridge_id = get_active_fridge_id(cursor)
-            if not fridge_id:
-                cursor.execute("SELECT fridge_id FROM fridges ORDER BY fridge_id LIMIT 1")
-                first_fridge = cursor.fetchone()
-                fridge_id = first_fridge["fridge_id"] if first_fridge else None
+            fridge_id = resolve_target_fridge_id(cursor, fridge_id)
             if not fridge_id:
                 return jsonify({"error": "No fridge is available for upload."}), 400
 

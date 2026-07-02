@@ -27,6 +27,10 @@ TRUSTED_DETECTOR_LABELS = {
 cv2 = None
 
 
+def env_flag(name: str, default: str = "0") -> bool:
+    return os.environ.get(name, default).strip().lower() in {"1", "true", "yes", "on"}
+
+
 @dataclass
 class Prediction:
     label: str
@@ -479,6 +483,35 @@ def upload_prediction(
     return response.json()
 
 
+def consume_prediction(
+    consume_url: str,
+    fridge_id: str | None,
+    frame,
+    crop,
+    prediction: Prediction,
+) -> dict:
+    import requests
+
+    data = {
+        "label": prediction.label,
+        "detected_name": prediction.label,
+        "quantity": "1",
+        "unit": "ea",
+    }
+    if prediction.confidence is not None:
+        data["confidence"] = f"{prediction.confidence:.4f}"
+    if fridge_id:
+        data["fridge_id"] = fridge_id
+
+    files = {
+        "image": ("pi_camera.jpg", encode_jpeg(frame), "image/jpeg"),
+        "crop_image": ("pi_camera_crop.jpg", encode_jpeg(crop), "image/jpeg"),
+    }
+    response = requests.post(consume_url, data=data, files=files, timeout=15)
+    response.raise_for_status()
+    return response.json()
+
+
 def upload_candidates(
     upload_url: str,
     fridge_id: str | None,
@@ -497,6 +530,53 @@ def upload_candidates(
             f"confidence={item.get('confidence')} fridge={item['fridge_id']} "
             f"source={candidate.source}"
         )
+
+
+def consume_candidates(
+    consume_url: str,
+    fridge_id: str | None,
+    frame,
+    candidates: list[ClassifiedCandidate],
+    dry_run: bool,
+) -> None:
+    for candidate in uploadable_candidates(candidates):
+        prediction = candidate.prediction
+        if dry_run:
+            print(f"Dry run consume skipped: {prediction.label} [{candidate.source}]")
+            continue
+        result = consume_prediction(consume_url, fridge_id, frame, candidate.crop, prediction)
+        if result.get("consumed"):
+            item = result.get("item") or {}
+            deleted = " deleted" if result.get("deleted") else ""
+            print(
+                f"Consumed: {item.get('display_name', prediction.label)} "
+                f"remaining={result.get('remaining_quantity')}{deleted} "
+                f"source={candidate.source}"
+            )
+        else:
+            print(
+                f"Consume skipped: {prediction.label} "
+                f"reason={result.get('reason', 'unknown')} source={candidate.source}"
+            )
+
+
+def apply_candidates(
+    action: str,
+    action_url: str,
+    fridge_id: str | None,
+    frame,
+    candidates: list[ClassifiedCandidate],
+    dry_run: bool,
+) -> None:
+    if action == "consume":
+        consume_candidates(action_url, fridge_id, frame, candidates, dry_run)
+        return
+    upload_candidates(action_url, fridge_id, frame, candidates, dry_run)
+
+
+def discard_camera_frames(camera, count: int) -> None:
+    for _ in range(max(0, count)):
+        camera.read()
 
 
 def scan_settings(args: argparse.Namespace) -> ScanSettings:
@@ -567,13 +647,28 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--reed-pin", type=int, default=int(os.environ.get("REED_PIN", "17")))
     parser.add_argument("--reed-open-level", choices=["high", "low"], default=os.environ.get("REED_OPEN_LEVEL", "high"))
     parser.add_argument("--reed-bounce-time", type=float, default=float(os.environ.get("REED_BOUNCE_TIME", "0.1")))
+    parser.add_argument("--reed-camera-mode", choices=["on-demand", "warm"], default=os.environ.get("REED_CAMERA_MODE", "on-demand"))
+    parser.add_argument("--reed-workflow", choices=["add-on-open", "add-on-open-consume-on-close"], default=os.environ.get("REED_WORKFLOW", "add-on-open"))
+    parser.add_argument("--warm-camera", action="store_true", default=env_flag("WARM_CAMERA"), help="Shortcut for --reed-camera-mode warm.")
+    parser.add_argument("--warm-camera-discard-frames", type=int, default=int(os.environ.get("WARM_CAMERA_DISCARD_FRAMES", "2")))
     parser.add_argument("--post-open-delay", type=float, default=float(os.environ.get("POST_OPEN_DELAY_SECONDS", "0.0")))
+    parser.add_argument("--post-close-delay", type=float, default=float(os.environ.get("POST_CLOSE_DELAY_SECONDS", "0.0")))
     parser.add_argument("--once", action="store_true", help="Upload the first stable prediction and exit.")
     parser.add_argument("--dry-run", action="store_true", help="Classify frames without uploading.")
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.warm_camera:
+        args.reed_camera_mode = "warm"
+    return args
 
 
-def scan_until_upload(camera, detector, classifier, args: argparse.Namespace, upload_url: str) -> bool:
+def scan_until_action(
+    camera,
+    detector,
+    classifier,
+    args: argparse.Namespace,
+    action_url: str,
+    action: str,
+) -> bool:
     settings = scan_settings(args)
     last_signature: tuple[str, ...] = ()
     stable_count = 0
@@ -581,7 +676,7 @@ def scan_until_upload(camera, detector, classifier, args: argparse.Namespace, up
 
     while True:
         if args.scan_timeout > 0 and time.time() - started_at > args.scan_timeout:
-            print("Scan timed out without an upload.")
+            print(f"Scan timed out without a {action}.")
             return False
 
         frame = camera.read()
@@ -596,10 +691,14 @@ def scan_until_upload(camera, detector, classifier, args: argparse.Namespace, up
             stable_count = 1 if signature else 0
 
         if signature and stable_count >= args.stable_frames:
-            upload_candidates(upload_url, args.fridge_id, frame, candidates, args.dry_run)
+            apply_candidates(action, action_url, args.fridge_id, frame, candidates, args.dry_run)
             return True
 
         time.sleep(args.interval)
+
+
+def scan_until_upload(camera, detector, classifier, args: argparse.Namespace, upload_url: str) -> bool:
+    return scan_until_action(camera, detector, classifier, args, upload_url, "upload")
 
 
 def run_continuous(detector, classifier, args: argparse.Namespace, upload_url: str) -> None:
@@ -641,38 +740,83 @@ def run_continuous(detector, classifier, args: argparse.Namespace, upload_url: s
         camera.close()
 
 
-def run_reed_triggered(detector, classifier, args: argparse.Namespace, upload_url: str) -> None:
+def scan_reed_event(
+    warm_camera,
+    detector,
+    classifier,
+    args: argparse.Namespace,
+    action_url: str,
+    action: str,
+) -> None:
+    camera = warm_camera
+    if camera is not None:
+        discard_camera_frames(camera, args.warm_camera_discard_frames)
+    else:
+        camera = make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps)
+
+    try:
+        scan_until_action(camera, detector, classifier, args, action_url, action)
+    finally:
+        if warm_camera is None:
+            camera.close()
+            print("Camera stopped.")
+        else:
+            print("Scan finished. Keeping camera warm.")
+
+
+def run_reed_triggered(
+    detector,
+    classifier,
+    args: argparse.Namespace,
+    upload_url: str,
+    consume_url: str,
+) -> None:
     sensor = ReedDoorSensor(args.reed_pin, args.reed_open_level, args.reed_bounce_time)
+    warm_camera = None
+    consume_on_close = args.reed_workflow == "add-on-open-consume-on-close"
     print(
-        f"Waiting for door open on GPIO {args.reed_pin} "
-        f"(open level: {args.reed_open_level})."
+        f"Waiting for reed open on GPIO {args.reed_pin} "
+        f"(open level: {args.reed_open_level}, workflow: {args.reed_workflow})."
     )
 
-    while True:
-        sensor.wait_for_open()
-        print("Door opened. Starting camera scan.")
-        if args.post_open_delay > 0:
-            time.sleep(args.post_open_delay)
+    if args.reed_camera_mode == "warm":
+        warm_camera = make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps)
+        print("Camera is warmed and ready; detection will run only on reed events.")
 
-        camera = make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps)
-        try:
-            scan_until_upload(camera, detector, classifier, args, upload_url)
-        finally:
-            camera.close()
-            print("Camera stopped. Waiting for door close.")
+    try:
+        while True:
+            sensor.wait_for_open()
+            print("Reed opened. Starting add scan.")
+            if args.post_open_delay > 0:
+                time.sleep(args.post_open_delay)
+            scan_reed_event(warm_camera, detector, classifier, args, upload_url, "upload")
 
-        if args.once:
-            return
+            if args.once and not consume_on_close:
+                return
 
-        sensor.wait_for_close()
-        print("Door closed. Ready for next open event.")
-        time.sleep(args.cooldown)
+            sensor.wait_for_close()
+            if consume_on_close:
+                print("Reed closed. Starting consume scan.")
+                if args.post_close_delay > 0:
+                    time.sleep(args.post_close_delay)
+                scan_reed_event(warm_camera, detector, classifier, args, consume_url, "consume")
+                if args.once:
+                    return
+                print("Consume scan finished. Ready for next open event.")
+            else:
+                print("Reed closed. Ready for next open event.")
+            time.sleep(args.cooldown)
+    finally:
+        if warm_camera is not None:
+            warm_camera.close()
 
 
 def main() -> None:
     args = parse_args()
     model_path = Path(args.model).expanduser().resolve()
-    upload_url = args.backend_url.rstrip("/") + "/upload"
+    backend_url = args.backend_url.rstrip("/")
+    upload_url = backend_url + "/upload"
+    consume_url = backend_url + "/consume"
 
     if not model_path.exists():
         raise SystemExit(f"Model was not found: {model_path}")
@@ -684,7 +828,7 @@ def main() -> None:
     classifier = YOLO(str(model_path))
     detector = load_detector(args.detector_model, args.disable_detector)
     if args.trigger == "reed":
-        run_reed_triggered(detector, classifier, args, upload_url)
+        run_reed_triggered(detector, classifier, args, upload_url, consume_url)
     else:
         run_continuous(detector, classifier, args, upload_url)
 
