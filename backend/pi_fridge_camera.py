@@ -872,6 +872,51 @@ def scan_until_upload(camera, detector, classifier, args: argparse.Namespace, up
     return scan_until_action(camera, detector, classifier, args, upload_url, "upload")
 
 
+def scan_while_reed_state(
+    camera,
+    detector,
+    classifier,
+    args: argparse.Namespace,
+    action_url: str,
+    action: str,
+    sensor: ReedDoorSensor,
+    target_open: bool,
+    preview_stream: PreviewStreamer | None = None,
+) -> bool:
+    settings = scan_settings(args)
+    last_signature: tuple[str, ...] = ()
+    stable_count = 0
+    action_applied = False
+    end_state = "close" if target_open else "open"
+
+    while sensor.is_open() == target_open:
+        frame = camera.read()
+        candidates = classify_frame(frame, detector, classifier, settings)
+        signature = prediction_signature(candidates)
+        print(f"Read: {format_candidates(candidates)}")
+        if preview_stream is not None:
+            preview_stream.update(frame, candidates, f"{action} scan until reed {end_state}")
+
+        if signature and signature == last_signature:
+            stable_count += 1
+        else:
+            last_signature = signature
+            stable_count = 1 if signature else 0
+
+        if not action_applied and signature and stable_count >= args.stable_frames:
+            apply_candidates(action, action_url, args.fridge_id, frame, candidates, args.dry_run)
+            action_applied = True
+            print(f"{action.capitalize()} applied. Continuing scan until reed {end_state}.")
+
+        time.sleep(args.interval)
+
+    if action_applied:
+        print(f"Reed {end_state} detected. Ending {action} scan.")
+    else:
+        print(f"Reed {end_state} detected before a stable {action}.")
+    return action_applied
+
+
 def run_continuous(
     detector,
     classifier,
@@ -944,6 +989,9 @@ def scan_reed_event(
     action_url: str,
     action: str,
     preview_stream: PreviewStreamer | None = None,
+    sensor: ReedDoorSensor | None = None,
+    scan_until_state_change: bool = False,
+    target_open: bool = True,
 ) -> None:
     camera = warm_camera
     if camera is not None:
@@ -952,7 +1000,20 @@ def scan_reed_event(
         camera = make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps)
 
     try:
-        scan_until_action(camera, detector, classifier, args, action_url, action, preview_stream)
+        if scan_until_state_change and sensor is not None:
+            scan_while_reed_state(
+                camera,
+                detector,
+                classifier,
+                args,
+                action_url,
+                action,
+                sensor,
+                target_open,
+                preview_stream,
+            )
+        else:
+            scan_until_action(camera, detector, classifier, args, action_url, action, preview_stream)
     finally:
         if warm_camera is None:
             camera.close()
@@ -994,7 +1055,18 @@ def run_reed_triggered(
             print("Reed opened. Starting add scan.")
             if args.post_open_delay > 0:
                 time.sleep(args.post_open_delay)
-            scan_reed_event(warm_camera, detector, classifier, args, upload_url, "upload", preview_stream)
+            scan_reed_event(
+                warm_camera,
+                detector,
+                classifier,
+                args,
+                upload_url,
+                "upload",
+                preview_stream,
+                sensor=sensor,
+                scan_until_state_change=True,
+                target_open=True,
+            )
 
             if args.once and not consume_on_close:
                 return

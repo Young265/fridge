@@ -184,6 +184,12 @@ The preview shows the latest camera frame and draws detection boxes while a scan
 is running. With `--reed-camera-mode warm`, it also updates while waiting for
 the reed switch to open or close.
 
+In this workflow, the open-side add scan keeps running until the reed switch
+closes. The first stable recognized ingredient group is added once, then the
+script keeps updating the camera preview and detection logs until close is
+detected. After close, the consume scan still stops after the first stable
+consume result or `--scan-timeout`.
+
 If opening the door does nothing but closing it triggers the scan, flip the level:
 
 ```bash
