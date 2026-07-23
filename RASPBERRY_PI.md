@@ -149,10 +149,11 @@ python backend/pi_fridge_camera.py \
   --detection-imgsz 416
 ```
 
-Arm in/out workflow:
+Direction-tracked in/out workflow (recommended):
 
-- reed open: scan and add recognized ingredients
-- reed close: scan and consume recognized ingredients if they already exist
+- ingredient crosses the two guide lines toward the fridge interior: add
+- ingredient crosses the two guide lines toward the outside: consume
+- both actions are detected while the door remains open
 
 ```bash
 BACKEND_URL=http://192.168.0.25:5000 \
@@ -161,18 +162,30 @@ python backend/pi_fridge_camera.py \
   --trigger reed \
   --reed-pin 17 \
   --reed-open-level high \
-  --reed-workflow add-on-open-consume-on-close \
+  --reed-workflow track-crossings \
   --reed-camera-mode warm \
-  --stable-frames 2 \
+  --track-stable-zone-frames 2 \
   --interval 0.2 \
   --detection-imgsz 416 \
+  --inside-direction down \
+  --track-outer-line-ratio 0.35 \
+  --track-inner-line-ratio 0.65 \
   --preview-stream \
   --preview-fps 30
 ```
 
-For this workflow, mount the camera so the ingredient is visible both while the
-hand enters and while it leaves. If the scan is too early or too late, tune
-`--post-open-delay` or `--post-close-delay`.
+For this workflow, mount the camera so the ingredient itself is visible on both
+sides of the virtual boundary. The cyan preview line is the outside line and the
+magenta line is the inside line. Set `--inside-direction` to `up`, `down`, `left`
+or `right` according to the camera orientation. Keep `--post-open-delay 0` so an
+early crossing is not missed.
+
+The tracker requires the same labelled box to be stable outside and inside the
+two lines before it sends an event. `--track-stable-zone-frames` controls that
+debounce (default `2`), while `--track-max-missed-frames` allows brief occlusion
+(default `3`). Center-crop fallback predictions are intentionally not tracked
+because they do not provide a moving object box. Use the detector or contour
+proposals for this workflow.
 
 With `--preview-stream`, open the Raspberry Pi camera preview from another
 device on the same network:
@@ -186,11 +199,27 @@ camera frames while detection is running. It draws the latest detection boxes
 when they are available. With `--reed-camera-mode warm`, it also updates while
 waiting for the reed switch to open or close.
 
-In this workflow, the open-side add scan keeps running until the reed switch
-closes. The first stable recognized ingredient group is added once, then the
-script keeps updating the camera preview and detection logs until close is
-detected. After close, the consume scan still stops after the first stable
-consume result or `--scan-timeout`.
+The older `add-on-open-consume-on-close` workflow remains available for
+compatibility, but it can miss removed ingredients because its consume scan
+starts only after the door has closed.
+
+Camera-only crossing test (no reed switch required):
+
+```bash
+python backend/pi_fridge_camera.py \
+  --trigger crossing-test \
+  --camera-backend opencv \
+  --camera-index 0 \
+  --inside-direction down \
+  --interval 0.2 \
+  --preview-stream \
+  --dry-run
+```
+
+Open `http://<THIS_DEVICE_IP>:8080` to see the boxes and guide lines. Move an
+ingredient across both lines and check for `direction=in` or `direction=out` in
+the terminal. Stop the test with `Ctrl+C`. Remove `--dry-run` only when the
+backend is running and real inventory updates are intended.
 
 If opening the door does nothing but closing it triggers the scan, flip the level:
 

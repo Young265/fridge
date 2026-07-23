@@ -9,6 +9,8 @@ from dataclasses import dataclass
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+from ingredient_tracker import IngredientCrossingTracker, TrackObservation, TrackingSettings
+
 BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_MODEL_PATH = BASE_DIR / "runs" / "classify" / "grocery-classifier-public4" / "weights" / "best.pt"
 DEFAULT_DETECTOR_MODEL_PATH = BASE_DIR / "yolov8n.pt"
@@ -77,13 +79,31 @@ class ClassifiedCandidate:
 class OpenCVCamera:
     def __init__(self, camera_index: int, width: int, height: int, fps: float) -> None:
         global cv2
-        self.cap = cv2.VideoCapture(camera_index)
+        api_preferences = [cv2.CAP_ANY]
+        if os.name == "nt":
+            api_preferences = [cv2.CAP_DSHOW, cv2.CAP_MSMF, cv2.CAP_ANY]
+
+        self.cap = None
+        attempted_backends = []
+        for api_preference in api_preferences:
+            backend_name = cv2.videoio_registry.getBackendName(api_preference)
+            attempted_backends.append(backend_name)
+            capture = cv2.VideoCapture(camera_index, api_preference)
+            if capture.isOpened():
+                self.cap = capture
+                print(f"OpenCV camera opened: index={camera_index} backend={backend_name}")
+                break
+            capture.release()
+
+        if self.cap is None:
+            raise RuntimeError(
+                f"OpenCV camera is not available: index {camera_index}; "
+                f"tried {', '.join(attempted_backends)}"
+            )
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         self.cap.set(cv2.CAP_PROP_FPS, fps)
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-        if not self.cap.isOpened():
-            raise RuntimeError(f"OpenCV camera is not available: index {camera_index}")
 
     def read(self):
         ok, frame = self.cap.read()
@@ -136,6 +156,13 @@ class ReedDoorSensor:
     def wait_for_close(self, interval: float = 0.05) -> None:
         while self.is_open():
             time.sleep(interval)
+
+
+class AlwaysOpenSensor:
+    """Camera-only test sensor that keeps the crossing scan active."""
+
+    def is_open(self) -> bool:
+        return True
 
 
 def make_camera(camera_backend: str, camera_index: int, width: int, height: int, fps: float):
@@ -434,6 +461,20 @@ def uploadable_candidates(
     return [candidate for candidate in candidates if is_uploadable(candidate.prediction)]
 
 
+def trackable_observations(
+    candidates: list[ClassifiedCandidate],
+) -> list[TrackObservation]:
+    return [
+        TrackObservation(
+            label=candidate.prediction.label.strip().lower(),
+            coords=candidate.coords,
+            payload=candidate,
+        )
+        for candidate in uploadable_candidates(candidates)
+        if candidate.source != "center-fallback"
+    ]
+
+
 def prediction_signature(
     candidates: list[ClassifiedCandidate],
 ) -> tuple[str, ...]:
@@ -453,6 +494,7 @@ def draw_preview_frame(
     frame,
     candidates: list[ClassifiedCandidate] | None = None,
     status: str | None = None,
+    tracking_guide: tuple[str, float, float] | None = None,
 ):
     preview = frame.copy()
     if candidates:
@@ -474,6 +516,22 @@ def draw_preview_frame(
                 2,
                 cv2.LINE_AA,
             )
+
+    if tracking_guide:
+        direction, outer_ratio, inner_ratio = tracking_guide
+        height, width = preview.shape[:2]
+        if direction in {"down", "up"}:
+            outer_position = outer_ratio if direction == "down" else 1.0 - outer_ratio
+            inner_position = inner_ratio if direction == "down" else 1.0 - inner_ratio
+            outer_start, outer_end = (0, int(height * outer_position)), (width, int(height * outer_position))
+            inner_start, inner_end = (0, int(height * inner_position)), (width, int(height * inner_position))
+        else:
+            outer_position = outer_ratio if direction == "right" else 1.0 - outer_ratio
+            inner_position = inner_ratio if direction == "right" else 1.0 - inner_ratio
+            outer_start, outer_end = (int(width * outer_position), 0), (int(width * outer_position), height)
+            inner_start, inner_end = (int(width * inner_position), 0), (int(width * inner_position), height)
+        cv2.line(preview, outer_start, outer_end, (255, 255, 0), 2)
+        cv2.line(preview, inner_start, inner_end, (255, 0, 255), 2)
 
     if status:
         cv2.rectangle(preview, (0, 0), (preview.shape[1], 34), (0, 0, 0), -1)
@@ -580,8 +638,9 @@ class PreviewStreamer:
         frame,
         candidates: list[ClassifiedCandidate] | None = None,
         status: str | None = None,
+        tracking_guide: tuple[str, float, float] | None = None,
     ) -> None:
-        preview = draw_preview_frame(frame, candidates, status)
+        preview = draw_preview_frame(frame, candidates, status, tracking_guide)
         ok, buffer = cv2.imencode(
             ".jpg",
             preview,
@@ -611,6 +670,7 @@ class LivePreviewCamera:
         self.latest_frame = None
         self.latest_candidates: list[ClassifiedCandidate] | None = None
         self.latest_status: str | None = "camera preview"
+        self.latest_tracking_guide: tuple[str, float, float] | None = None
         self.thread: threading.Thread | None = None
 
     def start(self) -> None:
@@ -627,7 +687,8 @@ class LivePreviewCamera:
             with self.overlay_lock:
                 candidates = self.latest_candidates
                 status = self.latest_status
-            self.preview_stream.update(frame, candidates, status)
+                tracking_guide = self.latest_tracking_guide
+            self.preview_stream.update(frame, candidates, status, tracking_guide)
             elapsed = time.time() - started_at
             time.sleep(max(0.0, self.interval - elapsed))
 
@@ -643,10 +704,12 @@ class LivePreviewCamera:
         self,
         candidates: list[ClassifiedCandidate] | None = None,
         status: str | None = None,
+        tracking_guide: tuple[str, float, float] | None = None,
     ) -> None:
         with self.overlay_lock:
             self.latest_candidates = candidates
             self.latest_status = status
+            self.latest_tracking_guide = tracking_guide
 
     def close(self) -> None:
         self.stop_event.set()
@@ -670,11 +733,12 @@ def update_preview(
     frame,
     candidates: list[ClassifiedCandidate] | None,
     status: str,
+    tracking_guide: tuple[str, float, float] | None = None,
 ) -> None:
     if isinstance(camera, LivePreviewCamera):
-        camera.set_overlay(candidates, status)
+        camera.set_overlay(candidates, status, tracking_guide)
     elif preview_stream is not None:
-        preview_stream.update(frame, candidates, status)
+        preview_stream.update(frame, candidates, status, tracking_guide)
 
 
 def maybe_live_preview_camera(camera, preview_stream: PreviewStreamer | None, args: argparse.Namespace):
@@ -885,27 +949,57 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--cooldown", type=float, default=float(os.environ.get("UPLOAD_COOLDOWN_SECONDS", "20.0")))
     parser.add_argument("--stable-frames", type=int, default=int(os.environ.get("STABLE_FRAMES", "3")))
     parser.add_argument("--scan-timeout", type=float, default=float(os.environ.get("SCAN_TIMEOUT_SECONDS", "20.0")))
-    parser.add_argument("--trigger", choices=["continuous", "reed"], default=os.environ.get("TRIGGER_MODE", "continuous"))
+    parser.add_argument(
+        "--trigger",
+        choices=["continuous", "reed", "crossing-test"],
+        default=os.environ.get("TRIGGER_MODE", "continuous"),
+    )
     parser.add_argument("--reed-pin", type=int, default=int(os.environ.get("REED_PIN", "17")))
     parser.add_argument("--reed-open-level", choices=["high", "low"], default=os.environ.get("REED_OPEN_LEVEL", "high"))
     parser.add_argument("--reed-bounce-time", type=float, default=float(os.environ.get("REED_BOUNCE_TIME", "0.1")))
     parser.add_argument("--reed-camera-mode", choices=["on-demand", "warm"], default=os.environ.get("REED_CAMERA_MODE", "on-demand"))
-    parser.add_argument("--reed-workflow", choices=["add-on-open", "add-on-open-consume-on-close"], default=os.environ.get("REED_WORKFLOW", "add-on-open"))
+    parser.add_argument(
+        "--reed-workflow",
+        choices=["add-on-open", "add-on-open-consume-on-close", "track-crossings"],
+        default=os.environ.get("REED_WORKFLOW", "add-on-open"),
+    )
     parser.add_argument("--warm-camera", action="store_true", default=env_flag("WARM_CAMERA"), help="Shortcut for --reed-camera-mode warm.")
     parser.add_argument("--warm-camera-discard-frames", type=int, default=int(os.environ.get("WARM_CAMERA_DISCARD_FRAMES", "2")))
     parser.add_argument("--post-open-delay", type=float, default=float(os.environ.get("POST_OPEN_DELAY_SECONDS", "0.0")))
     parser.add_argument("--post-close-delay", type=float, default=float(os.environ.get("POST_CLOSE_DELAY_SECONDS", "0.0")))
+    parser.add_argument(
+        "--inside-direction",
+        choices=["up", "down", "left", "right"],
+        default=os.environ.get("INSIDE_DIRECTION", "down"),
+        help="Image direction that points from outside toward the fridge interior.",
+    )
+    parser.add_argument("--track-outer-line-ratio", type=float, default=float(os.environ.get("TRACK_OUTER_LINE_RATIO", "0.35")))
+    parser.add_argument("--track-inner-line-ratio", type=float, default=float(os.environ.get("TRACK_INNER_LINE_RATIO", "0.65")))
+    parser.add_argument("--track-stable-zone-frames", type=int, default=int(os.environ.get("TRACK_STABLE_ZONE_FRAMES", "2")))
+    parser.add_argument("--track-max-center-distance-ratio", type=float, default=float(os.environ.get("TRACK_MAX_CENTER_DISTANCE_RATIO", "0.25")))
+    parser.add_argument("--track-max-missed-frames", type=int, default=int(os.environ.get("TRACK_MAX_MISSED_FRAMES", "3")))
     parser.add_argument("--preview-stream", action="store_true", default=env_flag("PREVIEW_STREAM"), help="Serve a browser camera preview from this Pi.")
     parser.add_argument("--preview-stream-host", default=os.environ.get("PREVIEW_STREAM_HOST", "0.0.0.0"))
     parser.add_argument("--preview-stream-port", type=int, default=int(os.environ.get("PREVIEW_STREAM_PORT", "8080")))
     parser.add_argument("--preview-stream-quality", type=int, default=int(os.environ.get("PREVIEW_STREAM_QUALITY", "80")))
     parser.add_argument("--preview-fps", type=float, default=float(os.environ.get("PREVIEW_FPS", os.environ.get("CAMERA_FPS", "30"))))
     parser.add_argument("--preview-idle-interval", type=float, default=float(os.environ.get("PREVIEW_IDLE_INTERVAL_SECONDS", "0.2")))
-    parser.add_argument("--once", action="store_true", help="Upload the first stable prediction and exit.")
+    parser.add_argument("--once", action="store_true", help="Process one trigger cycle and exit.")
     parser.add_argument("--dry-run", action="store_true", help="Classify frames without uploading.")
     args = parser.parse_args()
     if args.warm_camera:
         args.reed_camera_mode = "warm"
+    try:
+        TrackingSettings(
+            inside_direction=args.inside_direction,
+            outer_line_ratio=args.track_outer_line_ratio,
+            inner_line_ratio=args.track_inner_line_ratio,
+            stable_zone_frames=args.track_stable_zone_frames,
+            max_center_distance_ratio=args.track_max_center_distance_ratio,
+            max_missed_frames=args.track_max_missed_frames,
+        )
+    except ValueError as error:
+        parser.error(str(error))
     return args
 
 
@@ -993,6 +1087,149 @@ def scan_while_reed_state(
     else:
         print(f"Reed {end_state} detected before a stable {action}.")
     return action_applied
+
+
+def crossing_tracking_settings(args: argparse.Namespace) -> TrackingSettings:
+    return TrackingSettings(
+        inside_direction=args.inside_direction,
+        outer_line_ratio=args.track_outer_line_ratio,
+        inner_line_ratio=args.track_inner_line_ratio,
+        stable_zone_frames=args.track_stable_zone_frames,
+        max_center_distance_ratio=args.track_max_center_distance_ratio,
+        max_missed_frames=args.track_max_missed_frames,
+    )
+
+
+def scan_crossings_while_reed_open(
+    camera,
+    detector,
+    classifier,
+    args: argparse.Namespace,
+    upload_url: str,
+    consume_url: str,
+    sensor: ReedDoorSensor,
+    preview_stream: PreviewStreamer | None = None,
+) -> int:
+    settings = scan_settings(args)
+    tracker = IngredientCrossingTracker(crossing_tracking_settings(args))
+    event_count = 0
+
+    while sensor.is_open():
+        frame = camera.read()
+        candidates = classify_frame(frame, detector, classifier, settings)
+        observations = trackable_observations(candidates)
+        height, width = frame.shape[:2]
+        events = tracker.update(observations, width, height)
+        status = (
+            f"food track {args.inside_direction} "
+            f"active={tracker.active_track_count} events={event_count}"
+        )
+        print(f"Track: {format_candidates(candidates)}; active={tracker.active_track_count}")
+
+        for event in events:
+            candidate = event.observation.payload
+            action = "upload" if event.direction == "in" else "consume"
+            action_url = upload_url if event.direction == "in" else consume_url
+            print(
+                f"Crossing: track={event.track_id} label={event.label} "
+                f"direction={event.direction} action={action}"
+            )
+            apply_candidates(
+                action,
+                action_url,
+                args.fridge_id,
+                frame,
+                [candidate],
+                args.dry_run,
+            )
+            event_count += 1
+            status = f"{action}: {event.label} track={event.track_id} events={event_count}"
+
+        update_preview(
+            camera,
+            preview_stream,
+            frame,
+            candidates,
+            status,
+            (
+                args.inside_direction,
+                args.track_outer_line_ratio,
+                args.track_inner_line_ratio,
+            ),
+        )
+        if args.once and event_count > 0:
+            print("First crossing event detected. Ending one-shot scan.")
+            return event_count
+        time.sleep(args.interval)
+
+    print(f"Reed close detected. Crossing scan ended with {event_count} event(s).")
+    return event_count
+
+
+def scan_crossing_reed_event(
+    warm_camera,
+    detector,
+    classifier,
+    args: argparse.Namespace,
+    upload_url: str,
+    consume_url: str,
+    sensor: ReedDoorSensor,
+    preview_stream: PreviewStreamer | None = None,
+) -> int:
+    camera = warm_camera
+    if camera is not None:
+        discard_camera_frames(camera, args.warm_camera_discard_frames)
+    else:
+        camera = maybe_live_preview_camera(
+            make_camera(args.camera_backend, args.camera_index, args.width, args.height, args.fps),
+            preview_stream,
+            args,
+        )
+
+    try:
+        return scan_crossings_while_reed_open(
+            camera,
+            detector,
+            classifier,
+            args,
+            upload_url,
+            consume_url,
+            sensor,
+            preview_stream,
+        )
+    finally:
+        if warm_camera is None:
+            camera.close()
+            print("Camera stopped.")
+        else:
+            print("Crossing scan finished. Keeping camera warm.")
+
+
+def run_crossing_camera_test(
+    detector,
+    classifier,
+    args: argparse.Namespace,
+    upload_url: str,
+    consume_url: str,
+    preview_stream: PreviewStreamer | None = None,
+) -> None:
+    print(
+        "Starting camera-only crossing test. "
+        "No reed switch is required; press Ctrl+C to stop."
+    )
+    try:
+        scan_crossing_reed_event(
+            None,
+            detector,
+            classifier,
+            args,
+            upload_url,
+            consume_url,
+            AlwaysOpenSensor(),
+            preview_stream,
+        )
+    except KeyboardInterrupt:
+        print("Camera-only crossing test stopped.")
 
 
 def run_continuous(
@@ -1121,6 +1358,7 @@ def run_reed_triggered(
     sensor = ReedDoorSensor(args.reed_pin, args.reed_open_level, args.reed_bounce_time)
     warm_camera = None
     consume_on_close = args.reed_workflow == "add-on-open-consume-on-close"
+    track_crossings = args.reed_workflow == "track-crossings"
     print(
         f"Waiting for reed open on GPIO {args.reed_pin} "
         f"(open level: {args.reed_open_level}, workflow: {args.reed_workflow})."
@@ -1144,9 +1382,30 @@ def run_reed_triggered(
                 preview_stream,
                 "waiting for reed open",
             )
-            print("Reed opened. Starting add scan.")
+            print(
+                "Reed opened. Starting crossing scan."
+                if track_crossings
+                else "Reed opened. Starting add scan."
+            )
             if args.post_open_delay > 0:
                 time.sleep(args.post_open_delay)
+            if track_crossings:
+                scan_crossing_reed_event(
+                    warm_camera,
+                    detector,
+                    classifier,
+                    args,
+                    upload_url,
+                    consume_url,
+                    sensor,
+                    preview_stream,
+                )
+                if args.once:
+                    return
+                print("Crossing scan finished. Ready for next open event.")
+                time.sleep(max(0.05, args.reed_bounce_time))
+                continue
+
             scan_reed_event(
                 warm_camera,
                 detector,
@@ -1194,15 +1453,24 @@ def main() -> None:
     upload_url = backend_url + "/upload"
     consume_url = backend_url + "/consume"
 
-    if not model_path.exists():
-        raise SystemExit(f"Model was not found: {model_path}")
     if not args.dry_run:
         check_backend(upload_url)
 
+    if not model_path.exists():
+        raise SystemExit(f"Model was not found: {model_path}")
     from ultralytics import YOLO
 
     classifier = YOLO(str(model_path))
     detector = load_detector(args.detector_model, args.disable_detector)
+    if (
+        (args.reed_workflow == "track-crossings" or args.trigger == "crossing-test")
+        and detector is None
+        and args.disable_contour_proposals
+    ):
+        raise SystemExit(
+            "track-crossings needs detector boxes or contour proposals; "
+            "enable one of them."
+        )
     preview_stream = None
     if args.preview_stream:
         preview_stream = PreviewStreamer(
@@ -1215,6 +1483,15 @@ def main() -> None:
     try:
         if args.trigger == "reed":
             run_reed_triggered(detector, classifier, args, upload_url, consume_url, preview_stream)
+        elif args.trigger == "crossing-test":
+            run_crossing_camera_test(
+                detector,
+                classifier,
+                args,
+                upload_url,
+                consume_url,
+                preview_stream,
+            )
         else:
             run_continuous(detector, classifier, args, upload_url, preview_stream)
     finally:

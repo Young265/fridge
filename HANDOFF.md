@@ -41,6 +41,11 @@ main
   - Uses the old center crop only as a final fallback.
   - Configures the Pi and PC camera paths at the same `640x480`, `30 FPS` defaults.
   - Uploads the full frame and each recognized crop to the backend.
+  - Supports `--reed-workflow track-crossings`, which tracks classified boxes
+    across two virtual boundary lines while the door is open. Inward crossings
+    call `/upload`; outward crossings call `/consume`.
+  - Draws the crossing guide lines in the browser preview and tolerates short
+    detection gaps before expiring a track.
 
 - `backend/requirements-pi.txt`
   - Minimal pip requirements for Raspberry Pi.
