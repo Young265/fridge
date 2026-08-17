@@ -1,0 +1,58 @@
+const Map<String, String> ingredientLabels = {
+  'egg': '계란',
+  'milk': '우유',
+  'onion': '양파',
+  'carrot': '당근',
+  'potato': '감자',
+  'tomato': '토마토',
+  'green_onion': '대파',
+  'cheese': '치즈',
+  'ham': '햄',
+  'tofu': '두부',
+  'cabbage': '양배추',
+  'mushroom': '버섯',
+  'rice': '밥',
+  'apple': '사과',
+  'banana': '바나나',
+  'orange': '오렌지',
+  'watermelon': '수박',
+  'avocado': '아보카도',
+  'kiwi': '키위',
+  'lemon': '레몬',
+  'lime': '라임',
+  'mango': '망고',
+  'pear': '배',
+  'peach': '복숭아',
+  'pineapple': '파인애플',
+  'broccoli': '브로콜리',
+  'cucumber': '오이',
+  'eggplant': '가지',
+  'garlic': '마늘',
+  'ginger': '생강',
+  'leek': '리크',
+  'lettuce': '상추',
+  'paprika': '파프리카',
+  'spinach': '시금치',
+  'zucchini': '애호박',
+  'bottle': '병',
+  'cup': '컵',
+  'hot_dog': '핫도그',
+  'sandwich': '샌드위치',
+  'pizza': '피자',
+  'donut': '도넛',
+  'cake': '케이크',
+};
+
+const Map<String, String> unitLabels = {
+  'ea': '개',
+  'bowl': '공기',
+  'slice': '장',
+  'pack': '팩',
+  'cup': '컵',
+  'head': '통',
+};
+
+String localizedIngredientName(String name) =>
+    ingredientLabels[name] ?? name.replaceAll('_', ' ');
+
+String localizedUnit(String unit) => unitLabels[unit] ?? unit;

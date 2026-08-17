@@ -57,7 +57,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         return;
       }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error.toString().replaceFirst('Exception: ', ''))),
+        SnackBar(
+          content: Text(error.toString().replaceFirst('Exception: ', '')),
+        ),
       );
     } finally {
       if (mounted) {
@@ -107,12 +109,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextFormField(
                         controller: _emailController,
                         decoration: const InputDecoration(
-                          labelText: '이메일',
+                          labelText: '아이디',
                           border: OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return '이메일을 입력해주세요.';
+                            return '아이디를 입력해주세요.';
                           }
                           return null;
                         },
@@ -139,7 +141,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ? const SizedBox(
                                 height: 20,
                                 width: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               )
                             : const Text('가입하기'),
                       ),

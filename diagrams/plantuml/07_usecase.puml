@@ -1,0 +1,48 @@
+@startuml
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 180
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam packageStyle rectangle
+skinparam ArrowColor #526AA5
+skinparam usecase {
+  BackgroundColor #EEF3FB
+  BorderColor #526AA5
+  FontColor #172033
+}
+
+rectangle "AI 스마트 냉장고" as System {
+  usecase "회원가입·로그인" as UC_AUTH
+  usecase "냉장고 등록·선택" as UC_FRIDGE
+  usecase "식재료 자동 등록" as UC_AUTO
+  usecase "재고 목록 조회" as UC_LIST
+  usecase "재고 상세 검수·수정" as UC_REVIEW
+  usecase "레시피 추천 조회" as UC_RECIPE
+  usecase "레시피 상세 확인" as UC_DETAIL
+  usecase "문 이벤트 감지·촬영" as UC_CAPTURE
+  usecase "식재료 인식·안정화" as UC_AI
+}
+
+together {
+  actor "사용자" as User
+  actor "Raspberry Pi 5" as Pi
+}
+
+System -[hidden]right- User
+User -[hidden]down- Pi
+UC_AUTH -right- User
+UC_FRIDGE -right- User
+UC_AUTO -right- User
+UC_LIST -right- User
+UC_REVIEW -right- User
+UC_RECIPE -right- User
+UC_DETAIL -right- User
+UC_CAPTURE -right- Pi
+
+UC_AUTO .> UC_CAPTURE : <<include>>
+UC_AUTO .> UC_AI : <<include>>
+UC_REVIEW .> UC_LIST : <<extend>>
+UC_DETAIL .> UC_RECIPE : <<extend>>
+@enduml

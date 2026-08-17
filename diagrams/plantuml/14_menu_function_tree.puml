@@ -1,0 +1,31 @@
+@startuml
+title 메뉴 구성도 - 기능 트리
+top to bottom direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 160
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam linetype ortho
+skinparam ArrowColor #64748B
+skinparam rectangle {
+  BackgroundColor #F8FAFC
+  BorderColor #64748B
+  RoundCorner 12
+}
+
+rectangle "AI 스마트 냉장고" as ROOT #DCEBFF
+rectangle "계정·냉장고" as ACCOUNT #EAF2FF
+rectangle "센서·카메라" as SENSOR #FFF4D9
+rectangle "AI 인식" as AI #F3ECFF
+rectangle "재고 관리" as INVENTORY #EAF7EE
+rectangle "레시피" as RECIPE #FFF3E8
+rectangle "데이터 연동" as DATA #F2F4F7
+
+ROOT --> ACCOUNT
+ROOT --> SENSOR
+ROOT --> AI
+ROOT --> INVENTORY
+ROOT --> RECIPE
+ROOT --> DATA
+@enduml

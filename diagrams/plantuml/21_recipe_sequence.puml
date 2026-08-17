@@ -1,0 +1,34 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 180
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 13
+skinparam ArrowColor #526AA5
+hide footbox
+
+actor "사용자" as User
+participant "Flutter 앱" as App
+participant "Flask API" as API
+participant "추천 로직" as Ranker
+database "MySQL" as DB
+
+User -> App : 레시피 확인 선택
+App -> API : GET /recipes?fridge_id&q
+API -> DB : 보유 재료 SELECT
+DB --> API : ingredient_id 집합
+API -> DB : 레시피·필요 재료 SELECT
+DB --> API : 후보 레시피
+API -> Ranker : 보유/필요 재료 비교
+Ranker -> Ranker : matched·missing 계산
+Ranker -> Ranker : missing 오름차순\nmatched 내림차순 정렬
+Ranker --> API : 추천 목록
+API --> App : 레시피 요약·부족 재료
+App --> User : 추천 순위 표시
+User -> App : 레시피 상세 선택
+App -> API : GET /recipes/{id}?fridge_id
+API -> DB : 재료·조리법 SELECT
+DB --> API : 상세 데이터
+API --> App : 보유/부족 표시 포함 상세
+App --> User : 필요한 재료와 조리 방법 표시
+@enduml

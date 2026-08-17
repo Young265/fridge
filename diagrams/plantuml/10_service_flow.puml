@@ -1,0 +1,28 @@
+@startuml
+title 서비스 흐름도
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 160
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam roundcorner 14
+skinparam ArrowColor #3F5FA9
+skinparam rectangle {
+  BackgroundColor #EEF3FB
+  BorderColor #3F5FA9
+}
+
+rectangle "문 감지" as A
+rectangle "카메라 촬영" as B
+rectangle "AI 인식" as C
+rectangle "재고 반영" as D
+rectangle "앱 표시" as E
+rectangle "레시피 추천" as F
+
+A --> B
+B --> C
+C --> D
+D --> E
+E --> F
+@enduml

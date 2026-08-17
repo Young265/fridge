@@ -1,0 +1,33 @@
+@startuml
+title 화면 설계도 - 재고 상세·수정
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 160
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam linetype ortho
+skinparam ArrowColor #64748B
+skinparam rectangle {
+  BackgroundColor #F8FAFC
+  BorderColor #64748B
+  RoundCorner 12
+}
+
+rectangle "재고 상세" as DETAIL #FFFDF8
+rectangle "재료명 수정" as NAME #EAF2FF
+rectangle "수량 변경" as QUANTITY #EAF2FF
+rectangle "상태 변경" as STATUS #FFF3E8
+rectangle "사용자 확인" as CONFIRM #EAF7EE
+rectangle "저장" as SAVE #EAF7EE
+rectangle "삭제" as DELETE #FDECEC
+
+DETAIL --> NAME
+DETAIL --> QUANTITY
+DETAIL --> STATUS
+STATUS --> CONFIRM
+NAME --> SAVE
+QUANTITY --> SAVE
+CONFIRM --> SAVE
+DETAIL --> DELETE
+@enduml

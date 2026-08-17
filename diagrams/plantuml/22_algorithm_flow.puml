@@ -1,0 +1,50 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 180
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 14
+skinparam ActivityBackgroundColor #EEF3FB
+skinparam ActivityBorderColor #526AA5
+skinparam ActivityDiamondBackgroundColor #FFF8E8
+skinparam ActivityDiamondBorderColor #C98A2E
+skinparam ArrowColor #526AA5
+
+start
+:새 프레임 입력;
+:YOLO 객체 탐지;
+if (탐지 box가 있는가?) then (예)
+  :YOLO crop 후보 생성;
+else (아니오)
+  :OpenCV contour 분석;
+  if (유효 contour가 있는가?) then (예)
+    :contour crop 후보 생성;
+  else (아니오)
+    :center fallback 후보 생성;
+  endif
+endif
+
+:각 crop 분류·top1 confidence 계산;
+if (none/background 또는 임계값 미달인가?) then (예)
+  :해당 후보 제외;
+else (아니오)
+  :유효 label 집합 생성;
+endif
+
+if (직전 signature와 같은가?) then (예)
+  :stable_count 증가;
+else (아니오)
+  :signature 교체·stable_count = 1;
+endif
+
+if (stable_count가 3 이상인가?) then (예)
+  if (cooldown이 끝났는가?) then (예)
+    :/upload 또는 /consume 호출;
+  else (아니오)
+    :중복 결과 생략;
+  endif
+else (아니오)
+  :다음 프레임으로 반복;
+endif
+stop
+@enduml

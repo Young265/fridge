@@ -1,0 +1,29 @@
+@startuml
+title 물리 테이블 ERD
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 160
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam ArrowColor #49657A
+skinparam class {
+  BackgroundColor #F8FAFC
+  BorderColor #49657A
+}
+
+class users <<table>> #E8F2FF
+class fridges <<table>> #EAF7EE
+class fridge_items <<table>> #FFF4D9
+class ingredients <<table>> #EAF7EE
+class recipes <<table>> #FFECEC
+class recipe_ingredients <<table>> #F3ECFF
+class app_state <<table>> #F2F4F7
+
+users "1" -- "N" fridges
+fridges "1" -- "N" fridge_items
+ingredients "1" -- "N" fridge_items
+recipes "1" -- "N" recipe_ingredients
+ingredients "1" -- "N" recipe_ingredients
+app_state .. fridges
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+title 화면 설계도 - 대표 화면
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 160
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam linetype ortho
+skinparam ArrowColor #64748B
+skinparam rectangle {
+  BackgroundColor #F8FAFC
+  BorderColor #64748B
+  RoundCorner 12
+}
+
+rectangle "로그인 화면" as LOGIN #EAF2FF
+rectangle "홈 화면" as HOME #EAF7EE
+rectangle "재고 목록 화면" as INVENTORY #EAF7EE
+rectangle "재고 상세 화면" as DETAIL #FFF3E8
+rectangle "레시피 목록 화면" as RECIPES #FFF3E8
+rectangle "레시피 상세 화면" as RECIPE_DETAIL #FFF3E8
+
+LOGIN --> HOME
+HOME --> INVENTORY
+INVENTORY --> DETAIL
+HOME --> RECIPES
+RECIPES --> RECIPE_DETAIL
+@enduml

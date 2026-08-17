@@ -13,6 +13,8 @@ backend/temp_import/
 # Large training/import datasets
 backend/datasets/
 backend/custom_dataset/
+backend/feedback_dataset/
+backend/external_data/
 
 # Training outputs. Keep the current lightweight classifier weights needed by the Pi bridge.
 backend/runs/*

@@ -18,6 +18,7 @@ class TrackingSettings:
     stable_zone_frames: int = 2
     max_center_distance_ratio: float = 0.25
     max_missed_frames: int = 3
+    label_history_size: int = 7
 
     def __post_init__(self) -> None:
         if self.inside_direction not in {"up", "down", "left", "right"}:
@@ -30,6 +31,8 @@ class TrackingSettings:
             raise ValueError("max_center_distance_ratio must be positive")
         if self.max_missed_frames < 0:
             raise ValueError("max_missed_frames cannot be negative")
+        if self.label_history_size < 1:
+            raise ValueError("label_history_size must be at least 1")
 
 
 @dataclass(frozen=True)
@@ -55,6 +58,7 @@ class _Track:
     pending_zone: str | None = None
     pending_zone_frames: int = 0
     missed_frames: int = 0
+    label_history: list[str] | None = None
 
 
 def box_center(coords: tuple[int, int, int, int]) -> tuple[float, float]:
@@ -92,7 +96,20 @@ class IngredientCrossingTracker:
 
         for track_id, observation_index in matches:
             track = self._tracks[track_id]
-            track.observation = observations[observation_index]
+            observation = observations[observation_index]
+            history = track.label_history or [track.observation.label]
+            history.append(observation.label)
+            history = history[-self.settings.label_history_size :]
+            track.label_history = history
+            stable_label = max(
+                set(history),
+                key=lambda label: (history.count(label), max(i for i, value in enumerate(history) if value == label)),
+            )
+            track.observation = TrackObservation(
+                label=stable_label,
+                coords=observation.coords,
+                payload=observation.payload,
+            )
             track.missed_frames = 0
             event = self._update_zone(track, frame_width, frame_height)
             if event is not None:
@@ -110,7 +127,12 @@ class IngredientCrossingTracker:
             del self._tracks[track_id]
 
         for observation_index in unmatched_observations:
-            track = _Track(self._next_track_id, observations[observation_index])
+            observation = observations[observation_index]
+            track = _Track(
+                self._next_track_id,
+                observation,
+                label_history=[observation.label],
+            )
             self._next_track_id += 1
             self._tracks[track.track_id] = track
             self._update_zone(track, frame_width, frame_height)
@@ -129,15 +151,16 @@ class IngredientCrossingTracker:
         for track_id, track in self._tracks.items():
             previous_center = box_center(track.observation.coords)
             for observation_index, observation in enumerate(observations):
-                if observation.label != track.observation.label:
-                    continue
                 current_center = box_center(observation.coords)
                 distance_ratio = hypot(
                     current_center[0] - previous_center[0],
                     current_center[1] - previous_center[1],
                 ) / diagonal
                 if distance_ratio <= self.settings.max_center_distance_ratio:
-                    possible_matches.append((distance_ratio, track_id, observation_index))
+                    label_penalty = 0.05 if observation.label != track.observation.label else 0.0
+                    possible_matches.append(
+                        (distance_ratio + label_penalty, track_id, observation_index)
+                    )
 
         matches: list[tuple[int, int]] = []
         matched_tracks: set[int] = set()

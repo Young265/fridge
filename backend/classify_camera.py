@@ -31,7 +31,7 @@ def env_flag(name: str, default: str = "0") -> bool:
 
 SETTINGS = bridge.ScanSettings(
     crop_ratio=float(os.environ.get("CENTER_CROP_RATIO", "0.65")),
-    min_confidence=float(os.environ.get("CLASSIFIER_MIN_CONFIDENCE", "0.65")),
+    min_confidence=float(os.environ.get("CLASSIFIER_MIN_CONFIDENCE", "0.55")),
     background_strong_confidence=float(os.environ.get("CLASSIFIER_BACKGROUND_STRONG_CONFIDENCE", "0.90")),
     detection_confidence=float(os.environ.get("DETECTION_CONFIDENCE", "0.30")),
     detection_imgsz=int(os.environ.get("DETECTION_IMGSZ", "640")),

@@ -292,3 +292,46 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now fridge-camera
 sudo journalctl -u fridge-camera -f
 ```
+
+## 8. 인식 정확도 개선 운영
+
+현재 기본 모델은 YOLO11n 분류기이며 Grocery Store Dataset과 프로젝트 자체
+데이터를 합쳐 18개 클래스, 학습 3,442장, 검증 276장, 독립 테스트 1,016장으로
+학습했습니다. 독립 테스트 1순위 정확도는 92.42%입니다.
+
+인식 품목은 사과, 바나나, 양배추, 당근, 오이, 계란, 가지, 마늘, 상추, 우유,
+버섯, 양파, 파프리카, 감자, 시금치, 토마토, 애호박과 배경입니다.
+
+기본적으로 모든 학습 품목을 인식합니다. `RECOGNITION_ALLOWED_LABELS`를
+설정하지 않으면 특정 품목이 제한되지 않습니다. 이 환경 변수는 장애 조사나
+특정 품목 시연이 필요할 때만 선택적으로 사용합니다.
+
+```bash
+CLASSIFIER_MIN_CONFIDENCE=0.55 \
+python backend/pi_fridge_camera.py
+```
+
+분류기는 신뢰도 `0.55` 이상 후보를 백엔드로 보냅니다. 백엔드는
+신뢰도 `0.78` 미만이거나 평가 정밀도가 낮은 품목을 자동 확정하지 않고
+앱의 `확인 필요` 목록으로 보냅니다. 즉 인식 범위를 줄이지 않으면서
+잘못된 재고 자동 등록을 막습니다.
+환경 변수로 기준을 조정할 수 있습니다.
+
+```bash
+RECOGNITION_CONFIRM_CONFIDENCE=0.70 python backend/app.py
+```
+
+앱에서 오인식 재료를 올바른 이름으로 바꾸고 `사용자 확인 완료`로 저장하면 크롭 이미지가
+`backend/feedback_dataset/<정답 라벨>/`에 쌓입니다. 충분히 모인 뒤 아래 순서로 재학습과
+독립 테스트셋 평가를 실행합니다.
+
+```bash
+python backend/prepare_grocery_classifier_dataset.py
+CLASSIFIER_EPOCHS=50 python backend/train_grocery_classifier.py
+CLASSIFIER_MODEL_PATH=backend/runs/classify/<새 실행>/weights/best.pt \
+  python backend/evaluate_grocery_classifier.py
+```
+
+평가 결과는 `backend/runs/classify/evaluation_summary.json`과 혼동행렬 이미지로 저장됩니다.
+현재 분류 데이터에 없는 재료는 추가 촬영 없이 정확도를 높일 수 없으므로, 실제 냉장고 카메라로
+재료별 최소 80~150장(조명·각도·포장·가림 변화 포함)을 모으는 것이 우선입니다.

@@ -16,6 +16,16 @@ DEFAULT_MODEL_PATH = BASE_DIR / "runs" / "classify" / "grocery-classifier-public
 DEFAULT_DETECTOR_MODEL_PATH = BASE_DIR / "yolov8n.pt"
 
 SKIP_LABELS = {"none", "background", "no prediction"}
+# 기본적으로 모든 학습 품목을 인식한다. 운영 환경에서 특정 품목만
+# 임시로 허용해야 할 때만 RECOGNITION_ALLOWED_LABELS를 설정한다.
+DEFAULT_RELIABLE_LABELS = ""
+RECOGNITION_ALLOWED_LABELS = {
+    label.strip().lower()
+    for label in os.environ.get(
+        "RECOGNITION_ALLOWED_LABELS", DEFAULT_RELIABLE_LABELS
+    ).split(",")
+    if label.strip()
+}
 EXCLUDED_DETECTOR_LABELS = {"person"}
 TRUSTED_DETECTOR_LABELS = {
     "apple",
@@ -393,7 +403,10 @@ def choose_prediction(
 
 
 def is_uploadable(prediction: Prediction) -> bool:
-    return prediction.label.lower() not in SKIP_LABELS
+    label = prediction.label.lower()
+    return label not in SKIP_LABELS and (
+        not RECOGNITION_ALLOWED_LABELS or label in RECOGNITION_ALLOWED_LABELS
+    )
 
 
 def classify_frame(
@@ -770,7 +783,7 @@ def upload_prediction(
         "label": prediction.label,
         "detected_name": prediction.label,
         "quantity": "1",
-        "unit": "ea",
+        "unit": "개",
     }
     if prediction.confidence is not None:
         data["confidence"] = f"{prediction.confidence:.4f}"
@@ -799,7 +812,7 @@ def consume_prediction(
         "label": prediction.label,
         "detected_name": prediction.label,
         "quantity": "1",
-        "unit": "ea",
+        "unit": "개",
     }
     if prediction.confidence is not None:
         data["confidence"] = f"{prediction.confidence:.4f}"
@@ -934,7 +947,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--height", type=int, default=int(os.environ.get("CAMERA_HEIGHT", "480")))
     parser.add_argument("--fps", type=float, default=float(os.environ.get("CAMERA_FPS", "30")))
     parser.add_argument("--crop-ratio", type=float, default=float(os.environ.get("CENTER_CROP_RATIO", "0.65")))
-    parser.add_argument("--min-confidence", type=float, default=float(os.environ.get("CLASSIFIER_MIN_CONFIDENCE", "0.65")))
+    parser.add_argument(
+        "--min-confidence",
+        type=float,
+        default=float(os.environ.get("CLASSIFIER_MIN_CONFIDENCE", "0.55")),
+    )
     parser.add_argument("--background-strong-confidence", type=float, default=float(os.environ.get("CLASSIFIER_BACKGROUND_STRONG_CONFIDENCE", "0.90")))
     parser.add_argument("--detection-confidence", type=float, default=float(os.environ.get("DETECTION_CONFIDENCE", "0.30")))
     parser.add_argument("--detection-imgsz", type=int, default=int(os.environ.get("DETECTION_IMGSZ", "640")))
@@ -1128,6 +1145,17 @@ def scan_crossings_while_reed_open(
 
         for event in events:
             candidate = event.observation.payload
+            if candidate.prediction.label != event.label:
+                candidate = ClassifiedCandidate(
+                    crop=candidate.crop,
+                    coords=candidate.coords,
+                    source=f"{candidate.source}:temporal-label",
+                    prediction=Prediction(
+                        event.label,
+                        candidate.prediction.confidence,
+                        candidate.prediction.candidates,
+                    ),
+                )
             action = "upload" if event.direction == "in" else "consume"
             action_url = upload_url if event.direction == "in" else consume_url
             print(

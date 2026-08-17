@@ -1,0 +1,55 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 180
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 14
+skinparam ActivityBackgroundColor #EEF3FB
+skinparam ActivityBorderColor #526AA5
+skinparam ActivityDiamondBackgroundColor #FFF8E8
+skinparam ActivityDiamondBorderColor #C98A2E
+skinparam ArrowColor #526AA5
+
+start
+:리드스위치 상태 읽기;
+if (문 열림 이벤트인가?) then (예)
+  :카메라 프레임 수집;
+else (아니오)
+  :다음 센서 이벤트 대기;
+  stop
+endif
+
+repeat
+  :YOLO box 추출;
+  if (후보가 있는가?) then (예)
+    :box crop 생성;
+  else (아니오)
+    :contour 후보 추출;
+    if (후보가 있는가?) then (예)
+      :contour crop 생성;
+    else (아니오)
+      :center fallback crop 생성;
+    endif
+  endif
+  :식재료 분류·confidence 계산;
+  if (업로드 가능한 결과인가?) then (예)
+    :signature 안정 횟수 증가;
+  else (아니오)
+    :안정 횟수 초기화;
+  endif
+repeat while (동일 결과 3회 미만인가?) is (예)
+->아니오;
+
+if (cooldown 20초가 지났는가?) then (예)
+  :/upload 전송;
+  if (전송 성공인가?) then (예)
+    :재고·이미지·AI 메타데이터 저장;
+    :앱 재고 목록 갱신;
+  else (아니오)
+    :오류 로그 저장·다음 이벤트 재시도;
+  endif
+else (아니오)
+  :중복 전송 생략;
+endif
+stop
+@enduml

@@ -1,0 +1,147 @@
+T00 rows=1 cols=1 first='양식'
+P000 style=바탕글: <blank>
+P001 style=바탕글: <blank>
+T01 rows=3 cols=1 first=''
+P002 style=바탕글: <blank>
+P003 style=바탕글: 2026. 8.
+P004 style=바탕글: <blank>
+P005 style=바탕글: <blank>
+T02 rows=1 cols=2 first='프로젝트명'
+P006 style=바탕글: <blank>
+P007 style=바탕글: <blank>
+P008 style=바탕글: <blank>
+P009 style=바탕글: <blank>
+P010 style=바탕글: <blank>
+T03 rows=1 cols=1 first='요 약 본 | # 필히 1장으로 작성, 글꼴 맑은고딕, 사이즈 10, 글자색 검정, 줄간격 160, 판넬/책자 등 활용 예정'
+P011 style=바탕글: <blank>
+T04 rows=12 cols=5 first='프로젝트 정보'
+P012 style=바탕글: <blank>
+P013 style=Normal: <blank>
+T05 rows=1 cols=1 first='본    문 | # 본문 제목은 임의로 수정하거나 삭제할 수 없음'
+P014 style=바탕글: <blank>
+P015 style=대제목: I. 프로젝트 개요 # 프로젝트개요는 2장 이내로 작성
+T06 rows=1 cols=1 first='※ 평가항목 : 기획력 (필요성, 차별성)'
+P016 style=중제목: <blank>
+P017 style=중제목:  1. 프로젝트 소개
+P018 style=소제목:    1) 
+P019 style=소제목:     - 
+T07 rows=1 cols=1 first='# 기획의도, 프로젝트 내용, 정의 등 그림을 포함하여 개조식으로 작성 (항목별 핵심내용만 작성)'
+P020 style=바탕글: <blank>
+P021 style=소제목: <blank>
+P022 style=중제목:  2. 개발 배경 및 필요성 
+P023 style=소제목:    1) 
+P024 style=소제목:     - 
+T08 rows=1 cols=1 first='# 프로젝트 제작 동기 및 목적 작성'
+P025 style=바탕글: <blank>
+P026 style=소제목: <blank>
+P027 style=중제목:  3. 프로젝트 특·장점
+P028 style=소제목:    1) 
+P029 style=소제목:     - 
+T09 rows=1 cols=1 first='# 프로젝트의 주요 기능을 중심으로 기존 제품, 유사 제품과의 기능적/기술적 차별성을 작성\n - 기존 프로젝트를 업그레이드한 경우 기존 프로젝트와 비교하여 차이점 및 차별성을 작성 | - 유사 프로젝트가 있는 경우 그 내용 및 유사 프로젝트와 비교하여 본 프로젝트의 특이점 및 차별성 작성 | - 신규 창작 프로젝트인 경우 독창성을 충분히 설명하여 작성'
+P030 style=바탕글: <blank>
+P031 style=대제목: II. 프로젝트 내용 
+T10 rows=1 cols=1 first='※ 평가항목 : 기술력 (기능구체성, 난이도, 완성도)'
+P032 style=대제목: <blank>
+P033 style=중제목:  1. 프로젝트 구성도 
+P034 style=소제목:    1) 
+P035 style=소제목:     - 
+T11 rows=1 cols=1 first='# S/W구성도, H/W구성도, 서비스흐름도 등을 전체적으로 작성(그림을 포함한 도식 또는 흐름으로 표현)'
+P036 style=바탕글: <blank>
+P037 style=바탕글: <blank>
+P038 style=바탕글: <blank>
+P039 style=바탕글: <blank>
+P040 style=중제목:  2. 프로젝트 기능 
+P041 style=소제목: <blank>
+P042 style=소제목:   1) 전체 기능 목록 
+T12 rows=6 cols=4 first='구분'
+P043 style=소제목: <blank>
+P044 style=소제목: <blank>
+P045 style=소제목: <blank>
+P046 style=소제목: <blank>
+P047 style=소제목:  2) S/W 주요 기능 
+T13 rows=5 cols=5 first='기능'
+P048 style=소제목:     - 
+T14 rows=1 cols=1 first='# 표는 필수로 작성하고, 부연 및 추가설명 사항이 있는 경우 작성'
+P049 style=바탕글: <blank>
+P050 style=소제목:   3) H/W 주요 기능 
+T15 rows=3 cols=3 first='기능/부품'
+P051 style=Normal: <blank>
+T16 rows=1 cols=1 first='# 사진으로 진척도를 확인 할 수 있도록 작성, H/W가 없는 경우 작성 안함(표는 유지) | # 프로젝트 실물사진을 반드시 첨부하여 실제 프로젝트 완성도 확인할 수 있도록 작성, 필요 시 줄 추가'
+P052 style=소제목: <blank>
+P053 style=소제목:     - 
+T17 rows=1 cols=1 first='# 표는 필수로 작성하고, 부연 및 추가설명 사항이 있는 경우 작성'
+P054 style=중제목: <blank>
+P055 style=중제목: 3. 주요 적용 기술 
+P056 style=소제목:     - 
+T18 rows=1 cols=1 first='# S/W, H/W 기능 구현을 위한 시나리오, 적용 알고리즘 및 주요 적용 기술 등을 상세히 작성 | (이론적인 부분 포함)'
+P057 style=중제목:  4. 프로젝트 개발 환경
+T19 rows=15 cols=4 first='구분'
+P058 style=바탕글: <blank>
+P059 style=바탕글: <blank>
+P060 style=중제목:  5. 기타 사항 [본문에서 표현되지 못한 프로젝트의 가치(Value) 및 제작 노력
+P061 style=소제목:     - 
+T20 rows=1 cols=1 first='# 차별화된 성능, 신뢰성, 사용성, 보안, 알고리즘의 창작성, 데이터와 프로그램의 가치, 프로젝트를 통한 가치창출 등을 상세히 작성(이론적인 부분 포함)'
+P062 style=소제목: <blank>
+P063 style=대제목: III. 프로젝트 수행 내용 
+T21 rows=1 cols=1 first='※ 평가항목 : 수행능력 (문서완성도, 문제해결능력, 수행충실성)'
+P064 style=대제목: <blank>
+P065 style=중제목: 프로젝트 수행일정 
+T22 rows=13 cols=11 first='프로젝트 기간(한이음 드림업 사이트 기준)'
+P066 style=중제목: <blank>
+T23 rows=1 cols=1 first='# 기획부터 결과물 도출까지의 수행절차, 일정 및 현황 기재 | # 프로젝트 기간은 노란색 셀 색상으로 표시, 필요 시 줄 추가'
+P067 style=바탕글: <blank>
+P068 style=중제목: <blank>
+P069 style=중제목:  2. 프로젝트 추진 과정에서의 문제점 및 해결방안 
+P070 style=소제목:   1) 프로젝트 관리 측면 
+P071 style=소제목:     - 
+T24 rows=1 cols=1 first='# 프로젝트 진행 중 발생한 문제점 및 해결 경험 작성'
+P072 style=소제목: <blank>
+P073 style=바탕글: <blank>
+P074 style=바탕글: <blank>
+P075 style=소제목:   2) 프로젝트 개발 측면 
+P076 style=소제목:     - 
+T25 rows=1 cols=1 first='# 기술적으로 발생한 문제점 및 해결 경험 작성'
+P077 style=소제목: <blank>
+P078 style=소제목: <blank>
+P079 style=소제목: <blank>
+P080 style=중제목:  3. 프로젝트를 통해 배우거나 느낀 점 
+P081 style=소제목:     - 
+P082 style=소제목: <blank>
+T26 rows=1 cols=1 first='# 소속 및 성명 삭제'
+P083 style=소제목: <blank>
+P084 style=소제목: <blank>
+P085 style=소제목: <blank>
+P086 style=소제목: <blank>
+P087 style=소제목: <blank>
+P088 style=소제목: <blank>
+P089 style=소제목: <blank>
+P090 style=소제목: <blank>
+P091 style=소제목: <blank>
+P092 style=소제목: <blank>
+P093 style=소제목: <blank>
+P094 style=소제목: <blank>
+P095 style=소제목: <blank>
+P096 style=소제목: <blank>
+P097 style=소제목: <blank>
+P098 style=대제목: Ⅳ. 기대효과 및 활용분야 
+T27 rows=1 cols=1 first='※ 평가항목 : 기획력 (활용가능성)'
+P099 style=중제목:  1. 프로젝트의 기대효과 
+P100 style=소제목:     - 
+P101 style=소제목: <blank>
+T28 rows=1 cols=1 first='# 해당 프로젝트를 통한 기존 서비스와의 차별성과 시장성(가격 우위성) 등 작성'
+P102 style=소제목: <blank>
+P103 style=바탕글: <blank>
+P104 style=바탕글: <blank>
+P105 style=바탕글: <blank>
+P106 style=중제목:  2. 프로젝트의 활용분야 
+P107 style=소제목:     - 
+P108 style=소제목: <blank>
+T29 rows=1 cols=1 first='# 해당 프로젝트를 통한 서비스 활용분야에서의 실질적인 효과 작성'
+P109 style=소제목: <blank>
+P110 style=바탕글: <blank>
+P111 style=바탕글: <blank>
+P112 style=바탕글: <blank>
+P113 style=바탕글: <blank>
+P114 style=바탕글: <blank>
+P115 style=Normal: <blank>
+P116 style=바탕글: <blank>

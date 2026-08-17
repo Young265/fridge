@@ -4,6 +4,7 @@ import '../models/app_user.dart';
 import '../models/fridge.dart';
 import 'inventory/inventory_screen.dart';
 import 'recipes/recipe_list_screen.dart';
+import 'shopping/shopping_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -26,7 +27,11 @@ class HomeScreen extends StatelessWidget {
         title: Text(fridge.fridgeName),
         actions: [
           TextButton(onPressed: onChangeFridge, child: const Text('냉장고 변경')),
-          IconButton(onPressed: onLogout, icon: const Icon(Icons.logout)),
+          IconButton(
+            tooltip: '로그아웃',
+            onPressed: onLogout,
+            icon: const Icon(Icons.logout),
+          ),
         ],
       ),
       body: Padding(
@@ -38,21 +43,16 @@ class HomeScreen extends StatelessWidget {
               '${user.name}님, 무엇을 확인할까요?',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
-            const SizedBox(height: 8),
-            Text(
-              '현재 선택한 냉장고: ${fridge.fridgeName}',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   final isWide = constraints.maxWidth > 720;
                   return GridView.count(
-                    crossAxisCount: isWide ? 2 : 1,
+                    crossAxisCount: isWide ? 3 : 1,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio: isWide ? 1.45 : 1.9,
+                    childAspectRatio: isWide ? 1.15 : 1.9,
                     children: [
                       _HomeCard(
                         title: '재고 확인',
@@ -76,6 +76,20 @@ class HomeScreen extends StatelessWidget {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (_) => RecipeListScreen(fridge: fridge),
+                            ),
+                          );
+                        },
+                      ),
+                      _HomeCard(
+                        title: '장보기 목록',
+                        subtitle: '레시피의 부족 재료를 모아두고 구매 여부를 체크해요.',
+                        icon: Icons.shopping_basket_rounded,
+                        color: const Color(0xFF4267A9),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  ShoppingListScreen(fridge: fridge),
                             ),
                           );
                         },

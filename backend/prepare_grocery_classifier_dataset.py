@@ -8,20 +8,26 @@ from pathlib import Path
 
 import cv2
 
+BASE_DIR = Path(__file__).resolve().parent
+EXTERNAL_DATA_DIR = BASE_DIR / "external_data"
 SOURCE_DATASET_DIR = Path(
     os.environ.get(
         "GROCERY_SOURCE_DATASET_DIR",
-        r"C:\Users\dudal\Desktop\GroceryStoreDataset-master\dataset",
+        EXTERNAL_DATA_DIR / "GroceryStoreDataset" / "dataset",
     )
 )
-EGG_SOURCE_DIR = Path(os.environ.get("EGG_SOURCE_DIR", r"C:\Users\dudal\Desktop\Eggs Classification"))
-TARGET_DATASET_DIR = Path(__file__).resolve().parent / "datasets" / "grocery_classifier"
-CUSTOM_DATASET_DIR = Path(
-    os.environ.get("CUSTOM_GROCERY_DATASET_DIR", Path(__file__).resolve().parent / "custom_dataset")
+EGG_SOURCE_DIR = Path(
+    os.environ.get("EGG_SOURCE_DIR", EXTERNAL_DATA_DIR / "Eggs Classification")
 )
+TARGET_DATASET_DIR = BASE_DIR / "datasets" / "grocery_classifier"
+CUSTOM_DATASET_DIR = Path(
+    os.environ.get("CUSTOM_GROCERY_DATASET_DIR", BASE_DIR / "custom_dataset")
+)
+FEEDBACK_DATASET_DIR = BASE_DIR / "feedback_dataset"
+CUSTOM_DATASET_DIRS = (CUSTOM_DATASET_DIR, FEEDBACK_DATASET_DIR)
 LOCAL_BACKGROUND_SOURCES = (
-    Path(__file__).resolve().parent / "temp",
-    Path(__file__).resolve().parent / "uploads",
+    BASE_DIR / "temp",
+    BASE_DIR / "uploads",
 )
 
 COARSE_CLASS_TO_APP_LABEL = {
@@ -294,29 +300,34 @@ def split_custom_images(image_paths: list[Path], random_generator: random.Random
 
 
 def copy_custom_dataset() -> None:
-    if not CUSTOM_DATASET_DIR.exists():
-        return
-
     random_generator = random.Random(RANDOM_SEED + 31)
-    for class_dir in CUSTOM_DATASET_DIR.iterdir():
-        if not class_dir.is_dir():
+    for dataset_dir in CUSTOM_DATASET_DIRS:
+        if not dataset_dir.exists():
             continue
+        for class_dir in dataset_dir.iterdir():
+            if not class_dir.is_dir():
+                continue
 
-        label = normalize_custom_label(class_dir.name)
-        if label not in ACTIVE_LABELS:
-            print(f"Skipped custom class '{class_dir.name}' because it is not in ACTIVE_LABELS.")
-            continue
+            label = normalize_custom_label(class_dir.name)
+            if label not in ACTIVE_LABELS:
+                print(f"Skipped custom class '{class_dir.name}' because it is not in ACTIVE_LABELS.")
+                continue
 
-        image_paths = safe_image_paths([path for path in class_dir.rglob("*") if path.is_file()])
-        split_groups = split_custom_images(image_paths, random_generator)
-        for split, split_paths in split_groups.items():
-            copy_paths_to_split(label, split, split_paths, random_generator)
+            image_paths = safe_image_paths([path for path in class_dir.rglob("*") if path.is_file()])
+            split_groups = split_custom_images(image_paths, random_generator)
+            for split, split_paths in split_groups.items():
+                copy_paths_to_split(label, split, split_paths, random_generator)
 
 
 def has_custom_images() -> bool:
-    if not CUSTOM_DATASET_DIR.exists():
-        return False
-    return any(path.is_file() and path.suffix.lower() in IMAGE_EXTENSIONS for path in CUSTOM_DATASET_DIR.rglob("*"))
+    return any(
+        dataset_dir.exists()
+        and any(
+            path.is_file() and path.suffix.lower() in IMAGE_EXTENSIONS
+            for path in dataset_dir.rglob("*")
+        )
+        for dataset_dir in CUSTOM_DATASET_DIRS
+    )
 
 
 def normalize_custom_label(label: str) -> str:
@@ -444,6 +455,7 @@ def main() -> None:
             "No training image source was found.\n"
             f"- Grocery dataset path: {classes_csv_path}\n"
             f"- Custom dataset path: {CUSTOM_DATASET_DIR}\n"
+            f"- Confirmed feedback path: {FEEDBACK_DATASET_DIR}\n"
             "Either set GROCERY_SOURCE_DATASET_DIR or add your own photos under backend\\custom_dataset\\<label>."
         )
 

@@ -1,0 +1,34 @@
+@startuml
+title UI 흐름도
+top to bottom direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 160
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam linetype ortho
+skinparam ArrowColor #64748B
+skinparam rectangle {
+  BackgroundColor #F8FAFC
+  BorderColor #64748B
+  RoundCorner 12
+}
+
+rectangle "로그인" as LOGIN #EAF2FF
+rectangle "회원가입" as REGISTER #EAF2FF
+rectangle "냉장고 선택" as FRIDGE #EAF2FF
+rectangle "홈" as HOME #EAF7EE
+rectangle "재고 목록" as INVENTORY #EAF7EE
+rectangle "재고 상세" as DETAIL #FFF3E8
+rectangle "레시피 목록" as RECIPES #FFF3E8
+rectangle "레시피 상세" as RECIPE_DETAIL #FFF3E8
+
+LOGIN --> HOME
+REGISTER --> LOGIN
+LOGIN --> FRIDGE
+FRIDGE --> HOME
+HOME --> INVENTORY
+INVENTORY --> DETAIL
+HOME --> RECIPES
+RECIPES --> RECIPE_DETAIL
+@enduml

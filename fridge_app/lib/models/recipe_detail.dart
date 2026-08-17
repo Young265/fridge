@@ -1,39 +1,4 @@
-const Map<String, String> _ingredientLabels = {
-  'egg': '계란',
-  'milk': '우유',
-  'onion': '양파',
-  'carrot': '당근',
-  'potato': '감자',
-  'tomato': '토마토',
-  'green_onion': '대파',
-  'cheese': '치즈',
-  'ham': '햄',
-  'tofu': '두부',
-  'cabbage': '양배추',
-  'mushroom': '버섯',
-  'rice': '밥',
-  'apple': '사과',
-  'banana': '바나나',
-  'orange': '오렌지',
-  'watermelon': '수박',
-  'broccoli': '브로콜리',
-  'bottle': '병',
-  'cup': '컵',
-  'hot_dog': '핫도그',
-  'sandwich': '샌드위치',
-  'pizza': '피자',
-  'donut': '도넛',
-  'cake': '케이크',
-};
-
-const Map<String, String> _unitLabels = {
-  'ea': '개',
-  'bowl': '공기',
-  'slice': '장',
-  'pack': '팩',
-  'cup': '컵',
-  'head': '통',
-};
+import 'ingredient_labels.dart';
 
 const Map<String, String> _difficultyLabels = {
   'easy': '쉬움',
@@ -55,9 +20,8 @@ class RecipeIngredient {
   final double quantity;
   final String unit;
 
-  String get displayName =>
-      _ingredientLabels[name] ?? name.replaceAll('_', ' ');
-  String get unitLabel => _unitLabels[unit] ?? unit;
+  String get displayName => localizedIngredientName(name);
+  String get unitLabel => localizedUnit(unit);
 
   String get quantityLabel {
     if (quantity == quantity.roundToDouble()) {
@@ -75,6 +39,26 @@ class RecipeIngredient {
   }
 }
 
+class RecipeStep {
+  const RecipeStep({
+    required this.number,
+    required this.description,
+    this.imageUrl,
+  });
+
+  final int number;
+  final String description;
+  final String? imageUrl;
+
+  factory RecipeStep.fromJson(Map<String, dynamic> json) {
+    return RecipeStep(
+      number: json['step_number'] as int,
+      description: json['description'] as String,
+      imageUrl: json['image_url'] as String?,
+    );
+  }
+}
+
 class RecipeSummary {
   const RecipeSummary({
     required this.recipeId,
@@ -86,6 +70,10 @@ class RecipeSummary {
     required this.requiredCount,
     required this.missingCount,
     required this.missingIngredients,
+    this.imageUrl,
+    this.sourceName,
+    this.sourceUrl,
+    this.calories,
   });
 
   final int recipeId;
@@ -97,6 +85,10 @@ class RecipeSummary {
   final int requiredCount;
   final int missingCount;
   final List<RecipeIngredient> missingIngredients;
+  final String? imageUrl;
+  final String? sourceName;
+  final String? sourceUrl;
+  final String? calories;
 
   String get difficultyLabel => _difficultyLabels[difficulty] ?? difficulty;
 
@@ -115,6 +107,10 @@ class RecipeSummary {
             (item) => RecipeIngredient.fromJson(item as Map<String, dynamic>),
           )
           .toList(),
+      imageUrl: json['image_url'] as String?,
+      sourceName: json['source_name'] as String?,
+      sourceUrl: json['source_url'] as String?,
+      calories: json['calories'] as String?,
     );
   }
 }
@@ -129,6 +125,11 @@ class RecipeDetail {
     required this.difficulty,
     required this.requiredIngredients,
     required this.missingIngredients,
+    required this.steps,
+    this.imageUrl,
+    this.sourceName,
+    this.sourceUrl,
+    this.calories,
   });
 
   final int recipeId;
@@ -139,6 +140,11 @@ class RecipeDetail {
   final String difficulty;
   final List<RecipeIngredient> requiredIngredients;
   final List<RecipeIngredient> missingIngredients;
+  final List<RecipeStep> steps;
+  final String? imageUrl;
+  final String? sourceName;
+  final String? sourceUrl;
+  final String? calories;
 
   String get difficultyLabel => _difficultyLabels[difficulty] ?? difficulty;
 
@@ -160,6 +166,13 @@ class RecipeDetail {
             (item) => RecipeIngredient.fromJson(item as Map<String, dynamic>),
           )
           .toList(),
+      steps: (json['steps'] as List<dynamic>? ?? const [])
+          .map((item) => RecipeStep.fromJson(item as Map<String, dynamic>))
+          .toList(),
+      imageUrl: json['image_url'] as String?,
+      sourceName: json['source_name'] as String?,
+      sourceUrl: json['source_url'] as String?,
+      calories: json['calories'] as String?,
     );
   }
 }

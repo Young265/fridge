@@ -1,11 +1,4 @@
-const Map<String, String> _unitLabels = {
-  'ea': '개',
-  'bowl': '공기',
-  'slice': '장',
-  'pack': '팩',
-  'cup': '컵',
-  'head': '통',
-};
+import 'ingredient_labels.dart';
 
 class InventoryItem {
   const InventoryItem({
@@ -41,7 +34,10 @@ class InventoryItem {
   final String? cropImageUrl;
 
   bool get needsReview => status == 'UNRECOGNIZED';
-  String get unitLabel => _unitLabels[unit] ?? unit;
+  String get displayNameLabel => localizedIngredientName(displayName);
+  String? get detectedNameLabel =>
+      detectedName == null ? null : localizedIngredientName(detectedName!);
+  String get unitLabel => localizedUnit(unit);
 
   factory InventoryItem.fromJson(Map<String, dynamic> json) {
     return InventoryItem(

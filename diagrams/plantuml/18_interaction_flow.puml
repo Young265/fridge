@@ -1,0 +1,26 @@
+@startuml
+title 연계도
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 160
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam componentStyle rectangle
+skinparam ArrowColor #49657A
+
+actor "사용자" as User
+component "냉장고 센서" as Sensor #FFF4D9
+node "Raspberry Pi 5" as Pi #EAF7EE
+component "Flask API" as API #F3ECFF
+database "MySQL" as DB #F3ECFF
+component "Flutter 앱" as App #FFECEC
+
+User --> Sensor
+Sensor --> Pi
+Pi --> API
+API --> DB
+App --> API
+API --> App
+User --> App
+@enduml

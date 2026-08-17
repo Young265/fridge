@@ -1,0 +1,34 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 180
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 14
+skinparam ArrowColor #526AA5
+skinparam sequence {
+  LifeLineBorderColor #526AA5
+  LifeLineBackgroundColor #FFFFFF
+  ParticipantBorderColor #526AA5
+  ParticipantBackgroundColor #EEF3FB
+  ActorBorderColor #526AA5
+  ActorBackgroundColor #FFFFFF
+}
+
+actor "사용자" as User
+participant "Flutter 앱" as App
+participant "Flask API" as API
+database "MySQL·이미지" as DB
+
+User -> App : 홈에서 ‘재고 확인’ 선택
+App -> API : GET /inventory?fridge_id
+API -> DB : fridge_items 조회
+DB --> API : 재료명·수량·상태·이미지 경로
+API --> App : InventoryItem 목록
+App --> User : 전체·정상·확인 필요 카드 표시
+User -> App : 확인 필요 재료 선택
+App -> API : GET /inventory/{id}
+API -> DB : 상세 조회
+DB --> API : AI 추정값·메모·수정 시각
+API --> App : 상세 데이터
+App --> User : 수정·저장·삭제 화면 표시
+@enduml

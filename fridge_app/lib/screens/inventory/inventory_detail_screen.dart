@@ -28,7 +28,7 @@ class _InventoryDetailScreenState extends State<InventoryDetailScreen> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(
-      text: widget.item?.displayName ?? '',
+      text: widget.item?.displayNameLabel ?? '',
     );
     _quantityController = TextEditingController(
       text: widget.item != null ? widget.item!.quantity.toString() : '1',
@@ -116,7 +116,7 @@ class _InventoryDetailScreenState extends State<InventoryDetailScreen> {
           builder: (context) {
             return AlertDialog(
               title: const Text('재료 삭제'),
-              content: Text('${widget.item!.displayName}을(를) 삭제할까요?'),
+              content: Text('${widget.item!.displayNameLabel}을(를) 삭제할까요?'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
@@ -197,7 +197,7 @@ class _InventoryDetailScreenState extends State<InventoryDetailScreen> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
-                    'AI가 확정하지 못한 항목입니다. 이름과 상태를 수정해서 반영할 수 있습니다.',
+                    '자동 인식이 확정하지 못한 항목입니다. 이름과 상태를 수정해서 반영할 수 있습니다.',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -264,7 +264,7 @@ class _InventoryDetailScreenState extends State<InventoryDetailScreen> {
                   ),
                   DropdownMenuItem(
                     value: 'RECOGNIZED',
-                    child: Text('AI 인식 완료'),
+                    child: Text('자동 인식 완료'),
                   ),
                   DropdownMenuItem(value: 'UNRECOGNIZED', child: Text('확인 필요')),
                 ],
@@ -292,7 +292,7 @@ class _InventoryDetailScreenState extends State<InventoryDetailScreen> {
                 Text('마지막 수정: ${item.updatedAt}'),
                 if (item.detectedName != null) ...[
                   const SizedBox(height: 4),
-                  Text('AI 추정값: ${item.detectedName}'),
+                  Text('인식 추정값: ${item.detectedNameLabel}'),
                 ],
               ],
               const SizedBox(height: 24),

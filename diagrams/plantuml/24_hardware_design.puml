@@ -1,0 +1,35 @@
+@startuml
+title 하드웨어 설계도
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 160
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+skinparam ArrowColor #49657A
+
+package "냉장고 내부" #E8F2FF {
+  component "카메라" as Camera
+  component "리드스위치" as Reed
+  component "자석" as Magnet
+}
+
+package "제어부" #EAF7EE {
+  node "Raspberry Pi 5" as Pi
+  component "전원" as Power
+}
+
+package "서비스" #F2F4F7 {
+  component "Flask API" as API
+  component "Flutter 앱" as App
+}
+
+Magnet --> Reed
+Reed --> Pi
+Camera --> Pi
+Power --> Pi
+Pi --> API
+API --> App
+@enduml

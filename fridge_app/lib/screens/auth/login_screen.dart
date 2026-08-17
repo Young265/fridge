@@ -54,7 +54,9 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error.toString().replaceFirst('Exception: ', ''))),
+        SnackBar(
+          content: Text(error.toString().replaceFirst('Exception: ', '')),
+        ),
       );
     } finally {
       if (mounted) {
@@ -81,7 +83,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Icon(Icons.kitchen_rounded, size: 64, color: Color(0xFF1565C0)),
+                      const Icon(
+                        Icons.kitchen_rounded,
+                        size: 64,
+                        color: Color(0xFF1565C0),
+                      ),
                       const SizedBox(height: 16),
                       Text(
                         '스마트 냉장고 로그인',
@@ -92,12 +98,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFormField(
                         controller: _emailController,
                         decoration: const InputDecoration(
-                          labelText: '이메일',
+                          labelText: '아이디',
                           border: OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return '이메일을 입력해주세요.';
+                            return '아이디를 입력해주세요.';
                           }
                           return null;
                         },
@@ -124,7 +130,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             ? const SizedBox(
                                 height: 20,
                                 width: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               )
                             : const Text('로그인'),
                       ),

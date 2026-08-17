@@ -1,0 +1,675 @@
+{"kind":"deck","id":"pr/6cnkko","name":"Deck"}
+{"kind":"layout","layoutId":"e464d95d-7743-4699-b151-68493a53e4b1","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"a3844dfc-e880-481f-8ba5-6e3f81dfa649","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/7n9d2b","slide":1,"title":"SW개발/HW제작 설계서","textShapes":7}
+{"kind":"shape","id":"sh/6pcbihcn","slide":1,"bbox":[0,0,28,990]}
+{"kind":"shape","id":"sh/tc3utwve","slide":1,"bbox":[0,0,1400,16]}
+{"kind":"shape","id":"sh/8butkrut","slide":1,"bbox":[78,120,10,280]}
+{"kind":"textbox","id":"sh/velcv6d4","slide":1,"text":"SW개발/HW제작 설계서","textPreview":"SW개발/HW제작 설계서","textChars":13,"textLines":1,"bbox":[105,120,920,90]}
+{"kind":"textbox","id":"sh/udcbm1cz","slide":1,"text":"독거노인의 식생활 관리를 위한 AI 기반 스마트 냉장고","textPreview":"독거노인의 식생활 관리를 위한 AI 기반 스마트 냉장고","textChars":30,"textLines":1,"bbox":[110,260,1070,72]}
+{"kind":"shape","id":"sh/hgnuxwva","slide":1,"bbox":[110,390,1120,300]}
+{"kind":"textbox","id":"sh/gfetobup","slide":1,"text":"프로젝트 핵심","textPreview":"프로젝트 핵심","textChars":7,"textLines":1,"bbox":[150,430,240,40]}
+{"kind":"textbox","id":"sh/3i5cz6dg","slide":1,"text":"• 리드스위치로 냉장고 문 이벤트를 감지하고 필요한 시점에만 촬영\n• Raspberry Pi 5에서 YOLO·윤곽선 후보·식재료 분류를 수행\n• 자동 재고 등록·소비 반영과 사용자 검수를 함께 제공\n• 보유 재료 기반으로 부족 재료가 적은 레시피를 우선 추천","textPreview":"• 리드스위치로 냉장고 문 이벤트를 감지하고 필요한 시점에만 촬영 | • Raspberry Pi 5에서 YOLO·윤곽선 후보·식재료 분류를 수행 | • 자동 재고 등록·소비 반영과 사용자 검수를 함께 제공 | • 보유 재료 기반으로 부족 재료가 ...","textChars":144,"textLines":4,"bbox":[150,485,990,160]}
+{"kind":"textbox","id":"sh/ihwvq1cv","slide":1,"text":"2026. 07. 11","textPreview":"2026. 07. 11","textChars":12,"textLines":1,"bbox":[110,742,250,38]}
+{"kind":"textbox","id":"sh/43yxovex","slide":1,"text":"개인정보 미기재 편집 가능본","textPreview":"개인정보 미기재 편집 가능본","textChars":15,"textLines":1,"bbox":[930,742,300,38]}
+{"kind":"textbox","id":"sh/p47yx0fi","slide":1,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1070,50,250,42]}
+{"kind":"notes","id":"nt/7n9d2b","slide":1,"text":""}
+{"kind":"slide","id":"sl/6t78kl","slide":2,"title":"| 수행 단계별 주요 산출물","textShapes":4}
+{"kind":"shape","id":"sh/cfyl4zyp","slide":2,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/bep4vuxk","slide":2,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/adg32pgz","slide":2,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/pc7mtkfe","slide":2,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/obel0fyt","slide":2,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/na54rax8","slide":2,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/2pw3ypgn","slide":2,"text":"| 수행 단계별 주요 산출물","textPreview":"| 수행 단계별 주요 산출물","textChars":15,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/1on2pkf2","slide":2,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/0nelwfyx","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"textbox","id":"sh/vi9kzupg","slide":2,"text":"설문조사와 인터뷰 결과서는 실제 조사를 수행하지 않았으므로 제외한다.","textPreview":"설문조사와 인터뷰 결과서는 실제 조사를 수행하지 않았으므로 제외한다.","textChars":38,"textLines":1,"bbox":[82,890,850,30]}
+{"kind":"table","id":"tb/t4j65wvu","slide":2,"name":"","rows":7,"cols":4,"preview":"단계 | 산출물 | 적용 | 수록","bbox":[78,228,1245,640]}
+{"kind":"notes","id":"nt/6t78kl","slide":2,"text":""}
+{"kind":"slide","id":"sl/lxdxyd","slide":3,"title":"| 시장/기술 동향 분석","textShapes":13}
+{"kind":"shape","id":"sh/xo3i10fy","slide":3,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/alsj6lgn","slide":3,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/bml0zqxs","slide":3,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/kru1cvyp","slide":3,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/lc3i50fa","slide":3,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/ypcjalgj","slide":3,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/zql03qx4","slide":3,"text":"| 시장/기술 동향 분석","textPreview":"| 시장/기술 동향 분석","textChars":13,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/0vah0by5","slide":3,"text":"사회·시장 배경","textPreview":"사회·시장 배경","textChars":8,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/1wjitgfq","slide":3,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/pkvm5ovi","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/4jmlcjex","slide":3,"bbox":[78,228,600,420]}
+{"kind":"textbox","id":"sh/3id43eds","slide":3,"text":"그림 1-1. 고령인구 추이","textPreview":"그림 1-1. 고령인구 추이","textChars":15,"textLines":1,"bbox":[96,248,564,44]}
+{"kind":"textbox","id":"sh/2h43a9w7","slide":3,"text":"통계청 「2025 고령자 통계」 그래프 삽입\n2025년 20.3% · 2036년 30% · 2050년 40% 초과\n그래프 제목·범례·기준연도가 보이게 캡처","textPreview":"통계청 「2025 고령자 통계」 그래프 삽입 | 2025년 20.3% · 2036년 30% · 2050년 40% 초과 | 그래프 제목·범례·기준연도가 보이게 캡처","textChars":86,"textLines":3,"bbox":[102,312,552,274]}
+{"kind":"textbox","id":"sh/dofm98vu","slide":3,"text":"교체 파일: 03_market_elderly.png","textPreview":"교체 파일: 03_market_elderly.png","textChars":28,"textLines":1,"bbox":[96,600,564,30]}
+{"kind":"shape","id":"sh/cn6lg3e9","slide":3,"bbox":[716,228,608,420]}
+{"kind":"textbox","id":"sh/rmx47ydo","slide":3,"text":"그림 1-2. 노년 1인가구 추이","textPreview":"그림 1-2. 노년 1인가구 추이","textChars":18,"textLines":1,"bbox":[734,248,572,44]}
+{"kind":"textbox","id":"sh/qlo3etw3","slide":3,"text":"전체 1인가구가 아닌 65세 이상 노년 1인가구 그래프 삽입\n2022년 197.3만 → 2023년 약 213.8만 → 2024년 228.9만\n노년 가구 중 비중: 37.0% → 37.8% → 38.2%","textPreview":"전체 1인가구가 아닌 65세 이상 노년 1인가구 그래프 삽입 | 2022년 197.3만 → 2023년 약 213.8만 → 2024년 228.9만 | 노년 가구 중 비중: 37.0% → 37.8% → 38.2%","textChars":112,"textLines":3,"bbox":[740,312,560,274]}
+{"kind":"textbox","id":"sh/1cfmd8vq","slide":3,"text":"교체 파일: 03_market_elderly_single_household.png","textPreview":"교체 파일: 03_market_elderly_single_household.png","textChars":45,"textLines":1,"bbox":[734,600,572,30]}
+{"kind":"shape","id":"sh/0b65k3e5","slide":3,"bbox":[78,672,1246,238]}
+{"kind":"shape","id":"sh/k7yxwb6t","slide":3,"bbox":[78,672,1246,74]}
+{"kind":"textbox","id":"sh/5s7e5g7e","slide":3,"text":"해설 및 프로젝트 시사점","textPreview":"해설 및 프로젝트 시사점","textChars":13,"textLines":1,"bbox":[90,684,1222,48]}
+{"kind":"textbox","id":"sh/y5gfu1on","slide":3,"text":"• 우리나라는 2025년 65세 이상 인구가 전체의 20.3%를 차지해 초고령사회에 진입했고, 고령인구 비중은 장기적으로 계속 증가할 전망이다.\n• 2024년 가구주가 65세 이상인 노년 가구 중 1인 가구는 228만 9천 가구로 38.2%를 차지한다. 이는 식재료 구입·보관·소비를 혼자 관리하는 가구가 확대되고 있음을 뜻한다.\n• 수기 입력을 계속 요구하는 방식은 고령 사용자에게 부담이 될 수 있으므로, 문 이벤트 기반 자동 촬영·인식과 확인이 필요한 항목만 검수하는 방식이 적합하다.\n• 본 프로젝트는 재고 자동화에 그치지 않고 보유 재료와 레시피 필요 재료를 비교해 실제 식생활 의사결정까지 지원한다.","textPreview":"• 우리나라는 2025년 65세 이상 인구가 전체의 20.3%를 차지해 초고령사회에 진입했고, 고령인구 비중은 장기적으로 계속 증가할 전망이다. | • 2024년 가구주가 65세 이상인 노년 가구 중 1인 가구는 228만 9천 가구로 38.2%를...","textChars":341,"textLines":4,"bbox":[98,758,1206,128]}
+{"kind":"textbox","id":"sh/j6pw36p8","slide":3,"text":"출처: 통계청 「2025 고령자 통계」, 「2024년·2023년 생애단계별 행정통계」. 2023년 가구 수는 공표 비중으로 계산한 약값.","textPreview":"출처: 통계청 「2025 고령자 통계」, 「2024년·2023년 생애단계별 행정통계」. 2023년 가구 수는 공표 비중으로 계산한 약값.","textChars":76,"textLines":1,"bbox":[80,942,1160,26]}
+{"kind":"notes","id":"nt/lxdxyd","slide":3,"text":"고령인구: https://kostat.go.kr/board.es?act=view&bid=10820&list_no=438832&mid=a10301060100\n2024 노년 1인가구: https://www.kostat.go.kr/board.es?act=view&bid=11895&list_no=442561&mid=a10301010000\n전체 1인가구 그래프는 사용하지 말고 노년 1인가구 추이를 사용한다."}
+{"kind":"slide","id":"sl/ogjkn9","slide":4,"title":"| 시장/기술 동향 분석","textShapes":10}
+{"kind":"shape","id":"sh/up0z29kv","slide":4,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/hsryx436","slide":4,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/wrih4z21","slide":4,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/jutgzelc","slide":4,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/itkz69kr","slide":4,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/5wby1o3i","slide":4,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/4v2h8j2x","slide":4,"text":"| 시장/기술 동향 분석","textPreview":"| 시장/기술 동향 분석","textChars":13,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/zypgnal8","slide":4,"text":"관련 기술 비교","textPreview":"관련 기술 비교","textChars":8,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/yxgfu54n","slide":4,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/wnut87ud","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/alsb6xc7","slide":4,"bbox":[78,735,470,178]}
+{"kind":"textbox","id":"sh/vmlcf2ds","slide":4,"text":"IoT·엣지 AI 기술 동향 그림","textPreview":"IoT·엣지 AI 기술 동향 그림","textChars":18,"textLines":1,"bbox":[96,755,434,44]}
+{"kind":"textbox","id":"sh/krudc7u9","slide":4,"text":"IITP 기술로드맵의 엣지 AI·IoT 구조 그림 또는 핵심 문장 캡처","textPreview":"IITP 기술로드맵의 엣지 AI·IoT 구조 그림 또는 핵심 문장 캡처","textChars":39,"textLines":1,"bbox":[102,819,422,32]}
+{"kind":"textbox","id":"sh/5s3ulcvu","slide":4,"text":"교체 파일: 04_technology_trend.png","textPreview":"교체 파일: 04_technology_trend.png","textChars":30,"textLines":1,"bbox":[96,865,434,30]}
+{"kind":"shape","id":"sh/ipcbaxcj","slide":4,"bbox":[570,735,754,178]}
+{"kind":"shape","id":"sh/jqlcj2do","slide":4,"bbox":[570,735,754,74]}
+{"kind":"textbox","id":"sh/0vatgnu5","slide":4,"text":"기술 동향 해설","textPreview":"기술 동향 해설","textChars":8,"textLines":1,"bbox":[582,747,730,48]}
+{"kind":"textbox","id":"sh/lwju98vq","slide":4,"text":"• 엣지 AI는 클라우드 연결이 불안정해도 현장에서 상황을 인식하고 지연·데이터 전송량을 줄이는 방향으로 발전하고 있다.\n• 문 센서 이벤트가 있을 때만 촬영하면 연속 녹화 대비 연산·저장 부담을 줄이고 실제 입출고 시점에 집중할 수 있다.\n• 자동 인식 결과를 무조건 확정하지 않고 낮은 신뢰도 항목만 사용자가 보완하는 사람-검수 구조가 정확성과 접근성을 함께 확보한다.","textPreview":"• 엣지 AI는 클라우드 연결이 불안정해도 현장에서 상황을 인식하고 지연·데이터 전송량을 줄이는 방향으로 발전하고 있다. | • 문 센서 이벤트가 있을 때만 촬영하면 연속 녹화 대비 연산·저장 부담을 줄이고 실제 입출고 시점에 집중할 수 있다. ...","textChars":208,"textLines":3,"bbox":[590,812,714,82]}
+{"kind":"textbox","id":"sh/1cbad4ne","slide":4,"text":"출처 참고: IITP 「ICT R&D 기술로드맵 2025 - 스마트 디바이스」, 「2025년 지원사업 안내」. 비교표는 기술 유형 기준 분석.","textPreview":"출처 참고: IITP 「ICT R&D 기술로드맵 2025 - 스마트 디바이스」, 「2025년 지원사업 안내」. 비교표는 기술 유형 기준 분석.","textChars":79,"textLines":1,"bbox":[80,942,1160,26]}
+{"kind":"table","id":"tb/6dk32lc7","slide":4,"name":"","rows":8,"cols":5,"preview":"비교 항목 | 수기·일반 앱 | 바코드/RFID | 상용 스마트 냉장고 | 본 프로젝트","bbox":[78,214,1246,500]}
+{"kind":"notes","id":"nt/ogjkn9","slide":4,"text":"IITP 스마트 디바이스 기술로드맵: https://www.iitp.kr/resources/file/201217/5.ICT%EB%94%94%EB%B0%94%EC%9D%B4%EC%8A%A4_%EC%96%91%EC%9E%90%EB%B3%B4%EA%B3%A0%EC%84%9C.pdf\nIITP 2025 지원사업 안내: https://www.iitp.kr/resources/file/2025%EB%85%84%20IITP%20%EC%A7%80%EC%9B%90%EC%82%AC%EC%97%85%20%EC%95%88%EB%82%B4.pdf"}
+{"kind":"slide","id":"sl/yrcl8y","slide":5,"title":"| 요구사항 정의서","textShapes":5}
+{"kind":"shape","id":"sh/zm9wza1k","slide":5,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/knidsfi5","slide":5,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/lore1kja","slide":5,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/mp0vup0v","slide":5,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/7q9w3u1g","slide":5,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/8r2xwzi1","slide":5,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/9sbe5kjm","slide":5,"text":"| 요구사항 정의서","textPreview":"| 요구사항 정의서","textChars":10,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/2tgvilkr","slide":5,"text":"핵심 기능","textPreview":"핵심 기능","textChars":5,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/3upwrq1c","slide":5,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/vylova54","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"textbox","id":"sh/h036x0na","slide":5,"text":"검증 기준: 실제 앱/API/H/W 실행 결과와 데이터베이스 저장 결과로 확인한다.","textPreview":"검증 기준: 실제 앱/API/H/W 실행 결과와 데이터베이스 저장 결과로 확인한다.","textChars":46,"textLines":1,"bbox":[84,892,960,28]}
+{"kind":"table","id":"tb/p4na103u","slide":5,"name":"","rows":9,"cols":5,"preview":"ID | 구분 | 요구사항명 | 상세 설명 | 우선순위","bbox":[78,222,1246,650]}
+{"kind":"notes","id":"nt/yrcl8y","slide":5,"text":""}
+{"kind":"slide","id":"sl/jwdw28","slide":6,"title":"| 요구사항 정의서","textShapes":5}
+{"kind":"shape","id":"sh/ypo3ehc7","slide":6,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/lsfmpwby","slide":6,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/0r6lgrud","slide":6,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/bmdkjmtw","slide":6,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/ql43ahcb","slide":6,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/dof2lcbm","slide":6,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/cnmlc7u1","slide":6,"text":"| 요구사항 정의서","textPreview":"| 요구사항 정의서","textChars":10,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/3ydkf2tk","slide":6,"text":"세부 처리","textPreview":"세부 처리","textChars":5,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/2x436xcz","slide":6,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/cna9cf6d","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"textbox","id":"sh/ql8rapon","slide":6,"text":"비기능 요구: 개인정보·서버 IP·DB 계정은 문서와 캡처에서 제거하고, 미확정 H/W 사양은 “실물 제작 후 확정”으로 표시한다.","textPreview":"비기능 요구: 개인정보·서버 IP·DB 계정은 문서와 캡처에서 제거하고, 미확정 H/W 사양은 “실물 제작 후 확정”으로 표시한다.","textChars":73,"textLines":1,"bbox":[84,890,1180,36]}
+{"kind":"table","id":"tb/a1cz29g3","slide":6,"name":"","rows":10,"cols":3,"preview":"구분 | 기능 | 설명","bbox":[78,222,1246,650]}
+{"kind":"notes","id":"nt/jwdw28","slide":6,"text":""}
+{"kind":"slide","id":"sl/r85qs1","slide":7,"title":"| 유즈케이스 정의서","textShapes":6}
+{"kind":"shape","id":"sh/2horat8b","slide":7,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/pkfal87m","slide":7,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/oj69c3qh","slide":7,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/fed8fepk","slide":7,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/ed4r698z","slide":7,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/1gfqho7q","slide":7,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/gf698jq5","slide":7,"text":"| 유즈케이스 정의서","textPreview":"| 유즈케이스 정의서","textChars":11,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/zahsrip4","slide":7,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/y98rid8j","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/w7qdwfal","slide":7,"bbox":[76,228,670,690]}
+{"kind":"shape","id":"sh/x8zupkr6","slide":7,"bbox":[76,228,670,74]}
+{"kind":"textbox","id":"sh/a58vupsv","slide":7,"text":"유즈케이스 다이어그램","textPreview":"유즈케이스 다이어그램","textChars":11,"textLines":1,"bbox":[88,240,646,48]}
+{"kind":"shape","id":"sh/o3qdsfap","slide":7,"bbox":[766,228,558,690]}
+{"kind":"shape","id":"sh/94zulkra","slide":7,"bbox":[766,228,558,74]}
+{"kind":"textbox","id":"sh/mhobq5sj","slide":7,"text":"UC-01 식재료 자동 등록 정의","textPreview":"UC-01 식재료 자동 등록 정의","textChars":18,"textLines":1,"bbox":[778,240,534,48]}
+{"kind":"textbox","id":"sh/0f6tovad","slide":7,"text":"PlantUML 원본: diagrams/plantuml/07_usecase.puml","textPreview":"PlantUML 원본: diagrams/plantuml/07_usecase.puml","textChars":46,"textLines":1,"bbox":[80,942,1160,26]}
+{"kind":"table","id":"tb/8bq54z21","slide":7,"name":"","rows":10,"cols":2,"preview":"항목 | 정의","bbox":[782,310,526,584]}
+{"kind":"image","id":"im/ov218zil","slide":7,"name":"","alt":"AI 스마트 냉장고 유즈케이스","bbox":[90,310,642,585]}
+{"kind":"notes","id":"nt/r85qs1","slide":7,"text":""}
+{"kind":"slide","id":"sl/t0wouj","slide":8,"title":"| 서비스 구성도","textShapes":7}
+{"kind":"shape","id":"sh/50jidk36","slide":8,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/ix8jipkf","slide":8,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/jyh0bul0","slide":8,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/s3a1oz2h","slide":8,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/t4jih4j2","slide":8,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/61sjmpkr","slide":8,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/r210fu1c","slide":8,"text":"| 서비스 구성도","textPreview":"| 서비스 구성도","textChars":9,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/876hcv2d","slide":8,"text":"서비스 시나리오","textPreview":"서비스 시나리오","textChars":8,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/98zi503y","slide":8,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/h4bet8fy","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/w32d03ed","slide":8,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/v29wryxs","slide":8,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/a10vytw7","slide":8,"text":"사용자 중심 서비스 시나리오","textPreview":"사용자 중심 서비스 시나리오","textChars":15,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/4r2d4nep","slide":8,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/j6twvix4","slide":8,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/i5kv2dwj","slide":8,"text":"단계별 설명","textPreview":"단계별 설명","textChars":6,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"textbox","id":"sh/svmd8nel","slide":8,"text":"PlantUML: 08_service_scenario.puml | 자동 등록을 기본 경로, 문 닫힘 소비를 보조 경로로 표현","textPreview":"PlantUML: 08_service_scenario.puml | 자동 등록을 기본 경로, 문 닫힘 소비를 보조 경로로 표현","textChars":69,"textLines":1,"bbox":[80,942,1160,26]}
+{"kind":"table","id":"tb/m5c3mpkv","slide":8,"name":"","rows":7,"cols":3,"preview":"단계 | 입력·처리·출력 | 예외/확인","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/et0fedoj","slide":8,"name":"","alt":"사용자 중심 서비스 시나리오","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/t0wouj","slide":8,"text":""}
+{"kind":"slide","id":"sl/7u01k5","slide":9,"title":"| 서비스 구성도","textShapes":7}
+{"kind":"shape","id":"sh/zq5gvml4","slide":9,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/krex4r2p","slide":9,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/lcnyxwja","slide":9,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/mdgz6hkv","slide":9,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/7epgzm1g","slide":9,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/8fyh8r21","slide":9,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/9g7y1wj6","slide":9,"text":"| 서비스 구성도","textPreview":"| 서비스 구성도","textChars":9,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/uhgza1kr","slide":9,"text":"시스템 아키텍처","textPreview":"시스템 아키텍처","textChars":8,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/vipg361c","slide":9,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/3qp4ji1o","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/2pgnad03","slide":9,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/psrm5sju","slide":9,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/ori5cni9","slide":9,"text":"서비스 아키텍처","textPreview":"서비스 아키텍처","textChars":8,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/elgn6d07","slide":9,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/1o7mh8jy","slide":9,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/gny583id","slide":9,"text":"구성요소 역할·데이터 흐름","textPreview":"구성요소 역할·데이터 흐름","textChars":14,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"textbox","id":"sh/yh0nix0b","slide":9,"text":"연결 순서: 센서/카메라 → Pi 엣지 AI → Flask → MySQL/이미지 → Flutter | 보호자 알림은 향후 확장","textPreview":"연결 순서: 센서/카메라 → Pi 엣지 AI → Flask → MySQL/이미지 → Flutter | 보호자 알림은 향후 확장","textChars":70,"textLines":1,"bbox":[80,942,1160,26]}
+{"kind":"table","id":"tb/4je9wfa9","slide":9,"name":"","rows":7,"cols":3,"preview":"구성요소 | 역할 | 주요 데이터","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/gnep472d","slide":9,"name":"","alt":"서비스 아키텍처","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/7u01k5","slide":9,"text":""}
+{"kind":"slide","id":"sl/u8nock","slide":10,"title":"| 서비스 흐름도","textShapes":6}
+{"kind":"shape","id":"sh/ipcj6t8b","slide":10,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/5s3i18rm","slide":10,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/4ru183q1","slide":10,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/re503i9s","slide":10,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/6twjad87","slide":10,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/tgn25sry","slide":10,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/sfe1cnqd","slide":10,"text":"| 서비스 흐름도","textPreview":"| 서비스 흐름도","textChars":9,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/fi5k7i9o","slide":10,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/ehwjed8j","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/032143ih","slide":10,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/14bix8z2","slide":10,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/ehkj2t0b","slide":10,"text":"문 이벤트 기반 서비스 흐름","textPreview":"문 이벤트 기반 서비스 흐름","textChars":15,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/o72183id","slide":10,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/98vi18zy","slide":10,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/m5kj6d0n","slide":10,"text":"판단·예외 처리","textPreview":"판단·예외 처리","textChars":8,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"textbox","id":"sh/wbm1cnyp","slide":10,"text":"PlantUML: 10_service_flow.puml | 기본값: stable_frames 3, cooldown 20초","textPreview":"PlantUML: 10_service_flow.puml | 기본값: stable_frames 3, cooldown 20초","textChars":67,"textLines":1,"bbox":[80,942,1160,26]}
+{"kind":"table","id":"tb/crid0nq5","slide":10,"name":"","rows":7,"cols":2,"preview":"판단 지점 | 처리","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/4fu50nyt","slide":10,"name":"","alt":"문 이벤트 기반 서비스 흐름","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/u8nock","slide":10,"text":""}
+{"kind":"slide","id":"sl/z7csvs","slide":11,"title":"| UI/UX 정의서","textShapes":7}
+{"kind":"shape","id":"sh/kfmxsj6t","slide":11,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/jutgzyp8","slide":11,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/itkfqto3","slide":11,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/xsbyxo7i","slide":11,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/wr2xoj6x","slide":11,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/vqtgvepc","slide":11,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/apkfm9or","slide":11,"text":"| UI/UX 정의서","textPreview":"| UI/UX 정의서","textChars":11,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/9obyt476","slide":11,"text":"화면 설계","textPreview":"화면 설계","textChars":5,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/8nixkz6l","slide":11,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/utc3qdsv","slide":11,"text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/vul4jy9g","slide":11,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/wvuls3al","slide":11,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/hw3ml8r6","slide":11,"text":"주요 화면 와이어프레임","textPreview":"주요 화면 와이어프레임","textChars":12,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/7ql4fyt4","slide":11,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/8rulo3ap","slide":11,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/9s3mh8ba","slide":11,"text":"고령층 접근성·UI 원칙","textPreview":"고령층 접근성·UI 원칙","textChars":13,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"textbox","id":"sh/z21kbet8","slide":11,"text":"PlantUML: 11_uiux_wireframe.puml | 실제 앱 캡처가 준비되면 와이어프레임 이미지만 교체","textPreview":"PlantUML: 11_uiux_wireframe.puml | 실제 앱 캡처가 준비되면 와이어프레임 이미지만 교체","textChars":63,"textLines":1,"bbox":[80,942,1160,26]}
+{"kind":"table","id":"tb/5c7i9ory","slide":11,"name":"","rows":7,"cols":2,"preview":"원칙 | 적용 방법","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/h8bm5c3a","slide":11,"name":"","alt":"주요 화면 와이어프레임","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/z7csvs","slide":11,"text":""}
+{"kind":"slide","id":"sl/5x1m8a","slide":12,"title":"| H/W·센서 구성도","textShapes":6}
+{"kind":"shape","id":"sh/6dovu94n","slide":12,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/t0fup43e","slide":12,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/8z6dwzmt","slide":12,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/v2hcrelk","slide":12,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/u1ovy9kz","slide":12,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/h4zeto3a","slide":12,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/g3qd0j2p","slide":12,"text":"| H/W·센서 구성도","textPreview":"| H/W·센서 구성도","textChars":12,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/b6dcfal0","slide":12,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/a54vmp4f","slide":12,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/ojixsfad","slide":12,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/pkrelkby","slide":12,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/2hgfq5s7","slide":12,"text":"센서·카메라 배선 설계","textPreview":"센서·카메라 배선 설계","textChars":12,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/cnixwfa9","slide":12,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/dorepkbu","slide":12,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/ql0fups3","slide":12,"text":"부품·연결·역할","textPreview":"부품·연결·역할","textChars":8,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"textbox","id":"sh/srydkvu5","slide":12,"text":"별도 MCU/자체 PCB 없음. 결로·케이블 고정·카메라 모델·전원 정격은 실물 제작 후 확정.","textPreview":"별도 MCU/자체 PCB 없음. 결로·케이블 고정·카메라 모델·전원 정격은 실물 제작 후 확정.","textChars":53,"textLines":1,"bbox":[80,942,1160,26]}
+{"kind":"table","id":"tb/0na5wrql","slide":12,"name":"","rows":7,"cols":3,"preview":"부품 | 연결 | 역할/비고","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/kb254vil","slide":12,"name":"","alt":"센서·카메라 배선 설계","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/5x1m8a","slide":12,"text":""}
+{"kind":"slide","id":"sl/33miil","slide":13,"title":"| 메뉴 구성도","textShapes":6}
+{"kind":"shape","id":"sh/hknq18be","slide":13,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/uhw7qtc3","slide":13,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/vi5ozyto","slide":13,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/4nypw3u5","slide":13,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/5o7q58bq","slide":13,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/ilw7utcz","slide":13,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/3mp83ytk","slide":13,"text":"| 메뉴 구성도","textPreview":"| 메뉴 구성도","textChars":8,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/sbyp0nu1","slide":13,"text":"화면 트리","textPreview":"화면 트리","textChars":5,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/dc7q9sbm","slide":13,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/xob6dwfi","slide":13,"text":"13","textPreview":"13","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/wn254ryx","slide":13,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/bmt4bmxc","slide":13,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/alkn2hgr","slide":13,"text":"화면 이동 중심 메뉴 트리","textPreview":"화면 이동 중심 메뉴 트리","textChars":14,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/kr258by9","slide":13,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/jqtof6xo","slide":13,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/ypkn61g3","slide":13,"text":"화면별 진입·복귀 규칙","textPreview":"화면별 진입·복귀 규칙","textChars":12,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"table","id":"tb/mtk3e9gf","slide":13,"name":"","rows":7,"cols":3,"preview":"화면군 | 진입 | 복귀/처리","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/mxgzutc7","slide":13,"name":"","alt":"화면 이동 중심 메뉴 트리","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/33miil","slide":13,"text":""}
+{"kind":"slide","id":"sl/ps00ro","slide":14,"title":"| 메뉴 구성도","textShapes":6}
+{"kind":"shape","id":"sh/kzetwjml","slide":14,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/zy5c3el0","slide":14,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/yxwbut4f","slide":14,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/xwnu1o3a","slide":14,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/cvetsjmp","slide":14,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/bu5czel4","slide":14,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/atcbq94j","slide":14,"text":"| 메뉴 구성도","textPreview":"| 메뉴 구성도","textChars":8,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/hs7ud83e","slide":14,"text":"기능 트리","textPreview":"기능 트리","textChars":5,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/wryd43mt","slide":14,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/qhcbmlkv","slide":14,"text":"14","textPreview":"14","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/rilcvq1g","slide":14,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/cjudov2l","slide":14,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/dk3uxgj6","slide":14,"text":"기능군 중심 메뉴 트리","textPreview":"기능군 중심 메뉴 트리","textChars":12,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/3elcr614","slide":14,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/4futkb2p","slide":14,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/pg3utgja","slide":14,"text":"기능군 설명","textPreview":"기능군 설명","textChars":6,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"table","id":"tb/x4jm1one","slide":14,"name":"","rows":7,"cols":3,"preview":"기능군 | 핵심 기능 | 구현 위치","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/h4f698ni","slide":14,"name":"","alt":"기능군 중심 메뉴 트리","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/ps00ro","slide":14,"text":""}
+{"kind":"slide","id":"sl/p5rhvq","slide":15,"title":"| 화면 설계서","textShapes":6}
+{"kind":"shape","id":"sh/mxgnidk3","slide":15,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/907md8ju","slide":15,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/8zy5kn29","slide":15,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/v294fi1k","slide":15,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/u10nmdkz","slide":15,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/h4rmhsjq","slide":15,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/w3i5on25","slide":15,"text":"| 화면 설계서","textPreview":"| 화면 설계서","textChars":8,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/b6543ylg","slide":15,"text":"대표 화면","textPreview":"대표 화면","textChars":5,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/a5w3atkv","slide":15,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/47qhkjmt","slide":15,"text":"15","textPreview":"15","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/58zito3e","slide":15,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/i58zit4n","slide":15,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/36hgrel8","slide":15,"text":"로그인·홈·재고·레시피 화면","textPreview":"로그인·홈·재고·레시피 화면","textChars":15,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/dcjix83q","slide":15,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/q98zmt4z","slide":15,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/ra10vylk","slide":15,"text":"기능번호·처리내용","textPreview":"기능번호·처리내용","textChars":9,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"table","id":"tb/bmt0bqd0","slide":15,"name":"","rows":7,"cols":3,"preview":"ID | 화면/기능 | 처리","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/zm98r6t4","slide":15,"name":"","alt":"로그인·홈·재고·레시피 화면","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/p5rhvq","slide":15,"text":""}
+{"kind":"slide","id":"sl/il06bo","slide":16,"title":"| 화면 설계서","textShapes":6}
+{"kind":"shape","id":"sh/apk3ixkz","slide":16,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/xsvmdcja","slide":16,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/crm5k725","slide":16,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/nmt47i18","slide":16,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/2lk3exkn","slide":16,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/pobm9sje","slide":16,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/on2lgn2t","slide":16,"text":"| 화면 설계서","textPreview":"| 화면 설계서","textChars":8,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/7ix4jm1s","slide":16,"text":"재고 상세/수정","textPreview":"재고 상세/수정","textChars":8,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/mh4nqhk7","slide":16,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/gzatgjah","slide":16,"text":"16","textPreview":"16","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/h03a9or2","slide":16,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/uxsbetsr","slide":16,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/fy1s7e9w","slide":16,"text":"재고 상세·수정 화면","textPreview":"재고 상세·수정 화면","textChars":11,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/twja5or6","slide":16,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/6tsba9sf","slide":16,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/7u1s3e90","slide":16,"text":"입력·출력·예외","textPreview":"입력·출력·예외","textChars":8,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"table","id":"tb/v65obq1o","slide":16,"name":"","rows":8,"cols":3,"preview":"구분 | 항목 | 설명","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/rqh4r2lk","slide":16,"name":"","alt":"재고 상세·수정 화면","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/il06bo","slide":16,"text":""}
+{"kind":"slide","id":"sl/qg0ipn","slide":17,"title":"| UI 흐름도","textShapes":5}
+{"kind":"shape","id":"sh/poba9gbi","slide":17,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/210rylsr","slide":17,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/n2ts7qtc","slide":17,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/0zi9wbal","slide":17,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/10ra5gb6","slide":17,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/ex0ru1sv","slide":17,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/fy9s36t0","slide":17,"text":"| UI 흐름도","textPreview":"| UI 흐름도","textChars":8,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/kvmt8fa5","slide":17,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/lwvah0bq","slide":17,"text":"17","textPreview":"17","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/5svu1szm","slide":17,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/4rmt87i1","slide":17,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/jqtcz2hw","slide":17,"text":"사용자 화면 이동","textPreview":"사용자 화면 이동","textChars":9,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/xobuxszq","slide":17,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/wn2t4ni5","slide":17,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/vmtcvihk","slide":17,"text":"네비게이션 규칙","textPreview":"네비게이션 규칙","textChars":8,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"table","id":"tb/d8relkzm","slide":17,"name":"","rows":8,"cols":2,"preview":"상황 | 이동/처리","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/lovel4f6","slide":17,"name":"","alt":"사용자 화면 이동","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/qg0ipn","slide":17,"text":""}
+{"kind":"slide","id":"sl/dbb6bq","slide":18,"title":"| 연계도","textShapes":5}
+{"kind":"shape","id":"sh/zm5w725s","slide":18,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/0nex07md","slide":18,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/lone9cny","slide":18,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/qhcvud4b","slide":18,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/bilw3i5w","slide":18,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/cjuxwnmh","slide":18,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/dk3e5sn2","slide":18,"text":"| 연계도","textPreview":"| 연계도","textChars":5,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/adwf6h4f","slide":18,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/vepwfm50","slide":18,"text":"18","textPreview":"18","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/3m9cfql4","slide":18,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/il0bml4j","slide":18,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/5oruhg3a","slide":18,"text":"H/W·앱·서버·DB 연계","textPreview":"H/W·앱·서버·DB 연계","textChars":14,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/rq9cjqlg","slide":18,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/qp0bql4v","slide":18,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/dcbul036","slide":18,"text":"연계 인터페이스 정의","textPreview":"연계 인터페이스 정의","textChars":11,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"table","id":"tb/jmlkni5k","slide":18,"name":"","rows":7,"cols":3,"preview":"송신→수신 | 프로토콜/데이터 | 목적","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/7e94byhs","slide":18,"name":"","alt":"H/W·앱·서버·DB 연계","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/dbb6bq","slide":18,"text":""}
+{"kind":"slide","id":"sl/wfm33d","slide":19,"title":"| 엔티티 관계도","textShapes":6}
+{"kind":"shape","id":"sh/sr25cj61","slide":19,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/rqt43epg","slide":19,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/qpkna9ob","slide":19,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/5obm147q","slide":19,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/4n258z65","slide":19,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/3mt4zupk","slide":19,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/ilkn69oz","slide":19,"text":"| 엔티티 관계도","textPreview":"| 엔티티 관계도","textChars":9,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/pkf6d87u","slide":19,"text":"ERD","textPreview":"ERD","textChars":3,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/ojm5k369","slide":19,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/ih8fut8j","slide":19,"text":"19","textPreview":"19","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/jihg3e94","slide":19,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/kjqxwjqp","slide":19,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/5kzy5oru","slide":19,"text":"개념 ERD","textPreview":"개념 ERD","textChars":6,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/vexgze9s","slide":19,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/wf6xsjqd","slide":19,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/xgzy1ory","slide":19,"text":"핵심 관계·무결성","textPreview":"핵심 관계·무결성","textChars":9,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"table","id":"tb/hwrqp4zq","slide":19,"name":"","rows":7,"cols":3,"preview":"관계 | 카디널리티 | 규칙","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/9sn2p4bi","slide":19,"name":"","alt":"개념 ERD","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/wfm33d","slide":19,"text":""}
+{"kind":"slide","id":"sl/y01wye","slide":20,"title":"| 기능 처리도","textShapes":6}
+{"kind":"shape","id":"sh/rup4bi1c","slide":20,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/svy5kn2x","slide":20,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/dw7md8ji","slide":20,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/i5w3etkv","slide":20,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/3qp47y1g","slide":20,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/4ry5g321","slide":20,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/5s7m98jm","slide":20,"text":"| 기능 처리도","textPreview":"| 기능 처리도","textChars":8,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/u1w3atkz","slide":20,"text":"자동 등록","textPreview":"자동 등록","textChars":5,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/v2543y1k","slide":20,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/fihgzqh4","slide":20,"text":"20","textPreview":"20","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/eh8fq5gj","slide":20,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/14zy10za","slide":20,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/0jqxsvyp","slide":20,"text":"문 이벤트 기반 재고 반영","textPreview":"문 이벤트 기반 재고 반영","textChars":14,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/25sfu5gf","slide":20,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/p8jy5kz6","slide":20,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/o7ahwfyl","slide":20,"text":"입력·처리·출력","textPreview":"입력·처리·출력","textChars":8,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"table","id":"tb/ov65gne1","slide":20,"name":"","rows":8,"cols":2,"preview":"구분 | 내용","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/cbudsju9","slide":20,"name":"","alt":"문 이벤트 기반 재고 반영","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/y01wye","slide":20,"text":""}
+{"kind":"slide","id":"sl/sdnzdw","slide":21,"title":"| 순차 다이어그램","textShapes":5}
+{"kind":"shape","id":"sh/cbyhcfyd","slide":21,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/bapgjaxs","slide":21,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/a9gza5g7","slide":21,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/l0rip4fu","slide":21,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/kzihgzy9","slide":21,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/jypgnuxo","slide":21,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/yxgzepg3","slide":21,"text":"| 순차 다이어그램","textPreview":"| 순차 다이어그램","textChars":10,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/14nyd0za","slide":21,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/03ehkvy5","slide":21,"text":"21","textPreview":"21","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/u5oz6xgj","slide":21,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/f6x0f2x4","slide":21,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/g7qh87yp","slide":21,"text":"자동 등록·소비 호출 순서","textPreview":"자동 등록·소비 호출 순서","textChars":14,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/298zahgf","slide":21,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/3ah0jmx0","slide":21,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/4bqhcryl","slide":21,"text":"참여자·책임","textPreview":"참여자·책임","textChars":6,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"table","id":"tb/ux8j25sf","slide":21,"name":"","rows":8,"cols":2,"preview":"참여자 | 책임","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/a5ova9oz","slide":21,"name":"","alt":"자동 등록·소비 호출 순서","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/sdnzdw","slide":21,"text":""}
+{"kind":"slide","id":"sl/3xe9jt","slide":22,"title":"| 알고리즘 명세서","textShapes":6}
+{"kind":"shape","id":"sh/ju1wfa1s","slide":22,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/4vaxofid","slide":22,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/5wjehkjy","slide":22,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/6xsfq50j","slide":22,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/ry1wja14","slide":22,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/szuxsfip","slide":22,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/tk3ylkju","slide":22,"text":"| 알고리즘 명세서","textPreview":"| 알고리즘 명세서","textChars":10,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/elcfup0f","slide":22,"text":"후보·분류·안정화","textPreview":"후보·분류·안정화","textChars":9,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/fmlgnu10","slide":22,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/rih4jyh4","slide":22,"text":"22","textPreview":"22","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/qh83qt0j","slide":22,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/dkzml8za","slide":22,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/cjqls3ip","slide":22,"text":"알고리즘 흐름도","textPreview":"알고리즘 흐름도","textChars":8,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/2to3mt0n","slide":22,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/pwzmh8zy","slide":22,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/4vqlo3id","slide":22,"text":"단계별 명세","textPreview":"단계별 명세","textChars":6,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"table","id":"tb/kzuh8jq9","slide":22,"name":"","rows":9,"cols":3,"preview":"단계 | 처리 | 결과","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/ojmlkfat","slide":22,"name":"","alt":"알고리즘 흐름도","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/3xe9jt","slide":22,"text":""}
+{"kind":"slide","id":"sl/ugxfwi","slide":23,"title":"| 알고리즘 상세 명세","textShapes":9}
+{"kind":"shape","id":"sh/w3uxcbq1","slide":23,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/v2lg3qpg","slide":23,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/a1cfal8v","slide":23,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/90jy1g7a","slide":23,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/8fax8bqp","slide":23,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/ne1gz6pk","slide":23,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/mdsf618z","slide":23,"text":"| 알고리즘 상세 명세","textPreview":"| 알고리즘 상세 명세","textChars":12,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/lcjyxw7e","slide":23,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/0bax4rqt","slide":23,"text":"23","textPreview":"23","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/jedknalk","slide":23,"bbox":[78,540,600,345]}
+{"kind":"textbox","id":"sh/kzmlwf25","slide":23,"text":"정상 인식 결과","textPreview":"정상 인식 결과","textChars":8,"textLines":1,"bbox":[96,560,564,44]}
+{"kind":"textbox","id":"sh/l0v2pk3q","slide":23,"text":"원본 프레임·검출 박스·crop·label·confidence가 함께 보이는 화면\n설명 예: “동일 tomato signature 3회 후 /upload 성공”","textPreview":"원본 프레임·검출 박스·crop·label·confidence가 함께 보이는 화면 | 설명 예: “동일 tomato signature 3회 후 /upload 성공”","textChars":89,"textLines":2,"bbox":[102,624,552,199]}
+{"kind":"textbox","id":"sh/a9k3q5k3","slide":23,"text":"교체 파일: 23_algorithm_success.png","textPreview":"교체 파일: 23_algorithm_success.png","textChars":31,"textLines":1,"bbox":[96,837,564,30]}
+{"kind":"shape","id":"sh/batkjqlo","slide":23,"bbox":[716,540,608,345]}
+{"kind":"textbox","id":"sh/wb2lsv29","slide":23,"text":"낮은 신뢰도/오인식 결과","textPreview":"낮은 신뢰도/오인식 결과","textChars":13,"textLines":1,"bbox":[734,560,572,44]}
+{"kind":"textbox","id":"sh/xcb2l03u","slide":23,"text":"confidence 미달 또는 UNRECOGNIZED 사례\n사용자가 재료명·상태를 보완하는 화면과 함께 제시","textPreview":"confidence 미달 또는 UNRECOGNIZED 사례 | 사용자가 재료명·상태를 보완하는 화면과 함께 제시","textChars":60,"textLines":2,"bbox":[740,624,560,199]}
+{"kind":"textbox","id":"sh/m503mlk7","slide":23,"text":"교체 파일: 23_algorithm_review.png","textPreview":"교체 파일: 23_algorithm_review.png","textChars":30,"textLines":1,"bbox":[734,837,572,30]}
+{"kind":"table","id":"tb/dsve5wnm","slide":23,"name":"","rows":7,"cols":3,"preview":"항목 | 설정/입력 | 설명","bbox":[78,218,1246,295]}
+{"kind":"notes","id":"nt/ugxfwi","slide":23,"text":""}
+{"kind":"slide","id":"sl/tagzmc","slide":24,"title":"| 하드웨어 설계도","textShapes":5}
+{"kind":"shape","id":"sh/kzmp07y1","slide":24,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/jydo72hw","slide":24,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/yx47yxgb","slide":24,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/tof6dwzy","slide":24,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/836p4ryd","slide":24,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/72xobmhs","slide":24,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/61o72hg7","slide":24,"text":"| 하드웨어 설계도","textPreview":"| 하드웨어 설계도","textChars":10,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/9sb61sze","slide":24,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/o725sny9","slide":24,"text":"24","textPreview":"24","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/e10r6dsf","slide":24,"bbox":[76,228,760,690]}
+{"kind":"shape","id":"sh/z298zi90","slide":24,"bbox":[76,228,760,74]}
+{"kind":"textbox","id":"sh/03i98nal","slide":24,"text":"H/W 모듈·장착 설계","textPreview":"H/W 모듈·장착 설계","textChars":12,"textLines":1,"bbox":[88,240,736,48]}
+{"kind":"shape","id":"sh/m50raxsr","slide":24,"bbox":[856,228,468,690]}
+{"kind":"shape","id":"sh/n6t8329c","slide":24,"bbox":[856,228,468,74]}
+{"kind":"textbox","id":"sh/o729c7ax","slide":24,"text":"장착·안전·미확정 항목","textPreview":"장착·안전·미확정 항목","textChars":12,"textLines":1,"bbox":[868,240,444,48]}
+{"kind":"table","id":"tb/e183m9sv","slide":24,"name":"","rows":7,"cols":2,"preview":"항목 | 설계 원칙/상태","bbox":[872,316,436,572]}
+{"kind":"image","id":"im/udgri5ob","slide":24,"name":"","alt":"H/W 모듈·장착 설계","bbox":[94,314,724,575]}
+{"kind":"notes","id":"nt/tagzmc","slide":24,"text":""}
+{"kind":"slide","id":"sl/w3yowd","slide":25,"title":"| 프로그램·목록","textShapes":3}
+{"kind":"shape","id":"sh/9of6dgjy","slide":25,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/m14n2107","slide":25,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/n2dob61s","slide":25,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/0zm50bih","slide":25,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/l0vm9gjm","slide":25,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/ex4ny1kb","slide":25,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/zyd4761w","slide":25,"text":"| 프로그램·목록","textPreview":"| 프로그램·목록","textChars":9,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/cv25wr25","slide":25,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/dwbm5wjq","slide":25,"text":"25","textPreview":"25","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"table","id":"tb/m587eps3","slide":25,"name":"","rows":12,"cols":5,"preview":"기능번호 | 분류 | 프로그램/파일 | 기능명 | 신규/기존","bbox":[78,220,1246,665]}
+{"kind":"notes","id":"nt/w3yowd","slide":25,"text":""}
+{"kind":"slide","id":"sl/nrxf1z","slide":26,"title":"| 테이블 정의서","textShapes":6}
+{"kind":"shape","id":"sh/l4za5knu","slide":26,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/y18bu5oj","slide":26,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/j2hs3a5o","slide":26,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/wfqtsv6d","slide":26,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/x0za107y","slide":26,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/adobq5o7","slide":26,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/bexszaps","slide":26,"text":"| 테이블 정의서","textPreview":"| 테이블 정의서","textChars":9,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/ob69ov61","slide":26,"text":"ERD","textPreview":"ERD","textChars":3,"textLines":1,"bbox":[350,111,140,28]}
+{"kind":"textbox","id":"sh/9cfax07m","slide":26,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/hkb2h4je","slide":26,"text":"26","textPreview":"26","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/wj2l8zit","slide":26,"bbox":[76,228,560,690]}
+{"kind":"shape","id":"sh/vi9kfu18","slide":26,"bbox":[76,228,560,74]}
+{"kind":"textbox","id":"sh/ux0j6pk3","slide":26,"text":"ERD 축약본","textPreview":"ERD 축약본","textChars":7,"textLines":1,"bbox":[88,240,536,48]}
+{"kind":"shape","id":"sh/8vi14z2x","slide":26,"bbox":[656,228,668,690]}
+{"kind":"shape","id":"sh/7u9kbu1c","slide":26,"bbox":[656,228,668,74]}
+{"kind":"textbox","id":"sh/mt0j2pkr","slide":26,"text":"fridge_items 데이터사전","textPreview":"fridge_items 데이터사전","textChars":18,"textLines":1,"bbox":[668,240,644,48]}
+{"kind":"table","id":"tb/6d0j6pgj","slide":26,"name":"","rows":13,"cols":5,"preview":"항목명 | Type | PK/FK | NULL | 기본값/설명","bbox":[672,310,636,586]}
+{"kind":"image","id":"im/2x4j2dcj","slide":26,"name":"","alt":"물리 테이블 ERD","bbox":[90,312,532,585]}
+{"kind":"notes","id":"nt/nrxf1z","slide":26,"text":""}
+{"kind":"slide","id":"sl/dcv99k","slide":27,"title":"| 핵심 소스코드(1)","textShapes":9}
+{"kind":"shape","id":"sh/6xcjax4j","slide":27,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/t0n2lc3a","slide":27,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/8ze1c7mp","slide":27,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/v25knmlg","slide":27,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/u1wjeh4v","slide":27,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/hon2pc36","slide":27,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/g3e1g7m1","slide":27,"text":"| 핵심 소스코드(1)","textPreview":"| 핵심 소스코드(1)","textChars":12,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/3qpkrmlc","slide":27,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/2pwjih4r","slide":27,"text":"27","textPreview":"27","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/4bahwbm5","slide":27,"bbox":[78,240,610,650]}
+{"kind":"textbox","id":"sh/5cji5w3q","slide":27,"text":"backend/app.py - upload_detection()","textPreview":"backend/app.py - upload_detection()","textChars":35,"textLines":1,"bbox":[96,260,574,44]}
+{"kind":"textbox","id":"sh/i98zu14f","slide":27,"text":"권장 캡처: 1144~1159, 1161~1199\n이미지 검증·저장, RECOGNIZED/UNRECOGNIZED 결정, fridge_items INSERT가 보이게 캡처\n파일명·줄번호 표시, 개인정보·서버 정보 가림","textPreview":"권장 캡처: 1144~1159, 1161~1199 | 이미지 검증·저장, RECOGNIZED/UNRECOGNIZED 결정, fridge_items INSERT가 보이게 캡처 | 파일명·줄번호 표시, 개인정보·서버 정보 가림","textChars":120,"textLines":3,"bbox":[102,324,562,504]}
+{"kind":"textbox","id":"sh/jah036l0","slide":27,"text":"교체 파일: 27_code_upload.png","textPreview":"교체 파일: 27_code_upload.png","textChars":25,"textLines":1,"bbox":[96,842,574,30]}
+{"kind":"shape","id":"sh/sfa10bmh","slide":27,"bbox":[714,240,610,650]}
+{"kind":"textbox","id":"sh/dgji9g32","slide":27,"text":"backend/app.py - list_recipes()","textPreview":"backend/app.py - list_recipes()","textChars":31,"textLines":1,"bbox":[732,260,574,44]}
+{"kind":"textbox","id":"sh/6dsjy14b","slide":27,"text":"권장 캡처: 1018~1020, 1048~1082\n1061~1066 missing 계산과 1081 정렬식을 포함\n부족 재료가 적고 matched가 많은 순 추천 근거","textPreview":"권장 캡처: 1018~1020, 1048~1082 | 1061~1066 missing 계산과 1081 정렬식을 포함 | 부족 재료가 적고 matched가 많은 순 추천 근거","textChars":92,"textLines":3,"bbox":[738,324,562,504]}
+{"kind":"textbox","id":"sh/re1076lw","slide":27,"text":"교체 파일: 27_code_recipes.png","textPreview":"교체 파일: 27_code_recipes.png","textChars":26,"textLines":1,"bbox":[732,842,574,30]}
+{"kind":"notes","id":"nt/dcv99k","slide":27,"text":""}
+{"kind":"slide","id":"sl/f3d9kl","slide":28,"title":"| 핵심 소스코드(2)","textShapes":9}
+{"kind":"shape","id":"sh/v2hkfyhs","slide":28,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/g3q1o3yd","slide":28,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/h4z2h8zi","slide":28,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/6xojitgv","slide":28,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/7yxkbyhg","slide":28,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/8zq1k3y1","slide":28,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/t0z2d8zm","slide":28,"text":"| 핵심 소스코드(2)","textPreview":"| 핵심 소스코드(2)","textChars":12,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/qtsjuxgf","slide":28,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/ru1knih0","slide":28,"text":"28","textPreview":"28","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/zu50jqx4","slide":28,"bbox":[78,240,610,650]}
+{"kind":"textbox","id":"sh/etwjqlwj","slide":28,"text":"backend/pi_fridge_camera.py","textPreview":"backend/pi_fridge_camera.py","textChars":27,"textLines":1,"bbox":[96,260,574,44]}
+{"kind":"textbox","id":"sh/1gnil0fa","slide":28,"text":"collect_crop_candidates(): 319~329\nscan_until_action(): 912~947\nYOLO·contour·center fallback과 signature 안정화 구간을 “...”로 연결","textPreview":"collect_crop_candidates(): 319~329 | scan_until_action(): 912~947 | YOLO·contour·center fallback과 signature 안정화 구간을 “...”로 연결","textChars":121,"textLines":3,"bbox":[102,324,562,504]}
+{"kind":"textbox","id":"sh/0ve1svep","slide":28,"text":"교체 파일: 28_code_pi.png","textPreview":"교체 파일: 28_code_pi.png","textChars":21,"textLines":1,"bbox":[96,842,574,30]}
+{"kind":"shape","id":"sh/nip0naxg","slide":28,"bbox":[714,240,610,650]}
+{"kind":"textbox","id":"sh/mhgju5wv","slide":28,"text":"fridge_app/lib/services/api_service.dart","textPreview":"fridge_app/lib/services/api_service.dart","textChars":40,"textLines":1,"bbox":[732,260,574,44]}
+{"kind":"textbox","id":"sh/9k7ip0f6","slide":28,"text":"fetchInventory(): 91~95\nfetchRecipes(): 147~156\nfetchRecipeDetail(): 158~166\nREST URL과 응답 모델 변환이 보이게 캡처","textPreview":"fetchInventory(): 91~95 | fetchRecipes(): 147~156 | fetchRecipeDetail(): 158~166 | REST URL과 응답 모델 변환이 보이게 캡처","textChars":103,"textLines":4,"bbox":[738,324,562,504]}
+{"kind":"textbox","id":"sh/ojy1wfe1","slide":28,"text":"교체 파일: 28_code_flutter.png","textPreview":"교체 파일: 28_code_flutter.png","textChars":26,"textLines":1,"bbox":[732,842,574,30]}
+{"kind":"notes","id":"nt/f3d9kl","slide":28,"text":""}
+{"kind":"slide","id":"sl/4tmmp5","slide":29,"title":"| 참조-개발 환경 및 설명","textShapes":4}
+{"kind":"shape","id":"sh/98zud0jy","slide":29,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/m5ovi50n","slide":29,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/76xcbq1s","slide":29,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/wbqdofip","slide":29,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/hczuhkja","slide":29,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/u98vm50j","slide":29,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/vahcfa14","slide":29,"text":"| 참조-개발 환경 및 설명","textPreview":"| 참조-개발 환경 및 설명","textChars":15,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/cfmdcb25","slide":29,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/xgfu5gjq","slide":29,"text":"29","textPreview":"29","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"textbox","id":"sh/wnqpknih","slide":29,"text":"주의: 저장소 URL·계정명·서버 IP·DB 비밀번호는 제출 자료에 노출하지 않는다.","textPreview":"주의: 저장소 URL·계정명·서버 IP·DB 비밀번호는 제출 자료에 노출하지 않는다.","textChars":47,"textLines":1,"bbox":[84,870,1100,34]}
+{"kind":"table","id":"tb/q9crepk7","slide":29,"name":"","rows":8,"cols":4,"preview":"구분 | 항목 | 적용 내역 | 설명","bbox":[78,220,1246,620]}
+{"kind":"notes","id":"nt/4tmmp5","slide":29,"text":""}
+{"kind":"slide","id":"sl/wn8c8p","slide":30,"title":"| S/W 기능 실사 사진","textShapes":16}
+{"kind":"shape","id":"sh/ahozyl4j","slide":30,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/xkfi90nu","slide":30,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/cj6h0vmp","slide":30,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/zmh0ba50","slide":30,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/yloz254f","slide":30,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/lozid0n6","slide":30,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/knqh4vml","slide":30,"text":"| S/W 기능 실사 사진","textPreview":"| S/W 기능 실사 사진","textChars":14,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/fqd0z65w","slide":30,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/ep4zq14b","slide":30,"text":"30","textPreview":"30","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/gnmt03ip","slide":30,"bbox":[78,242,292,630]}
+{"kind":"textbox","id":"sh/h8fa98ja","slide":30,"text":"재고 목록","textPreview":"재고 목록","textChars":5,"textLines":1,"bbox":[96,262,256,44]}
+{"kind":"textbox","id":"sh/ul4bydkz","slide":30,"text":"AI crop·재료명·상태 표시","textPreview":"AI crop·재료명·상태 표시","textChars":17,"textLines":1,"bbox":[102,326,244,484]}
+{"kind":"textbox","id":"sh/vmds7y14","slide":30,"text":"교체 파일: 30_sw_inventory.png","textPreview":"교체 파일: 30_sw_inventory.png","textChars":26,"textLines":1,"bbox":[96,824,256,30]}
+{"kind":"shape","id":"sh/4b6t4ni1","slide":30,"bbox":[393,242,292,630]}
+{"kind":"textbox","id":"sh/5cfadsjm","slide":30,"text":"재고 상세","textPreview":"재고 상세","textChars":5,"textLines":1,"bbox":[411,262,256,44]}
+{"kind":"textbox","id":"sh/i9ob2d0v","slide":30,"text":"수량·단위·상태 수정","textPreview":"수량·단위·상태 수정","textChars":11,"textLines":1,"bbox":[417,326,244,484]}
+{"kind":"textbox","id":"sh/3axsbi1g","slide":30,"text":"교체 파일: 30_sw_detail.png","textPreview":"교체 파일: 30_sw_detail.png","textChars":23,"textLines":1,"bbox":[411,824,256,30]}
+{"kind":"shape","id":"sh/kf29sj2h","slide":30,"bbox":[708,242,292,630]}
+{"kind":"textbox","id":"sh/lgva1oj2","slide":30,"text":"레시피 목록","textPreview":"레시피 목록","textChars":6,"textLines":1,"bbox":[726,262,256,44]}
+{"kind":"textbox","id":"sh/103y9g7u","slide":30,"text":"부족 재료 수·추천 순서","textPreview":"부족 재료 수·추천 순서","textChars":13,"textLines":1,"bbox":[732,326,244,484]}
+{"kind":"textbox","id":"sh/0zuhgvq9","slide":30,"text":"교체 파일: 30_sw_recipes.png","textPreview":"교체 파일: 30_sw_recipes.png","textChars":24,"textLines":1,"bbox":[726,824,256,30]}
+{"kind":"shape","id":"sh/fy1g7qpo","slide":30,"bbox":[1023,242,292,630]}
+{"kind":"textbox","id":"sh/exszel83","slide":30,"text":"레시피 상세","textPreview":"레시피 상세","textChars":6,"textLines":1,"bbox":[1041,262,256,44]}
+{"kind":"textbox","id":"sh/p43id07q","slide":30,"text":"필요·부족 재료와 조리법","textPreview":"필요·부족 재료와 조리법","textChars":13,"textLines":1,"bbox":[1047,326,244,484]}
+{"kind":"textbox","id":"sh/o3uhkvq5","slide":30,"text":"교체 파일: 30_sw_recipe_detail.png","textPreview":"교체 파일: 30_sw_recipe_detail.png","textChars":30,"textLines":1,"bbox":[1041,824,256,30]}
+{"kind":"textbox","id":"sh/n2l0bqp0","slide":30,"text":"실행 화면은 동일 사용자·냉장고 데이터 기준으로 촬영하고 개인정보·서버 주소를 가린다.","textPreview":"실행 화면은 동일 사용자·냉장고 데이터 기준으로 촬영하고 개인정보·서버 주소를 가린다.","textChars":48,"textLines":1,"bbox":[80,942,1160,26]}
+{"kind":"notes","id":"nt/wn8c8p","slide":30,"text":""}
+{"kind":"slide","id":"sl/p3rxcv","slide":31,"title":"| 참조-H/W 기능 실사 사진","textShapes":21}
+{"kind":"shape","id":"sh/ozed8n6h","slide":31,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/ny5czi5c","slide":31,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/mxwv6dor","slide":31,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/1cnux8n6","slide":31,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/0bed436l","slide":31,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/za5cvy50","slide":31,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/e9wb2dof","slide":31,"text":"| 참조-H/W 기능 실사 사진","textPreview":"| 참조-H/W 기능 실사 사진","textChars":17,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/d83ut8nu","slide":31,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/c7ut036p","slide":31,"text":"31","textPreview":"31","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/2d4rmlgr","slide":31,"bbox":[78,240,392,305]}
+{"kind":"textbox","id":"sh/3ed8vqxc","slide":31,"text":"전체 장착","textPreview":"전체 장착","textChars":5,"textLines":1,"bbox":[96,260,356,44]}
+{"kind":"textbox","id":"sh/4fm9ovyx","slide":31,"text":"냉장고·Pi·카메라·센서·케이블 경로","textPreview":"냉장고·Pi·카메라·센서·케이블 경로","textChars":20,"textLines":1,"bbox":[102,324,344,159]}
+{"kind":"textbox","id":"sh/pgvqxgfi","slide":31,"text":"교체 파일: 31_hw_01.jpg","textPreview":"교체 파일: 31_hw_01.jpg","textChars":19,"textLines":1,"bbox":[96,497,356,30]}
+{"kind":"shape","id":"sh/u9kri1gv","slide":31,"bbox":[494,240,392,305]}
+{"kind":"textbox","id":"sh/fat8r6hg","slide":31,"text":"Pi-카메라 연결","textPreview":"Pi-카메라 연결","textChars":9,"textLines":1,"bbox":[512,260,356,44]}
+{"kind":"textbox","id":"sh/gb29kby1","slide":31,"text":"CSI 또는 USB 연결부·촬영 방향","textPreview":"CSI 또는 USB 연결부·촬영 방향","textChars":20,"textLines":1,"bbox":[518,324,344,159]}
+{"kind":"textbox","id":"sh/hcbqtgf6","slide":31,"text":"교체 파일: 31_hw_02.jpg","textPreview":"교체 파일: 31_hw_02.jpg","textChars":19,"textLines":1,"bbox":[512,497,356,30]}
+{"kind":"shape","id":"sh/6lk7e1gj","slide":31,"bbox":[910,240,392,305]}
+{"kind":"textbox","id":"sh/7mt8n6h4","slide":31,"text":"GPIO17/GND","textPreview":"GPIO17/GND","textChars":10,"textLines":1,"bbox":[928,260,356,44]}
+{"kind":"textbox","id":"sh/bqpov2xw","slide":31,"text":"물리 핀 11과 GND 배선 근접 사진","textPreview":"물리 핀 11과 GND 배선 근접 사진","textChars":21,"textLines":1,"bbox":[934,324,344,159]}
+{"kind":"textbox","id":"sh/apgnmxwb","slide":31,"text":"교체 파일: 31_hw_03.jpg","textPreview":"교체 파일: 31_hw_03.jpg","textChars":19,"textLines":1,"bbox":[928,497,356,30]}
+{"kind":"shape","id":"sh/xs76xcf2","slide":31,"bbox":[78,570,392,305]}
+{"kind":"textbox","id":"sh/wry5o7eh","slide":31,"text":"문 열림/닫힘","textPreview":"문 열림/닫힘","textChars":7,"textLines":1,"bbox":[96,590,356,44]}
+{"kind":"textbox","id":"sh/ju9oz2d8","slide":31,"text":"리드스위치·자석 거리 비교","textPreview":"리드스위치·자석 거리 비교","textChars":14,"textLines":1,"bbox":[102,654,344,159]}
+{"kind":"textbox","id":"sh/ytgnqxwn","slide":31,"text":"교체 파일: 31_hw_04.jpg","textPreview":"교체 파일: 31_hw_04.jpg","textChars":19,"textLines":1,"bbox":[96,827,356,30]}
+{"kind":"shape","id":"sh/lgr61cvy","slide":31,"bbox":[494,570,392,305]}
+{"kind":"textbox","id":"sh/kfi5s7et","slide":31,"text":"MJPEG 인식","textPreview":"MJPEG 인식","textChars":8,"textLines":1,"bbox":[512,590,356,44]}
+{"kind":"textbox","id":"sh/zy54nixo","slide":31,"text":"실제 식재료와 검출 박스 화면","textPreview":"실제 식재료와 검출 박스 화면","textChars":16,"textLines":1,"bbox":[518,654,344,159]}
+{"kind":"textbox","id":"sh/exwnedw3","slide":31,"text":"교체 파일: 31_hw_05.jpg","textPreview":"교체 파일: 31_hw_05.jpg","textChars":19,"textLines":1,"bbox":[512,827,356,30]}
+{"kind":"shape","id":"sh/43uloju1","slide":31,"bbox":[910,570,392,305]}
+{"kind":"textbox","id":"sh/p432xovm","slide":31,"text":"앱 재고 반영","textPreview":"앱 재고 반영","textChars":7,"textLines":1,"bbox":[928,590,356,44]}
+{"kind":"textbox","id":"sh/21s3m9cv","slide":31,"text":"식재료 투입 후 목록 갱신 결과","textPreview":"식재료 투입 후 목록 갱신 결과","textChars":17,"textLines":1,"bbox":[934,654,344,159]}
+{"kind":"textbox","id":"sh/321kvedg","slide":31,"text":"교체 파일: 31_hw_06.jpg","textPreview":"교체 파일: 31_hw_06.jpg","textChars":19,"textLines":1,"bbox":[928,827,356,30]}
+{"kind":"notes","id":"nt/p3rxcv","slide":31,"text":""}
+{"kind":"slide","id":"sl/7q7yse","slide":32,"title":"| 동영상 촬영 콘티","textShapes":15}
+{"kind":"shape","id":"sh/mx83up0r","slide":32,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/90zm54ji","slide":32,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/8zqlwzix","slide":32,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/zuh4za1g","slide":32,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/yt83qpkv","slide":32,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/lwzm1kj6","slide":32,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/kvqlsf2l","slide":32,"text":"| 동영상 촬영 콘티","textPreview":"| 동영상 촬영 콘티","textChars":11,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/jq14be1k","slide":32,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/ipsn290z","slide":32,"text":"32","textPreview":"32","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/gfm5k7mx","slide":32,"bbox":[78,240,610,305]}
+{"kind":"textbox","id":"sh/10v6tc3i","slide":32,"text":"#1 문제 제시","textPreview":"#1 문제 제시","textChars":8,"textLines":1,"bbox":[96,260,574,44]}
+{"kind":"textbox","id":"sh/ed4nih4r","slide":32,"text":"고령인구·노년 1인가구 증가와 수기 재고관리 부담을 1~2문장으로 설명","textPreview":"고령인구·노년 1인가구 증가와 수기 재고관리 부담을 1~2문장으로 설명","textChars":39,"textLines":1,"bbox":[102,324,562,159]}
+{"kind":"textbox","id":"sh/fedor2lc","slide":32,"text":"교체 파일: 32_story_1.png","textPreview":"교체 파일: 32_story_1.png","textChars":21,"textLines":1,"bbox":[96,497,574,30]}
+{"kind":"shape","id":"sh/sbm5g7m1","slide":32,"bbox":[716,240,610,305]}
+{"kind":"textbox","id":"sh/tcv6pc36","slide":32,"text":"#2 하드웨어 소개","textPreview":"#2 하드웨어 소개","textChars":10,"textLines":1,"bbox":[734,260,574,44]}
+{"kind":"textbox","id":"sh/69knex4v","slide":32,"text":"카메라·리드스위치·Raspberry Pi 장착 위치와 연결을 소개","textPreview":"카메라·리드스위치·Raspberry Pi 장착 위치와 연결을 소개","textChars":36,"textLines":1,"bbox":[740,324,562,159]}
+{"kind":"textbox","id":"sh/raton2lg","slide":32,"text":"교체 파일: 32_story_2.png","textPreview":"교체 파일: 32_story_2.png","textChars":21,"textLines":1,"bbox":[734,497,574,30]}
+{"kind":"shape","id":"sh/4725cnmp","slide":32,"bbox":[78,570,610,305]}
+{"kind":"textbox","id":"sh/58b6ls3a","slide":32,"text":"#3 자동 인식·저장","textPreview":"#3 자동 인식·저장","textChars":11,"textLines":1,"bbox":[96,590,574,44]}
+{"kind":"textbox","id":"sh/l43m9ofy","slide":32,"text":"문 열림 → 촬영 → AI 인식 → /upload → 재고 반영을 시연","textPreview":"문 열림 → 촬영 → AI 인식 → /upload → 재고 반영을 시연","textChars":39,"textLines":1,"bbox":[102,654,562,159]}
+{"kind":"textbox","id":"sh/k3ulgjed","slide":32,"text":"교체 파일: 32_story_3.png","textPreview":"교체 파일: 32_story_3.png","textChars":21,"textLines":1,"bbox":[96,827,574,30]}
+{"kind":"shape","id":"sh/j2l47ex8","slide":32,"bbox":[716,570,610,305]}
+{"kind":"textbox","id":"sh/y1c3e9wn","slide":32,"text":"#4 앱 확인·레시피","textPreview":"#4 앱 확인·레시피","textChars":11,"textLines":1,"bbox":[734,590,574,44]}
+{"kind":"textbox","id":"sh/x03m54f2","slide":32,"text":"확인 필요 항목 검수와 부족 재료가 적은 레시피 추천을 시연","textPreview":"확인 필요 항목 검수와 부족 재료가 적은 레시피 추천을 시연","textChars":33,"textLines":1,"bbox":[740,654,562,159]}
+{"kind":"textbox","id":"sh/wzalcjeh","slide":32,"text":"교체 파일: 32_story_4.png","textPreview":"교체 파일: 32_story_4.png","textChars":21,"textLines":1,"bbox":[734,827,574,30]}
+{"kind":"notes","id":"nt/7q7yse","slide":32,"text":""}
+{"kind":"slide","id":"sl/pa59hp","slide":33,"title":"| 참조-프로젝트 관리","textShapes":13}
+{"kind":"shape","id":"sh/9kze5ofi","slide":33,"bbox":[0,194,26,742]}
+{"kind":"shape","id":"sh/mx8fa9g7","slide":33,"bbox":[18,920,8,16]}
+{"kind":"shape","id":"sh/nyhw3exc","slide":33,"bbox":[54,0,455,164]}
+{"kind":"shape","id":"sh/0vqx8zy1","slide":33,"bbox":[102,76,378,4]}
+{"kind":"shape","id":"sh/lwze14fm","slide":33,"bbox":[510,78,665,4]}
+{"kind":"shape","id":"sh/ytof6pgv","slide":33,"bbox":[0,0,100,100]}
+{"kind":"textbox","id":"sh/zuhwzuxg","slide":33,"text":"| 참조-프로젝트 관리","textPreview":"| 참조-프로젝트 관리","textChars":12,"textLines":1,"bbox":[90,99,390,48]}
+{"kind":"textbox","id":"sh/cr6d4zyp","slide":33,"text":"한이음드림업","textPreview":"한이음드림업","textChars":6,"textLines":1,"bbox":[1160,26,185,42]}
+{"kind":"textbox","id":"sh/dsfexkfa","slide":33,"text":"33","textPreview":"33","textChars":2,"textLines":1,"bbox":[1300,946,55,22]}
+{"kind":"shape","id":"sh/t0f6tgju","slide":33,"bbox":[78,242,392,630]}
+{"kind":"textbox","id":"sh/sz650b29","slide":33,"text":"프로젝트 관리","textPreview":"프로젝트 관리","textChars":7,"textLines":1,"bbox":[96,262,356,44]}
+{"kind":"textbox","id":"sh/7ydor61o","slide":33,"text":"주간 일정 또는 Kanban 보드\n완료/진행/대기 상태와 담당을 표시","textPreview":"주간 일정 또는 Kanban 보드 | 완료/진행/대기 상태와 담당을 표시","textChars":38,"textLines":2,"bbox":[102,326,344,484]}
+{"kind":"textbox","id":"sh/6x4ny1k3","slide":33,"text":"교체 파일: 33_project_board.png","textPreview":"교체 파일: 33_project_board.png","textChars":27,"textLines":1,"bbox":[96,824,356,30]}
+{"kind":"shape","id":"sh/5wv6pwjy","slide":33,"bbox":[494,242,392,630]}
+{"kind":"textbox","id":"sh/kvm5wb2d","slide":33,"text":"형상관리","textPreview":"형상관리","textChars":4,"textLines":1,"bbox":[512,262,356,44]}
+{"kind":"textbox","id":"sh/judon61s","slide":33,"text":"Git commit·branch 화면\n개인 계정명·원격 저장소 URL은 가림","textPreview":"Git commit·branch 화면 | 개인 계정명·원격 저장소 URL은 가림","textChars":42,"textLines":2,"bbox":[518,326,344,484]}
+{"kind":"textbox","id":"sh/i94nu1k7","slide":33,"text":"교체 파일: 33_git_history.png","textPreview":"교체 파일: 33_git_history.png","textChars":25,"textLines":1,"bbox":[512,824,356,30]}
+{"kind":"shape","id":"sh/x8v6lwjm","slide":33,"bbox":[910,242,392,630]}
+{"kind":"textbox","id":"sh/w7m5sr21","slide":33,"text":"이슈관리","textPreview":"이슈관리","textChars":4,"textLines":1,"bbox":[928,262,356,44]}
+{"kind":"textbox","id":"sh/ob658rax","slide":33,"text":"오류-원인-해결-검증이 보이는 이슈 화면\n재현 조건과 수정 commit을 연결","textPreview":"오류-원인-해결-검증이 보이는 이슈 화면 | 재현 조건과 수정 commit을 연결","textChars":43,"textLines":2,"bbox":[934,326,344,484]}
+{"kind":"textbox","id":"sh/9cz61wri","slide":33,"text":"교체 파일: 33_issue_log.png","textPreview":"교체 파일: 33_issue_log.png","textChars":23,"textLines":1,"bbox":[928,824,356,30]}
+{"kind":"textbox","id":"sh/mpon6hsr","slide":33,"text":"관리 증빙은 날짜·상태·해결 결과가 보이도록 캡처하고 개인정보는 제거한다.","textPreview":"관리 증빙은 날짜·상태·해결 결과가 보이도록 캡처하고 개인정보는 제거한다.","textChars":41,"textLines":1,"bbox":[80,942,1160,26]}
+{"kind":"notes","id":"nt/pa59hp","slide":33,"text":""}
+{"kind":"slide","id":"sl/lgikel","slide":34,"title":"제작설계 핵심 정리","textShapes":9}
+{"kind":"shape","id":"sh/ap8j6pg3","slide":34,"bbox":[0,0,1400,18]}
+{"kind":"textbox","id":"sh/xcz2hkzu","slide":34,"text":"제작설계 핵심 정리","textPreview":"제작설계 핵심 정리","textChars":10,"textLines":1,"bbox":[110,110,700,72]}
+{"kind":"shape","id":"sh/wbql8zy9","slide":34,"bbox":[110,250,1120,118]}
+{"kind":"textbox","id":"sh/je1kjuhk","slide":34,"text":"직접 수요","textPreview":"직접 수요","textChars":5,"textLines":1,"bbox":[145,275,190,56]}
+{"kind":"textbox","id":"sh/yd83apgz","slide":34,"text":"초고령사회와 노년 1인가구 증가에 맞춘 식재료 관리 자동화","textPreview":"초고령사회와 노년 1인가구 증가에 맞춘 식재료 관리 자동화","textChars":32,"textLines":1,"bbox":[350,275,830,56]}
+{"kind":"shape","id":"sh/lgj2l4zq","slide":34,"bbox":[110,400,1120,118]}
+{"kind":"textbox","id":"sh/kfalczy5","slide":34,"text":"구현 방식","textPreview":"구현 방식","textChars":5,"textLines":1,"bbox":[145,425,190,56]}
+{"kind":"textbox","id":"sh/fixk7ahg","slide":34,"text":"문 이벤트·엣지 AI·Flask/MySQL·Flutter를 연결한 모듈형 구조","textPreview":"문 이벤트·엣지 AI·Flask/MySQL·Flutter를 연결한 모듈형 구조","textChars":43,"textLines":1,"bbox":[350,425,830,56]}
+{"kind":"shape","id":"sh/ehojy5gv","slide":34,"bbox":[110,550,1120,118]}
+{"kind":"textbox","id":"sh/sbaxc7e1","slide":34,"text":"신뢰성","textPreview":"신뢰성","textChars":3,"textLines":1,"bbox":[145,575,190,56]}
+{"kind":"textbox","id":"sh/tcjy5cvm","slide":34,"text":"stable frame과 UNRECOGNIZED 사용자 검수로 자동화와 정확성 균형","textPreview":"stable frame과 UNRECOGNIZED 사용자 검수로 자동화와 정확성 균형","textChars":46,"textLines":1,"bbox":[350,575,830,56]}
+{"kind":"textbox","id":"sh/6psfaxwv","slide":34,"text":"최종 제출 전 교체할 자료: 통계 그래프 · 기술 동향 그림 · 코드 캡처 · S/W/H/W 실사 · 관리 증빙","textPreview":"최종 제출 전 교체할 자료: 통계 그래프 · 기술 동향 그림 · 코드 캡처 · S/W/H/W 실사 · 관리 증빙","textChars":62,"textLines":1,"bbox":[110,760,1120,48]}
+{"kind":"textbox","id":"sh/ra1g32dg","slide":34,"text":"Thank you","textPreview":"Thank you","textChars":9,"textLines":1,"bbox":[510,860,380,50]}
+{"kind":"notes","id":"nt/lgikel","slide":34,"text":""}

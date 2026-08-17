@@ -133,6 +133,35 @@ class IngredientCrossingTrackerTests(unittest.TestCase):
         self.assertEqual(2, len(events))
         self.assertTrue(all(event.direction == "in" for event in events))
 
+    def test_one_frame_label_flicker_keeps_track_and_majority_label(self):
+        tracker = self.make_tracker()
+
+        events = self.update(
+            tracker,
+            observation(20, "apple"),
+            observation(22, "apple"),
+            observation(50, "orange"),
+            observation(70, "apple"),
+            observation(72, "apple"),
+        )
+
+        self.assertEqual(1, len(events))
+        self.assertEqual("apple", events[0].label)
+
+    def test_sustained_label_change_can_replace_initial_mistake(self):
+        tracker = self.make_tracker(stable_zone_frames=1, label_history_size=3)
+
+        events = self.update(
+            tracker,
+            observation(20, "orange"),
+            observation(30, "apple"),
+            observation(50, "apple"),
+            observation(70, "apple"),
+        )
+
+        self.assertEqual(1, len(events))
+        self.assertEqual("apple", events[0].label)
+
 
 if __name__ == "__main__":
     unittest.main()

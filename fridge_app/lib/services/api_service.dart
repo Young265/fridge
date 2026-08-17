@@ -7,12 +7,10 @@ import '../models/app_user.dart';
 import '../models/fridge.dart';
 import '../models/inventory_item.dart';
 import '../models/recipe_detail.dart';
+import '../models/shopping_item.dart';
 
 class AuthResponse {
-  const AuthResponse({
-    required this.user,
-    required this.fridges,
-  });
+  const AuthResponse({required this.user, required this.fridges});
 
   final AppUser user;
   final List<Fridge> fridges;
@@ -20,6 +18,10 @@ class AuthResponse {
 
 class ApiService {
   static String get baseUrl {
+    const configuredUrl = String.fromEnvironment('API_BASE_URL');
+    if (configuredUrl.isNotEmpty) {
+      return configuredUrl.replaceFirst(RegExp(r'/$'), '');
+    }
     if (kIsWeb) {
       return 'http://127.0.0.1:5000';
     }
@@ -54,7 +56,9 @@ class ApiService {
   }
 
   static Future<List<Fridge>> fetchFridges(int userId) async {
-    final response = await http.get(Uri.parse('$baseUrl/fridges?user_id=$userId'));
+    final response = await http.get(
+      Uri.parse('$baseUrl/fridges?user_id=$userId'),
+    );
     final data = _decodeList(response);
     return data.map((item) => Fridge.fromJson(item)).toList();
   }
@@ -89,9 +93,13 @@ class ApiService {
   }
 
   static Future<List<InventoryItem>> fetchInventory(int fridgeId) async {
-    final response = await http.get(Uri.parse('$baseUrl/inventory?fridge_id=$fridgeId'));
+    final response = await http.get(
+      Uri.parse('$baseUrl/inventory?fridge_id=$fridgeId'),
+    );
     final data = _decodeList(response);
-    return data.map((item) => InventoryItem.fromJson(_normalizeItemUrls(item))).toList();
+    return data
+        .map((item) => InventoryItem.fromJson(_normalizeItemUrls(item)))
+        .toList();
   }
 
   static Future<InventoryItem> createInventoryItem({
@@ -140,16 +148,30 @@ class ApiService {
   }
 
   static Future<void> deleteInventoryItem(int fridgeItemId) async {
-    final response = await http.delete(Uri.parse('$baseUrl/inventory/$fridgeItemId'));
+    final response = await http.delete(
+      Uri.parse('$baseUrl/inventory/$fridgeItemId'),
+    );
     _ensureSuccess(response);
   }
 
   static Future<List<RecipeSummary>> fetchRecipes({
     required int fridgeId,
     String query = '',
+    String sort = 'available',
+    String difficulty = '',
+    bool availableOnly = false,
+    int limit = 200,
   }) async {
+    final parameters = <String, String>{
+      'fridge_id': '$fridgeId',
+      'q': query,
+      'sort': sort,
+      'difficulty': difficulty,
+      'available_only': '$availableOnly',
+      'limit': '$limit',
+    };
     final response = await http.get(
-      Uri.parse('$baseUrl/recipes?fridge_id=$fridgeId&q=${Uri.encodeQueryComponent(query)}'),
+      Uri.parse('$baseUrl/recipes').replace(queryParameters: parameters),
     );
     final data = _decodeList(response);
     return data.map((item) => RecipeSummary.fromJson(item)).toList();
@@ -163,6 +185,83 @@ class ApiService {
       Uri.parse('$baseUrl/recipes/$recipeId?fridge_id=$fridgeId'),
     );
     return RecipeDetail.fromJson(_decodeObject(response));
+  }
+
+  static Future<List<ShoppingItem>> fetchShoppingList(int fridgeId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/shopping-list?fridge_id=$fridgeId'),
+    );
+    return _decodeList(response).map(ShoppingItem.fromJson).toList();
+  }
+
+  static Future<ShoppingItem> createShoppingItem({
+    required int fridgeId,
+    required String displayName,
+    required double quantity,
+    required String unit,
+    required String category,
+    required int estimatedPrice,
+    String? note,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/shopping-list'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'fridge_id': fridgeId,
+        'display_name': displayName,
+        'quantity': quantity,
+        'unit': unit,
+        'category': category,
+        'estimated_price': estimatedPrice,
+        'note': note,
+      }),
+    );
+    return ShoppingItem.fromJson(_decodeObject(response));
+  }
+
+  static Future<List<ShoppingItem>> addMissingIngredients({
+    required int fridgeId,
+    required int recipeId,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/shopping-list/from-recipe'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'fridge_id': fridgeId, 'recipe_id': recipeId}),
+    );
+    return _decodeList(response).map(ShoppingItem.fromJson).toList();
+  }
+
+  static Future<ShoppingItem> updateShoppingItem({
+    required ShoppingItem item,
+    bool? isChecked,
+    String? displayName,
+    double? quantity,
+    String? unit,
+    String? category,
+    int? estimatedPrice,
+    String? note,
+  }) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/shopping-list/${item.shoppingItemId}'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'display_name': displayName ?? item.displayName,
+        'quantity': quantity ?? item.quantity,
+        'unit': unit ?? item.unit,
+        'category': category ?? item.category,
+        'estimated_price': estimatedPrice ?? item.estimatedPrice,
+        'note': note ?? item.note,
+        'is_checked': isChecked ?? item.isChecked,
+      }),
+    );
+    return ShoppingItem.fromJson(_decodeObject(response));
+  }
+
+  static Future<void> deleteShoppingItem(int shoppingItemId) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/shopping-list/$shoppingItemId'),
+    );
+    _ensureSuccess(response);
   }
 
   static AuthResponse _parseAuthResponse(http.Response response) {
@@ -196,9 +295,9 @@ class ApiService {
   static String _extractError(http.Response response) {
     try {
       final decoded = jsonDecode(response.body) as Map<String, dynamic>;
-      return decoded['error'] as String? ?? 'Request failed.';
+      return decoded['error'] as String? ?? '요청을 처리하지 못했습니다.';
     } catch (_) {
-      return 'Request failed.';
+      return '요청을 처리하지 못했습니다.';
     }
   }
 

@@ -8,7 +8,7 @@ from ultralytics import YOLO
 
 BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_MODEL_PATH = BASE_DIR / "runs" / "classify" / "grocery-classifier-public4" / "weights" / "best.pt"
-MIN_CONFIDENCE = float(os.environ.get("CLASSIFIER_MIN_CONFIDENCE", "0.65"))
+MIN_CONFIDENCE = float(os.environ.get("CLASSIFIER_MIN_CONFIDENCE", "0.55"))
 BACKGROUND_STRONG_CONFIDENCE = float(os.environ.get("CLASSIFIER_BACKGROUND_STRONG_CONFIDENCE", "0.90"))
 
 

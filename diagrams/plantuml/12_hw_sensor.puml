@@ -1,0 +1,26 @@
+@startuml
+title H/W·센서 구성도
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 160
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam componentStyle rectangle
+skinparam ArrowColor #49657A
+
+component "냉장고 문" as Door #E8F2FF
+component "자석" as Magnet #FFF4D9
+component "리드스위치" as Reed #FFF4D9
+component "카메라" as Camera #FFF4D9
+node "Raspberry Pi 5" as Pi #EAF7EE
+component "전원" as Power #F2F4F7
+component "Flask 서버" as Server #F3ECFF
+
+Door -- Magnet
+Magnet --> Reed
+Reed --> Pi
+Camera --> Pi
+Power --> Pi
+Pi --> Server
+@enduml

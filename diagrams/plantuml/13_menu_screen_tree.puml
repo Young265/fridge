@@ -1,0 +1,34 @@
+@startuml
+title 메뉴 구성도 - 화면 트리
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 160
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam linetype ortho
+skinparam ArrowColor #64748B
+skinparam rectangle {
+  BackgroundColor #F8FAFC
+  BorderColor #64748B
+  RoundCorner 12
+}
+
+rectangle "Smart Fridge 앱" as ROOT #DCEBFF
+rectangle "로그인" as LOGIN #EAF2FF
+rectangle "회원가입" as REGISTER #EAF2FF
+rectangle "냉장고 관리" as FRIDGE #EAF2FF
+rectangle "홈" as HOME #EAF7EE
+rectangle "재고 목록" as INVENTORY #EAF7EE
+rectangle "재고 상세" as DETAIL #FFF3E8
+rectangle "레시피 목록" as RECIPES #FFF3E8
+rectangle "레시피 상세" as RECIPE_DETAIL #FFF3E8
+
+ROOT --> LOGIN
+ROOT --> REGISTER
+ROOT --> FRIDGE
+ROOT --> HOME
+HOME --> INVENTORY
+INVENTORY --> DETAIL
+HOME --> RECIPES
+RECIPES --> RECIPE_DETAIL
+@enduml

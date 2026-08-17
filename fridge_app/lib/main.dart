@@ -55,7 +55,10 @@ class _FridgeAppState extends State<FridgeApp> {
     }
     setState(() {
       _fridges = fridges;
-      _selectedFridge = selectedFridge ?? preserved ?? (fridges.isNotEmpty ? fridges.first : null);
+      _selectedFridge =
+          selectedFridge ??
+          preserved ??
+          (fridges.isNotEmpty ? fridges.first : null);
     });
   }
 
@@ -72,10 +75,22 @@ class _FridgeAppState extends State<FridgeApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Smart Fridge',
+      title: '스마트 냉장고',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1565C0)),
-        scaffoldBackgroundColor: const Color(0xFFF4F7FB),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2F6B4F)),
+        scaffoldBackgroundColor: const Color(0xFFF7F8F5),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFF7F8F5),
+          surfaceTintColor: Colors.transparent,
+          centerTitle: false,
+        ),
+        cardTheme: const CardThemeData(
+          color: Colors.white,
+          margin: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+        ),
         useMaterial3: true,
       ),
       home: _buildHome(),

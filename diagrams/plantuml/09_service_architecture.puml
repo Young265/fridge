@@ -1,0 +1,26 @@
+@startuml
+title 서비스 구성도 - 시스템 아키텍처
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 160
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 15
+skinparam componentStyle rectangle
+skinparam ArrowColor #49657A
+
+actor "사용자" as User
+component "Flutter 앱" as App #FFECEC
+component "Flask API" as API #F3ECFF
+database "MySQL" as DB #F3ECFF
+node "Raspberry Pi 5" as Pi #EAF7EE
+component "카메라" as Camera #FFF4D9
+component "리드스위치" as Reed #FFF4D9
+
+User --> App
+Reed --> Pi
+Camera --> Pi
+Pi --> API
+App --> API
+API --> DB
+@enduml

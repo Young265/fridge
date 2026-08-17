@@ -74,6 +74,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       final matchesQuery =
           _query.isEmpty ||
           item.displayName.toLowerCase().contains(_query) ||
+          item.displayNameLabel.toLowerCase().contains(_query) ||
           (item.detectedName?.toLowerCase().contains(_query) ?? false) ||
           (item.note?.toLowerCase().contains(_query) ?? false);
 
@@ -444,7 +445,7 @@ class _InventoryCard extends StatelessWidget {
     final confidence = item.confidence == null
         ? null
         : '${(item.confidence! * 100).round()}%';
-    final metaText = [item.detectedName, confidence].nonNulls.join(' · ');
+    final metaText = [item.detectedNameLabel, confidence].nonNulls.join(' · ');
 
     return Material(
       color: Colors.white,
@@ -512,7 +513,7 @@ class _InventoryCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        item.displayName,
+                        item.displayNameLabel,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.titleMedium
@@ -644,11 +645,7 @@ class _SampleFruitThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     final asset = _assets[item.fridgeItemId.abs() % _assets.length];
 
-    return Image.asset(
-      asset,
-      width: double.infinity,
-      fit: BoxFit.cover,
-    );
+    return Image.asset(asset, width: double.infinity, fit: BoxFit.cover);
   }
 }
 

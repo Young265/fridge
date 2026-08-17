@@ -1,0 +1,37 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam dpi 180
+skinparam defaultFontName "Malgun Gothic"
+skinparam defaultFontSize 14
+skinparam ArrowColor #526AA5
+skinparam sequence {
+  LifeLineBorderColor #526AA5
+  LifeLineBackgroundColor #FFFFFF
+  ParticipantBorderColor #526AA5
+  ParticipantBackgroundColor #EEF3FB
+  ActorBorderColor #526AA5
+  ActorBackgroundColor #FFFFFF
+}
+
+actor "사용자" as User
+participant "리드스위치" as Reed
+participant "Raspberry Pi 5\n카메라·AI" as Pi
+participant "Flask API" as API
+database "MySQL·이미지" as DB
+participant "Flutter 앱" as App
+
+User -> Reed : 냉장고 문 열기
+Reed -> Pi : GPIO17 = HIGH
+Pi -> Pi : 내부 촬영·후보 추출·분류
+Pi -> Pi : 동일 결과 3회 안정화
+Pi -> API : /upload\n원본·crop·label·confidence
+API -> DB : 재고 INSERT 및 이미지 저장
+DB --> API : 저장 결과
+API --> Pi : 등록 완료
+App -> API : GET /inventory
+API -> DB : 현재 냉장고 재고 조회
+DB --> API : 최신 재고
+API --> App : 재료 목록·상태·이미지
+App --> User : 자동 등록 결과 표시
+@enduml

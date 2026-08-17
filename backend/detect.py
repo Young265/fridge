@@ -405,7 +405,7 @@ while True:
                             "detected_name": detected_name,
                             "confidence": f"{final_confidence:.4f}",
                             "quantity": "1",
-                            "unit": "ea",
+                            "unit": "개",
                         }
                         if FRIDGE_ID:
                             data["fridge_id"] = FRIDGE_ID
